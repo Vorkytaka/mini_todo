@@ -1,0 +1,6 @@
+package tk.vrk.todo.mini_todo
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
