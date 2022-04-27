@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mini_todo/current_time_widget.dart';
+import 'package:mini_todo/dependencies.dart';
 import 'package:mini_todo/entity/todo.dart';
 import 'package:mini_todo/ui/new_todo.dart';
 import 'package:mini_todo/utils/datetime.dart';
@@ -25,8 +26,7 @@ class App extends StatelessWidget {
       ),
       builder: (context, child) {
         assert(child != null);
-        return CurrentTimeUpdater(
-          duration: const Duration(seconds: 30),
+        return InnerDependencies(
           child: child!,
         );
       },
