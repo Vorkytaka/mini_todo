@@ -15,14 +15,7 @@ abstract class Repository {
 }
 
 class TestRepository extends Repository {
-  final List<Todo> _todos = List.generate(
-    5,
-    (index) => Todo(
-      id: index,
-      title: 'Task #$index',
-      completed: index % 3 == 0,
-    ),
-  );
+  final List<Todo> _todos = List.empty();
   final StreamController<List<Todo>> _controller = StreamController.broadcast();
 
   TestRepository() {
