@@ -21,4 +21,16 @@ class Todo {
 
   @override
   int get hashCode => id.hashCode;
+
+  DateTime? get datetime {
+    if (date == null) {
+      return null;
+    }
+
+    if (time == null) {
+      return date;
+    }
+
+    return date!.add(Duration(minutes: time!));
+  }
 }

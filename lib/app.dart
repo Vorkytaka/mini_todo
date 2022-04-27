@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/entity/todo.dart';
+import 'package:mini_todo/ui/new_todo.dart';
+import 'package:mini_todo/utils/datetime.dart';
 
 import 'generated/l10n.dart';
 
@@ -20,12 +23,23 @@ class App extends StatelessWidget {
       theme: ThemeData(
         splashFactory: InkRipple.splashFactory,
       ),
+      builder: (context, child) {
+        assert(child != null);
+        return CurrentTimeUpdater(
+          duration: const Duration(seconds: 30),
+          child: child!,
+        );
+      },
       home: Scaffold(
         backgroundColor: Colors.lightBlue.shade100,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
+        floatingActionButton: Builder(builder: (context) {
+          return FloatingActionButton(
+            onPressed: () {
+              showNewTodoDialog(context: context);
+            },
+            child: const Icon(Icons.add),
+          );
+        }),
         body: SafeArea(
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -56,16 +70,24 @@ class App extends StatelessWidget {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, i) {
-                      // final int itemIndex = i ~/ 2;
+                      final int itemIndex = i ~/ 2;
 
                       if (i.isEven) {
-                        // return TodoItemWidget(itemIndex: itemIndex);
+                        return TodoItemWidget(
+                          todo: Todo(
+                            id: itemIndex,
+                            title: 'Task $itemIndex',
+                            completed: false,
+                            date: DateTime(2022, 04, 28),
+                            time: 60 + 10 + itemIndex,
+                          ),
+                        );
                       }
 
                       // divider
                       return const SizedBox(height: 2);
                     },
-                    childCount: 0,
+                    childCount: 10,
                   ),
                 ),
               ),
@@ -87,9 +109,11 @@ class TodoItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     // todo: line through when completed
     final Widget titleWidget = AnimatedDefaultTextStyle(
-      style: Theme.of(context).textTheme.subtitle1!,
+      style: theme.textTheme.subtitle1!,
       duration: kThemeChangeDuration,
       child: Text(
         todo.title,
@@ -98,22 +122,9 @@ class TodoItemWidget extends StatelessWidget {
       ),
     );
 
-    // todo: inactive date when more than 7 days
-    // todo: active date when less then 7 days
-    // todo: error date when date is before
     Widget? datetimeWidget;
     if (todo.date != null) {
-      String dateStr = '${todo.date}';
-      if (todo.time != null) dateStr = '$dateStr, ${todo.time}';
-      datetimeWidget = AnimatedDefaultTextStyle(
-        style: Theme.of(context).textTheme.caption!,
-        duration: kThemeChangeDuration,
-        child: Text(
-          dateStr,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
+      datetimeWidget = _TodoItemDatetime(todo: todo);
     }
 
     final Widget checkbox = Checkbox(
@@ -159,6 +170,55 @@ class TodoItemWidget extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _TodoItemDatetime extends StatelessWidget {
+  final Todo todo;
+
+  const _TodoItemDatetime({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  TextStyle _textStyle(ThemeData theme, DateTime now) {
+    final DateTime todoTime = todo.datetime!;
+    final TextStyle textStyle = theme.textTheme.caption!;
+    final Color? color;
+    if (now.isBefore(todoTime)) {
+      if (now.between(todoTime) > 7) {
+        color = theme.hintColor;
+      } else {
+        color = theme.primaryColor;
+      }
+    } else {
+      color = theme.errorColor;
+    }
+    return textStyle.copyWith(color: color);
+  }
+
+  // todo: inactive date when more than 7 days
+  // todo: active date when less then 7 days
+  // todo: error date when date is before
+  @override
+  Widget build(BuildContext context) {
+    assert(todo.date != null);
+    final now = CurrentTime.of(context);
+
+    String str = '${todo.date}';
+    if (todo.time != null) {
+      str = '$str, ${todo.time}';
+    }
+
+    return AnimatedDefaultTextStyle(
+      style: _textStyle(Theme.of(context), now),
+      duration: kThemeChangeDuration,
+      child: Text(
+        str,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
