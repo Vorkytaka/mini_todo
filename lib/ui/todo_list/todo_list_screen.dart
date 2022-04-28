@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
@@ -102,7 +103,9 @@ class TodoItemWidget extends StatelessWidget {
 
     // todo: line through when completed
     final Widget titleWidget = AnimatedDefaultTextStyle(
-      style: theme.textTheme.subtitle1!,
+      style: theme.textTheme.subtitle1!.apply(
+        decoration: todo.completed ? TextDecoration.lineThrough : TextDecoration.none,
+      ),
       duration: kThemeChangeDuration,
       child: Text(
         todo.title,
@@ -121,48 +124,57 @@ class TodoItemWidget extends StatelessWidget {
 
     final Widget checkbox = Checkbox(
       value: todo.completed,
-      onChanged: (_) {},
+      onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
     );
 
     const BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
 
-    return SizedBox(
-      height: 56,
-      child: Material(
-        color: Colors.grey.shade100,
+    Widget body = Material(
+      color: Colors.grey.shade100,
+      borderRadius: borderRadius,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: borderRadius,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: borderRadius,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24, right: 16),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      titleWidget,
-                      if (datetimeWidget != null) ...[
-                        const SizedBox(height: 2),
-                        datetimeWidget,
-                      ],
+        child: Padding(
+          padding: const EdgeInsets.only(left: 24, right: 16),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    titleWidget,
+                    if (datetimeWidget != null) ...[
+                      const SizedBox(height: 2),
+                      datetimeWidget,
                     ],
-                  ),
+                  ],
                 ),
-                checkbox,
-              ],
-            ),
+              ),
+              checkbox,
+            ],
           ),
         ),
       ),
+    );
+
+    if (todo.completed) {
+      body = Opacity(
+        opacity: 0.8,
+        child: body,
+      );
+    }
+
+    return SizedBox(
+      height: 56,
+      child: body,
     );
   }
 }

@@ -24,6 +24,20 @@ class Todo {
   @override
   int get hashCode => id.hashCode;
 
+  Todo copyWith({
+    String? title,
+    bool? completed,
+    DateTime? date,
+    TimeOfDay? time,
+  }) =>
+      Todo(
+        id: id,
+        title: title ?? this.title,
+        completed: completed ?? this.completed,
+        date: date ?? this.date,
+        time: time ?? this.time,
+      );
+
   DateTime? get datetime {
     if (date == null) {
       return null;

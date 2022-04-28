@@ -12,6 +12,8 @@ abstract class Repository {
   Future<void> update(Todo todo);
 
   Future<void> delete(Todo todo);
+
+  Future<void> setCompleted(int id, bool completed);
 }
 
 class TestRepository extends Repository {
@@ -57,6 +59,15 @@ class TestRepository extends Repository {
   @override
   Future<void> delete(Todo todo) async {
     _todos.removeWhere((t) => t.id == todo.id);
+    _controller.add(_todos);
+  }
+
+  @override
+  Future<void> setCompleted(int id, bool completed) async {
+    final index = _todos.indexWhere((todo) => todo.id == id);
+    final todo = _todos[index];
+    final newTodo = todo.copyWith(completed: completed);
+    _todos[index] = newTodo;
     _controller.add(_todos);
   }
 }
