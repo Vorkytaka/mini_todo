@@ -2,11 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
 
 import '../../current_time_widget.dart';
-import '../../data/repository.dart';
 import '../../entity/todo.dart';
 import '../new_todo.dart';
 
@@ -50,36 +50,33 @@ class TodoListScreen extends StatelessWidget {
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: StreamBuilder<List<Todo>>(
-                    stream: context.read<Repository>().streamAll(),
-                    initialData: const [],
-                    builder: (context, snapshot) {
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) {
-                            final int itemIndex = i ~/ 2;
+                sliver: BlocBuilder<TodoListCubit, List<Todo>>(builder: (context, todos) {
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) {
+                        final int itemIndex = i ~/ 2;
 
-                            if (i.isEven) {
-                              final todo = snapshot.data![itemIndex];
-                              return TodoItemWidget(
-                                todo: todo,
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => TodoDetailedScreen(id: todo.id),
-                                    ),
-                                  );
-                                },
+                        if (i.isEven) {
+                          final todo = todos[itemIndex];
+                          return TodoItemWidget(
+                            todo: todo,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => TodoDetailedScreen(id: todo.id),
+                                ),
                               );
-                            }
+                            },
+                          );
+                        }
 
-                            // divider
-                            return const SizedBox(height: 2);
-                          },
-                          childCount: math.max(0, (snapshot.data?.length ?? 0) * 2 - 1),
-                        ),
-                      );
-                    }),
+                        // divider
+                        return const SizedBox(height: 2);
+                      },
+                      childCount: math.max(0, todos.length * 2 - 1),
+                    ),
+                  );
+                }),
               ),
             ],
           ),

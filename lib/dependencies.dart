@@ -1,8 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 
 import 'current_time_widget.dart';
+
+class OuterDependencies extends StatelessWidget {
+  final Widget child;
+
+  const OuterDependencies({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider<Repository>(
+      create: (context) => TestRepository(),
+      child: BlocProvider(
+        create: (context) => TodoListCubit(repository: context.read()),
+        lazy: false,
+        child: child,
+      ),
+    );
+  }
+}
 
 class InnerDependencies extends StatelessWidget {
   final Widget child;
@@ -16,12 +38,9 @@ class InnerDependencies extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurrentTimeUpdater(
       duration: const Duration(seconds: 30),
-      child: RepositoryProvider<Repository>(
-        create: (context) => TestRepository(),
-        child: ScrollConfiguration(
-          behavior: const _ScrollBehavior(),
-          child: child,
-        ),
+      child: ScrollConfiguration(
+        behavior: const _ScrollBehavior(),
+        child: child,
       ),
     );
   }
