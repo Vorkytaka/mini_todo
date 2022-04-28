@@ -15,7 +15,7 @@ abstract class Repository {
 }
 
 class TestRepository extends Repository {
-  final List<Todo> _todos = List.empty();
+  final List<Todo> _todos = List.empty(growable: true);
   final StreamController<List<Todo>> _controller = StreamController.broadcast();
 
   TestRepository() {
@@ -24,9 +24,16 @@ class TestRepository extends Repository {
 
   @override
   Future<void> create(Todo todo) async {
-    if (!_todos.contains(todo)) {
-      _todos.add(todo);
-    }
+    final int lastId = _todos.isEmpty ? 0 : _todos.last.id;
+    _todos.add(
+      Todo(
+        id: lastId + 1,
+        title: todo.title,
+        completed: todo.completed,
+        date: todo.date,
+        time: todo.time,
+      ),
+    );
     _controller.add(_todos);
   }
 

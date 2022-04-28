@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mini_todo/current_time_widget.dart';
+import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/dependencies.dart';
 import 'package:mini_todo/entity/todo.dart';
 import 'package:mini_todo/ui/new_todo.dart';
@@ -40,60 +44,61 @@ class App extends StatelessWidget {
             child: const Icon(Icons.add),
           );
         }),
-        body: SafeArea(
-          child: CustomScrollView(
-            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverToBoxAdapter(
-                child: Center(
-                  child: InkWell(
-                    onTap: () {},
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    child: Ink(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      ),
-                      child: Text(
-                        'Входящие',
-                        style: Theme.of(context).textTheme.subtitle1,
+        body: Builder(builder: (context) {
+          return SafeArea(
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              slivers: [
+                const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      child: Ink(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        ),
+                        child: Text(
+                          'Входящие',
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 8)),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, i) {
-                      final int itemIndex = i ~/ 2;
+                const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: StreamBuilder<List<Todo>>(
+                      stream: context.read<Repository>().streamAll(),
+                      initialData: [],
+                      builder: (context, snapshot) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) {
+                              final int itemIndex = i ~/ 2;
 
-                      if (i.isEven) {
-                        return TodoItemWidget(
-                          todo: Todo(
-                            id: itemIndex,
-                            title: 'Task $itemIndex',
-                            completed: false,
-                            date: DateTime(2022, 04, 28),
-                            time: 60 + 10 + itemIndex,
+                              if (i.isEven) {
+                                return TodoItemWidget(
+                                  todo: snapshot.data![itemIndex],
+                                );
+                              }
+
+                              // divider
+                              return const SizedBox(height: 2);
+                            },
+                            childCount: max(0, (snapshot.data?.length ?? 0) * 2 - 1),
                           ),
                         );
-                      }
-
-                      // divider
-                      return const SizedBox(height: 2);
-                    },
-                    childCount: 10,
-                  ),
+                      }),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
