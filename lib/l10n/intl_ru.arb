@@ -1,0 +1,10 @@
+{
+  "common__inbox": "Входящие",
+  "common__confirm": "Принять",
+  "common__cancel": "Отмена",
+  "common__all": "Все",
+  "new_todo__title_hint": "Задача...",
+  "datetime_dialog__today": "Сегодня",
+  "datetime_dialog__tomorrow": "Завтра",
+  "datetime_dialog__time": "Время"
+}

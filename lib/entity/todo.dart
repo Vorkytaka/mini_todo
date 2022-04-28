@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
+
 class Todo {
   final int id;
   final String title;
   final bool completed;
   final DateTime? date;
-  final int? time;
+  final TimeOfDay? time;
 
   const Todo({
     required this.id,
@@ -31,6 +33,6 @@ class Todo {
       return date;
     }
 
-    return date!.add(Duration(minutes: time!));
+    return date!.add(Duration(hours: time!.hour, minutes: time!.minute));
   }
 }

@@ -18,8 +18,20 @@ class InnerDependencies extends StatelessWidget {
       duration: const Duration(seconds: 30),
       child: RepositoryProvider<Repository>(
         create: (context) => TestRepository(),
-        child: child,
+        child: ScrollConfiguration(
+          behavior: const _ScrollBehavior(),
+          child: child,
+        ),
       ),
     );
+  }
+}
+
+class _ScrollBehavior extends ScrollBehavior {
+  const _ScrollBehavior() : super();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics();
   }
 }

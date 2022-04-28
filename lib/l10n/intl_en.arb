@@ -1,3 +1,11 @@
 {
-  "app_name": "miniTodo"
+  "app_name": "miniTodo",
+  "common__inbox": "Inbox",
+  "common__confirm": "Confirm",
+  "common__cancel": "Cancel",
+  "common__all": "All",
+  "new_todo__title_hint": "Task...",
+  "datetime_dialog__today": "Today",
+  "datetime_dialog__tomorrow": "Tomorrow",
+  "datetime_dialog__time": "Time"
 }

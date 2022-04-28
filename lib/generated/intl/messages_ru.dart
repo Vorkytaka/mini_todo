@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a ru locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -18,19 +18,20 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'en';
+  String get localeName => 'ru';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "app_name": MessageLookupByLibrary.simpleMessage("miniTodo"),
-        "common__all": MessageLookupByLibrary.simpleMessage("All"),
-        "common__cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
-        "common__confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
-        "common__inbox": MessageLookupByLibrary.simpleMessage("Inbox"),
-        "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
-        "datetime_dialog__today": MessageLookupByLibrary.simpleMessage("Today"),
+        "common__all": MessageLookupByLibrary.simpleMessage("Все"),
+        "common__cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "common__confirm": MessageLookupByLibrary.simpleMessage("Принять"),
+        "common__inbox": MessageLookupByLibrary.simpleMessage("Входящие"),
+        "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Время"),
+        "datetime_dialog__today":
+            MessageLookupByLibrary.simpleMessage("Сегодня"),
         "datetime_dialog__tomorrow":
-            MessageLookupByLibrary.simpleMessage("Tomorrow"),
-        "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task...")
+            MessageLookupByLibrary.simpleMessage("Завтра"),
+        "new_todo__title_hint":
+            MessageLookupByLibrary.simpleMessage("Задача...")
       };
 }

@@ -59,6 +59,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Inbox`
+  String get common__inbox {
+    return Intl.message(
+      'Inbox',
+      name: 'common__inbox',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get common__confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'common__confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get common__cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'common__cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get common__all {
+    return Intl.message(
+      'All',
+      name: 'common__all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task...`
+  String get new_todo__title_hint {
+    return Intl.message(
+      'Task...',
+      name: 'new_todo__title_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get datetime_dialog__today {
+    return Intl.message(
+      'Today',
+      name: 'datetime_dialog__today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tomorrow`
+  String get datetime_dialog__tomorrow {
+    return Intl.message(
+      'Tomorrow',
+      name: 'datetime_dialog__tomorrow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time`
+  String get datetime_dialog__time {
+    return Intl.message(
+      'Time',
+      name: 'datetime_dialog__time',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -67,6 +147,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'ru'),
     ];
   }
 

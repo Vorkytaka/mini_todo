@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:mini_todo/utils/datetime.dart';
+
+import 'ui/formatter.dart';
 
 class CurrentTimeUpdater extends StatefulWidget {
   final Duration duration;
@@ -76,4 +80,59 @@ bool debugCheckHasCurrentTime(BuildContext context) {
     return true;
   }());
   return true;
+}
+
+class DatetimeOnNowWidget extends StatelessWidget {
+  final DateTime date;
+  final TimeOfDay? time;
+
+  const DatetimeOnNowWidget({
+    Key? key,
+    required this.date,
+    this.time,
+  }) : super(key: key);
+
+  DateTime get datetime {
+    if (time == null) {
+      return date;
+    }
+
+    return date.add(Duration(hours: time!.hour, minutes: time!.minute));
+  }
+
+  TextStyle _textStyle(ThemeData theme, DateTime now) {
+    final DateTime dt = datetime;
+    final TextStyle textStyle = theme.textTheme.caption!;
+    final Color? color;
+    if (now.isBefore(dt)) {
+      if (now.between(dt) > 7) {
+        color = theme.hintColor;
+      } else {
+        color = theme.primaryColor;
+      }
+    } else {
+      color = theme.errorColor;
+    }
+    return textStyle.copyWith(color: color);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = CurrentTime.of(context);
+
+    String str = dateFormatter.format(date);
+    if (time != null) {
+      str = '$str, ${time!.format(context)}';
+    }
+
+    return AnimatedDefaultTextStyle(
+      style: _textStyle(Theme.of(context), now),
+      duration: kThemeChangeDuration,
+      child: Text(
+        str,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
 }
