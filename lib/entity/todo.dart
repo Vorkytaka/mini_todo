@@ -19,7 +19,13 @@ class Todo {
   String toString() => 'Todo($id, $title)';
 
   @override
-  bool operator ==(Object other) => other is Todo && id == other.id;
+  bool operator ==(Object other) =>
+      other is Todo &&
+      id == other.id &&
+      title != other.title &&
+      completed != other.completed &&
+      date != other.date &&
+      time != other.time;
 
   @override
   int get hashCode => id.hashCode;

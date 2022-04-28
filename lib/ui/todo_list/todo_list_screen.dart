@@ -87,6 +87,25 @@ class TodoListScreen extends StatelessWidget {
   }
 }
 
+class TodoCheckbox extends StatelessWidget {
+  final Todo todo;
+
+  const TodoCheckbox({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: todo.completed,
+      onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+    );
+  }
+}
+
 class TodoItemWidget extends StatelessWidget {
   final Todo todo;
   final VoidCallback? onTap;
@@ -122,12 +141,7 @@ class TodoItemWidget extends StatelessWidget {
       );
     }
 
-    final Widget checkbox = Checkbox(
-      value: todo.completed,
-      onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-    );
+    final Widget checkbox = TodoCheckbox(todo: todo);
 
     const BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
 

@@ -290,6 +290,7 @@ class _DateTimePickerState extends State<_DateTimePicker> {
               },
             ),
             ListTile(
+              dense: true,
               leading: const Icon(Icons.access_time_outlined),
               title: time == null ? Text(S.of(context).datetime_dialog__time) : Text(time!.format(context)),
               onTap: () async {
