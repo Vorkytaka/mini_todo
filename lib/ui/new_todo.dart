@@ -197,7 +197,11 @@ class _DatetimeFormField extends FormField<Pair<DateTime, int?>?> {
             }
             return _IconButton(
               onTap: () async {
-                final data = await _showDateTimePicker(context: field.context);
+                final data = await _showDateTimePicker(
+                  context: field.context,
+                  date: field.value?.value1,
+                  time: field.value?.value2,
+                );
                 if (data != null) {
                   field.didChange(data);
                 }
@@ -209,23 +213,44 @@ class _DatetimeFormField extends FormField<Pair<DateTime, int?>?> {
         );
 }
 
-Future<Pair<DateTime, int?>?> _showDateTimePicker({required BuildContext context}) async {
+Future<Pair<DateTime, int?>?> _showDateTimePicker({
+  required BuildContext context,
+  DateTime? date,
+  int? time,
+}) async {
   return showDialog(
     context: context,
-    builder: (context) => const _DateTimePicker(),
+    builder: (context) => _DateTimePicker(
+      date: date,
+      time: time,
+    ),
   );
 }
 
 class _DateTimePicker extends StatefulWidget {
-  const _DateTimePicker({Key? key}) : super(key: key);
+  final DateTime? date;
+  final int? time;
+
+  const _DateTimePicker({
+    Key? key,
+    this.date,
+    this.time,
+  }) : super(key: key);
 
   @override
   State<_DateTimePicker> createState() => _DateTimePickerState();
 }
 
 class _DateTimePickerState extends State<_DateTimePicker> {
-  DateTime date = DateUtils.dateOnly(DateTime.now());
+  late DateTime date;
   int? time;
+
+  @override
+  void initState() {
+    super.initState();
+    date = widget.date ?? DateUtils.dateOnly(DateTime.now());
+    time = widget.time;
+  }
 
   @override
   Widget build(BuildContext context) {
