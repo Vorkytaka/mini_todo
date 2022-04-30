@@ -3,8 +3,9 @@
   "common__confirm": "Принять",
   "common__cancel": "Отмена",
   "common__all": "Все",
+  "common_yesterday": "Вчера",
+  "common_today": "Сегодня",
+  "common_tomorrow": "Завтра",
   "new_todo__title_hint": "Задача...",
-  "datetime_dialog__today": "Сегодня",
-  "datetime_dialog__tomorrow": "Завтра",
   "datetime_dialog__time": "Время"
 }

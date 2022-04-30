@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/utils/datetime.dart';
 
 import 'ui/formatter.dart';
@@ -37,9 +38,10 @@ class _CurrentTimeUpdaterState extends State<CurrentTimeUpdater> {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return CurrentTime(
       child: widget.child,
-      now: DateTime.now(),
+      now: DateTime(now.year, now.month, now.day, now.hour, now.minute),
     );
   }
 }
@@ -92,47 +94,108 @@ class DatetimeOnNowWidget extends StatelessWidget {
     this.time,
   }) : super(key: key);
 
-  DateTime get datetime {
-    if (time == null) {
-      return date;
-    }
-
-    return date.add(Duration(hours: time!.hour, minutes: time!.minute));
-  }
-
-  TextStyle _textStyle(ThemeData theme, DateTime now) {
-    final DateTime dt = datetime;
-    final TextStyle textStyle = theme.textTheme.caption!;
-    final Color? color;
-    if (now.isBefore(dt)) {
-      if (now.between(dt) > 7) {
-        color = theme.hintColor;
-      } else {
-        color = theme.primaryColor;
-      }
-    } else {
-      color = theme.errorColor;
-    }
-    return textStyle.copyWith(color: color);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final now = CurrentTime.of(context);
-
     String str = dateFormatter.format(date);
     if (time != null) {
       str = '$str, ${time!.format(context)}';
     }
 
-    return AnimatedDefaultTextStyle(
-      style: _textStyle(Theme.of(context), now),
-      duration: kThemeChangeDuration,
-      child: Text(
-        str,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+    return NowStyle(
+      date: date,
+      time: time,
+      child: DateTextWidget(
+        date: date,
+        time: time,
       ),
     );
+  }
+}
+
+class NowStyle extends StatelessWidget {
+  final Widget child;
+  final DateTime? date;
+  final TimeOfDay? time;
+  final TextStyle? textStyle;
+
+  const NowStyle({
+    Key? key,
+    required this.child,
+    this.date,
+    this.time,
+    this.textStyle,
+  }) : super(key: key);
+
+  Color? _color(ThemeData theme, DateTime now) {
+    if (date == null) {
+      return null;
+    }
+
+    if (time == null) {
+      final nowDate = DateUtils.dateOnly(now);
+      if (date!.isBefore(nowDate)) {
+        return theme.errorColor;
+      } else {
+        return theme.primaryColor;
+      }
+    }
+
+    final datetime = date! & time;
+    if (datetime.isBefore(now)) {
+      return theme.errorColor;
+    } else {
+      return theme.primaryColor;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final now = CurrentTime.of(context);
+
+    final color = _color(theme, now);
+    final textStyle = (this.textStyle ?? theme.textTheme.caption!).apply(color: color);
+
+    return AnimatedDefaultTextStyle(
+      style: textStyle,
+      duration: kThemeChangeDuration,
+      child: IconTheme.merge(
+        data: IconThemeData(color: color),
+        child: child,
+      ),
+    );
+  }
+}
+
+class DateTextWidget extends StatelessWidget {
+  final DateTime date;
+  final TimeOfDay? time;
+
+  const DateTextWidget({
+    Key? key,
+    required this.date,
+    this.time,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final now = CurrentTime.of(context);
+
+    String str;
+    if (DateUtils.isSameDay(date, now)) {
+      str = S.of(context).common_today;
+    } else if (DateUtils.isSameDay(date, now + const Duration(days: 1))) {
+      str = S.of(context).common_tomorrow;
+    } else if (DateUtils.isSameDay(date, now - const Duration(days: 1))) {
+      str = S.of(context).common_yesterday;
+    } else {
+      str = dateFormatter.format(date);
+    }
+
+    if (time != null) {
+      str = '$str, ${time!.format(context)}';
+    }
+
+    return Text(str);
   }
 }

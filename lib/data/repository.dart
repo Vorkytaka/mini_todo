@@ -36,7 +36,7 @@ class TestRepository extends Repository {
         time: todo.time,
       ),
     );
-    _controller.add(_todos);
+    _send();
   }
 
   @override
@@ -53,13 +53,13 @@ class TestRepository extends Repository {
   Future<void> update(Todo todo) async {
     final id = _todos.indexWhere((t) => t.id == todo.id);
     _todos[id] = todo;
-    _controller.add(_todos);
+    _send();
   }
 
   @override
   Future<void> delete(Todo todo) async {
     _todos.removeWhere((t) => t.id == todo.id);
-    _controller.add(_todos);
+    _send();
   }
 
   @override
@@ -68,6 +68,10 @@ class TestRepository extends Repository {
     final todo = _todos[index];
     final newTodo = todo.copyWith(completed: completed);
     _todos[index] = newTodo;
-    _controller.add(_todos);
+    _send();
+  }
+
+  void _send() {
+    _controller.add(_todos/*.where((todo) => !todo.completed)*/.toList(growable: false));
   }
 }

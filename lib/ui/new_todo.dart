@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
+import 'package:mini_todo/ui/formatter.dart';
+import 'package:mini_todo/ui/select_date.dart';
 
 import '../entity/todo.dart';
-import '../utils/tuple.dart';
 
 Future<void> showNewTodoDialog({required BuildContext context}) async {
   return showModalBottomSheet(
@@ -27,6 +28,8 @@ class _NewTodoDialog extends StatefulWidget {
 }
 
 class _NewTodoDialogState extends State<_NewTodoDialog> {
+  final GlobalKey<FormFieldState<DateTime?>> _dateKey = GlobalKey();
+
   String? title;
   DateTime? date;
   TimeOfDay? time;
@@ -53,15 +56,6 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       },
       onSaved: (title) {
         this.title = title;
-      },
-    );
-
-    final Widget datetimeField = _DatetimeFormField(
-      onSaved: (datetime) {
-        if (datetime != null) {
-          date = datetime.value1;
-          time = datetime.value2;
-        }
       },
     );
 
@@ -123,15 +117,33 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Expanded(
-                      child: Wrap(
-                        children: [
-                          datetimeField,
-                          const SizedBox(width: 8),
-                          const _IconButton(
-                            icon: Icon(Icons.inbox),
-                          ),
-                        ],
+                    NowStyle(
+                      date: date,
+                      time: time,
+                      child: Expanded(
+                        child: Wrap(
+                          children: [
+                            _DateFormField(
+                              key: _dateKey,
+                              onSaved: (date) {
+                                this.date = date;
+                              },
+                              onChanged: (date) {
+                                this.date = date;
+                              },
+                            ),
+                            const SizedBox(width: 8),
+                            if (_dateKey.currentState?.value != null)
+                              _TimeFormField(
+                                onSaved: (time) {
+                                  this.time = time;
+                                },
+                                onChanged: (time) {
+                                  this.time = time;
+                                },
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                     submitBtn,
@@ -180,164 +192,63 @@ class _IconButton extends StatelessWidget {
   }
 }
 
-class _DatetimeFormField extends FormField<Pair<DateTime, TimeOfDay?>?> {
-  _DatetimeFormField({
-    Pair<DateTime, TimeOfDay?>? initialValue,
-    FormFieldSetter<Pair<DateTime, TimeOfDay?>?>? onSaved,
+class _DateFormField extends FormField<DateTime?> {
+  _DateFormField({
+    Key? key,
+    DateTime? initialValue,
+    FormFieldSetter<DateTime?>? onSaved,
+    ValueChanged<DateTime?>? onChanged,
   }) : super(
+          key: key,
           initialValue: initialValue,
           onSaved: onSaved,
-          builder: (FormFieldState<Pair<DateTime, TimeOfDay?>?> field) {
-            Widget? datetimeWidget;
-            if (field.value != null) {
-              datetimeWidget = DatetimeOnNowWidget(
-                date: field.value!.value1,
-                time: field.value?.value2,
-              );
-            }
+          builder: (field) {
             return _IconButton(
               onTap: () async {
-                final data = await _showDateTimePicker(
+                final date = await showDateSelector(
                   context: field.context,
-                  date: field.value?.value1,
-                  time: field.value?.value2,
+                  selectedDate: field.value,
                 );
-                if (data != null) {
-                  field.didChange(data);
+                if (date != null) {
+                  field.didChange(date);
+                  onChanged?.call(date);
                 }
               },
               icon: const Icon(Icons.today),
-              text: datetimeWidget,
+              text: field.value != null ? DateTextWidget(date: field.value!) : null,
             );
           },
         );
 }
 
-Future<Pair<DateTime, TimeOfDay?>?> _showDateTimePicker({
-  required BuildContext context,
-  DateTime? date,
-  TimeOfDay? time,
-}) async {
-  return showDialog(
-    context: context,
-    builder: (context) => _DateTimePicker(
-      date: date,
-      time: time,
-    ),
-  );
-}
-
-class _DateTimePicker extends StatefulWidget {
-  final DateTime? date;
-  final TimeOfDay? time;
-
-  const _DateTimePicker({
+class _TimeFormField extends FormField<TimeOfDay?> {
+  _TimeFormField({
     Key? key,
-    this.date,
-    this.time,
-  }) : super(key: key);
-
-  @override
-  State<_DateTimePicker> createState() => _DateTimePickerState();
-}
-
-class _DateTimePickerState extends State<_DateTimePicker> {
-  late DateTime date;
-  TimeOfDay? time;
-
-  @override
-  void initState() {
-    super.initState();
-    date = widget.date ?? DateUtils.dateOnly(DateTime.now());
-    time = widget.time;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Wrap(
-              spacing: 8,
-              children: [
-                ActionChip(
-                  onPressed: () {
-                    date = DateUtils.dateOnly(DateTime.now());
-                    setState(() {});
-                  },
-                  label: Text(S.of(context).datetime_dialog__today),
-                ),
-                ActionChip(
-                  onPressed: () {
-                    date = DateUtils.dateOnly(DateTime.now().add(const Duration(days: 1)));
-                    setState(() {});
-                  },
-                  label: Text(S.of(context).datetime_dialog__tomorrow),
-                ),
-              ],
-            ),
-            CalendarDatePicker(
-              initialDate: date,
-              firstDate: DateTime(1994, 04, 20),
-              lastDate: DateTime(2200, 04, 20),
-              currentDate: DateTime.now(),
-              onDateChanged: (d) {
-                date = d;
-                setState(() {});
-              },
-            ),
-            ListTile(
-              dense: true,
-              leading: const Icon(Icons.access_time_outlined),
-              title: time == null ? Text(S.of(context).datetime_dialog__time) : Text(time!.format(context)),
+    TimeOfDay? initialValue,
+    FormFieldSetter<TimeOfDay?>? onSaved,
+    ValueChanged<TimeOfDay?>? onChanged,
+  }) : super(
+          key: key,
+          initialValue: initialValue,
+          onSaved: onSaved,
+          builder: (field) {
+            return _IconButton(
               onTap: () async {
-                final initialTime = DateUtils.isSameDay(DateTime.now(), date)
-                    ? TimeOfDay.fromDateTime(DateTime.now())
-                    : const TimeOfDay(hour: 12, minute: 0);
-                final selectedTime = await showTimePicker(
-                  context: context,
-                  initialTime: initialTime,
+                final time = await showTimePicker(
+                  context: field.context,
+                  initialTime: field.value ?? const TimeOfDay(hour: 12, minute: 00),
                 );
-
-                if (selectedTime != null) {
-                  time = selectedTime;
-                  setState(() {});
+                if (time != null) {
+                  field.didChange(time);
+                  onChanged?.call(time);
                 }
               },
-              trailing: time != null
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        time = null;
-                        setState(() {});
-                      },
-                    )
-                  : null,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(S.of(context).common__cancel),
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(
-                    Pair(date, time),
-                  ),
-                  child: Text(S.of(context).common__confirm),
-                ),
-                const SizedBox(width: 16),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+              icon: Icon(
+                Icons.access_time,
+                color: field.value == null ? Theme.of(field.context).hintColor : null,
+              ),
+              text: field.value != null ? Text(field.value!.format(field.context)) : null,
+            );
+          },
+        );
 }

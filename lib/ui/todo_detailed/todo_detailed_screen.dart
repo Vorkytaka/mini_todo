@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 import 'package:mini_todo/ui/formatter.dart';
+import 'package:mini_todo/ui/select_date.dart';
 import 'package:mini_todo/ui/todo_list/todo_list_screen.dart';
 
 import '../../entity/todo.dart';
@@ -19,6 +21,7 @@ class TodoDetailedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: BlocSelector<TodoListCubit, List<Todo>, Todo>(
         selector: (todos) => todos.firstWhere((todo) => todo.id == id),
         builder: (context, todo) {
@@ -28,34 +31,76 @@ class TodoDetailedScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBar(todo: todo),
-              if (todo.date != null)
-                ListTile(
-                  leading: const Icon(Icons.today),
-                  title: Text(dateFormatter.format(todo.date!)),
-                  onTap: () {},
-                  dense: true,
-                )
-              else
-                ListTile(
-                  leading: const Icon(Icons.today),
-                  title: const Text('Без даты'),
-                  onTap: () {},
-                  dense: true,
+              NowStyle(
+                date: todo.date,
+                time: todo.time,
+                textStyle: Theme.of(context).textTheme.subtitle1,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final date = await showDateSelector(
+                          context: context,
+                          selectedDate: todo.date,
+                        );
+                        if (date != null) {
+                          context.read<Repository>().update(todo.copyWith(date: date));
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: SizedBox(
+                          height: 56,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.today),
+                              const SizedBox(width: 16),
+                              todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
+                        );
+                        if (time != null) {
+                          context.read<Repository>().update(todo.copyWith(time: time));
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: SizedBox(
+                          height: 56,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.access_time_outlined),
+                              const SizedBox(width: 16),
+                              todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              if (todo.time != null)
-                ListTile(
-                  leading: const Icon(Icons.access_time_outlined),
-                  title: Text(todo.time!.format(context)),
-                  onTap: () {},
-                  dense: true,
-                )
-              else
-                ListTile(
-                  leading: const Icon(Icons.access_time_outlined),
-                  title: const Text('Без времени'),
-                  onTap: () {},
-                  dense: true,
-                ),
+              ),
+              const Divider(
+                height: 1,
+                indent: 64,
+              ),
             ],
           );
         },

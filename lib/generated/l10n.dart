@@ -100,31 +100,41 @@ class S {
     );
   }
 
-  /// `Task...`
-  String get new_todo__title_hint {
+  /// `Yesterday`
+  String get common_yesterday {
     return Intl.message(
-      'Task...',
-      name: 'new_todo__title_hint',
+      'Yesterday',
+      name: 'common_yesterday',
       desc: '',
       args: [],
     );
   }
 
   /// `Today`
-  String get datetime_dialog__today {
+  String get common_today {
     return Intl.message(
       'Today',
-      name: 'datetime_dialog__today',
+      name: 'common_today',
       desc: '',
       args: [],
     );
   }
 
   /// `Tomorrow`
-  String get datetime_dialog__tomorrow {
+  String get common_tomorrow {
     return Intl.message(
       'Tomorrow',
-      name: 'datetime_dialog__tomorrow',
+      name: 'common_tomorrow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Task...`
+  String get new_todo__title_hint {
+    return Intl.message(
+      'Task...',
+      name: 'new_todo__title_hint',
       desc: '',
       args: [],
     );

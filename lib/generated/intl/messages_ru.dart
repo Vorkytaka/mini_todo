@@ -26,11 +26,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Принять"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Входящие"),
+        "common_today": MessageLookupByLibrary.simpleMessage("Сегодня"),
+        "common_tomorrow": MessageLookupByLibrary.simpleMessage("Завтра"),
+        "common_yesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Время"),
-        "datetime_dialog__today":
-            MessageLookupByLibrary.simpleMessage("Сегодня"),
-        "datetime_dialog__tomorrow":
-            MessageLookupByLibrary.simpleMessage("Завтра"),
         "new_todo__title_hint":
             MessageLookupByLibrary.simpleMessage("Задача...")
       };

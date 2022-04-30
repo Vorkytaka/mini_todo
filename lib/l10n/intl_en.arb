@@ -4,8 +4,9 @@
   "common__confirm": "Confirm",
   "common__cancel": "Cancel",
   "common__all": "All",
+  "common_yesterday": "Yesterday",
+  "common_today": "Today",
+  "common_tomorrow": "Tomorrow",
   "new_todo__title_hint": "Task...",
-  "datetime_dialog__today": "Today",
-  "datetime_dialog__tomorrow": "Tomorrow",
   "datetime_dialog__time": "Time"
 }
