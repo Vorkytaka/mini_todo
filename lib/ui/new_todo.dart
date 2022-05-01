@@ -35,6 +35,9 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
+
     final Widget titleField = TextFormField(
       decoration: InputDecoration(
         border: InputBorder.none,
@@ -85,7 +88,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
               children: [
                 Icon(
                   Icons.send,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: theme.colorScheme.primary,
                 ),
               ],
             ),
@@ -95,7 +98,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     );
 
     return Padding(
-      padding: MediaQuery.of(context).viewInsets + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: Colors.grey.shade50,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
