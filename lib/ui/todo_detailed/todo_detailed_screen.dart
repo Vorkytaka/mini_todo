@@ -52,8 +52,7 @@ class TodoDetailedScreen extends StatelessWidget {
                           selectedDate: todo.date,
                         );
                         if (date != null) {
-                          // todo: ???
-                          // context.read<Repository>().update(todo.copyWith(date: date));
+                          context.read<Repository>().setDate(todo.id, date);
                         }
                       },
                       child: Padding(
@@ -80,8 +79,7 @@ class TodoDetailedScreen extends StatelessWidget {
                           initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
                         );
                         if (time != null) {
-                          // todo: ???
-                          // context.read<Repository>().update(todo.copyWith(time: time));
+                          context.read<Repository>().setTime(todo.id, time);
                         }
                       },
                       child: Padding(
@@ -136,8 +134,7 @@ class _AppBarState extends State<_AppBar> {
     super.initState();
     _titleController = TextEditingController(text: widget.todo.title);
     _titleController.addListener(() {
-      // todo: ???
-      // context.read<Repository>().update(widget.todo.copyWith(title: _titleController.text));
+      context.read<Repository>().setTitle(widget.todo.id, _titleController.text);
     });
   }
 
