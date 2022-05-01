@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/database/database.dart';
+import 'package:mini_todo/data/drift_repository.dart';
 import 'package:mini_todo/data/repository.dart';
 
 import 'current_time_widget.dart';
@@ -16,7 +17,7 @@ class OuterDependencies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<Repository>(
-      create: (context) => SqlRepository(database: Database()),
+      create: (context) => DriftRepository(database: Database()),
       child: child,
     );
   }
