@@ -29,6 +29,7 @@ class Todo {
   final DateTime? date;
   final TimeOfDay? time;
   final DateTime createdDate;
+  final DateTime updatedDate;
 
   const Todo({
     required this.id,
@@ -37,6 +38,7 @@ class Todo {
     this.date,
     this.time,
     required this.createdDate,
+    required this.updatedDate,
   });
 
   static TodoCarcase carcase({
@@ -78,6 +80,7 @@ class Todo {
         date: date ?? this.date,
         time: time ?? this.time,
         createdDate: createdDate,
+        updatedDate: updatedDate,
       );
 
   DateTime? get datetime {

@@ -13,6 +13,8 @@ class TodoTable extends Table {
   IntColumn get time => integer().map(const TimeConverter()).nullable()();
 
   DateTimeColumn get createdDate => dateTime().withDefault(currentDateAndTime)();
+
+  DateTimeColumn get updatedDate => dateTime().withDefault(currentDateAndTime)();
 }
 
 class DateConverter implements TypeConverter<DateTime, DateTime> {

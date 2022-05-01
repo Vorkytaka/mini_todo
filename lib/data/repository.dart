@@ -85,5 +85,6 @@ extension on TodoTableData {
         date: date,
         time: time,
         createdDate: createdDate,
+        updatedDate: updatedDate,
       );
 }

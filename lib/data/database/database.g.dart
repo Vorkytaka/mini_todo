@@ -14,6 +14,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   final DateTime? date;
   final TimeOfDay? time;
   final DateTime createdDate;
+  final DateTime updatedDate;
 
   TodoTableData(
       {required this.id,
@@ -21,7 +22,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       required this.completed,
       this.date,
       this.time,
-      required this.createdDate});
+      required this.createdDate,
+      required this.updatedDate});
 
   factory TodoTableData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -34,9 +36,9 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       time: $TodoTableTable.$converter1
           .mapToDart(const IntType().mapFromDatabaseResponse(data['${effectivePrefix}time'])),
       createdDate: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}created_date'])!,
+      updatedDate: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}updated_date'])!,
     );
   }
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -52,6 +54,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       map['time'] = Variable<int?>(converter.mapToSql(time));
     }
     map['created_date'] = Variable<DateTime>(createdDate);
+    map['updated_date'] = Variable<DateTime>(updatedDate);
     return map;
   }
 
@@ -63,6 +66,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       date: date == null && nullToAbsent ? const Value.absent() : Value(date),
       time: time == null && nullToAbsent ? const Value.absent() : Value(time),
       createdDate: Value(createdDate),
+      updatedDate: Value(updatedDate),
     );
   }
 
@@ -75,9 +79,9 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       date: serializer.fromJson<DateTime?>(json['date']),
       time: serializer.fromJson<TimeOfDay?>(json['time']),
       createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+      updatedDate: serializer.fromJson<DateTime>(json['updatedDate']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -88,11 +92,18 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       'date': serializer.toJson<DateTime?>(date),
       'time': serializer.toJson<TimeOfDay?>(time),
       'createdDate': serializer.toJson<DateTime>(createdDate),
+      'updatedDate': serializer.toJson<DateTime>(updatedDate),
     };
   }
 
   TodoTableData copyWith(
-          {int? id, String? title, bool? completed, DateTime? date, TimeOfDay? time, DateTime? createdDate}) =>
+          {int? id,
+          String? title,
+          bool? completed,
+          DateTime? date,
+          TimeOfDay? time,
+          DateTime? createdDate,
+          DateTime? updatedDate}) =>
       TodoTableData(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -100,6 +111,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
         date: date ?? this.date,
         time: time ?? this.time,
         createdDate: createdDate ?? this.createdDate,
+        updatedDate: updatedDate ?? this.updatedDate,
       );
 
   @override
@@ -110,14 +122,14 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           ..write('completed: $completed, ')
           ..write('date: $date, ')
           ..write('time: $time, ')
-          ..write('createdDate: $createdDate')
+          ..write('createdDate: $createdDate, ')
+          ..write('updatedDate: $updatedDate')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, completed, date, time, createdDate);
-
+  int get hashCode => Object.hash(id, title, completed, date, time, createdDate, updatedDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -127,7 +139,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           other.completed == this.completed &&
           other.date == this.date &&
           other.time == this.time &&
-          other.createdDate == this.createdDate);
+          other.createdDate == this.createdDate &&
+          other.updatedDate == this.updatedDate);
 }
 
 class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
@@ -137,6 +150,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
   final Value<DateTime?> date;
   final Value<TimeOfDay?> time;
   final Value<DateTime> createdDate;
+  final Value<DateTime> updatedDate;
 
   const TodoTableCompanion({
     this.id = const Value.absent(),
@@ -145,6 +159,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.date = const Value.absent(),
     this.time = const Value.absent(),
     this.createdDate = const Value.absent(),
+    this.updatedDate = const Value.absent(),
   });
 
   TodoTableCompanion.insert({
@@ -154,8 +169,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.date = const Value.absent(),
     this.time = const Value.absent(),
     this.createdDate = const Value.absent(),
+    this.updatedDate = const Value.absent(),
   }) : title = Value(title);
-
   static Insertable<TodoTableData> custom({
     Expression<int>? id,
     Expression<String>? title,
@@ -163,6 +178,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     Expression<DateTime?>? date,
     Expression<TimeOfDay?>? time,
     Expression<DateTime>? createdDate,
+    Expression<DateTime>? updatedDate,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -171,6 +187,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       if (date != null) 'date': date,
       if (time != null) 'time': time,
       if (createdDate != null) 'created_date': createdDate,
+      if (updatedDate != null) 'updated_date': updatedDate,
     });
   }
 
@@ -180,7 +197,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       Value<bool>? completed,
       Value<DateTime?>? date,
       Value<TimeOfDay?>? time,
-      Value<DateTime>? createdDate}) {
+      Value<DateTime>? createdDate,
+      Value<DateTime>? updatedDate}) {
     return TodoTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -188,6 +206,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       date: date ?? this.date,
       time: time ?? this.time,
       createdDate: createdDate ?? this.createdDate,
+      updatedDate: updatedDate ?? this.updatedDate,
     );
   }
 
@@ -214,6 +233,9 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     if (createdDate.present) {
       map['created_date'] = Variable<DateTime>(createdDate.value);
     }
+    if (updatedDate.present) {
+      map['updated_date'] = Variable<DateTime>(updatedDate.value);
+    }
     return map;
   }
 
@@ -225,7 +247,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
           ..write('completed: $completed, ')
           ..write('date: $date, ')
           ..write('time: $time, ')
-          ..write('createdDate: $createdDate')
+          ..write('createdDate: $createdDate, ')
+          ..write('updatedDate: $updatedDate')
           ..write(')'))
         .toString();
   }
@@ -269,9 +292,13 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, TodoTabl
   @override
   late final GeneratedColumn<DateTime?> createdDate = GeneratedColumn<DateTime?>('created_date', aliasedName, false,
       type: const IntType(), requiredDuringInsert: false, defaultValue: currentDateAndTime);
+  final VerificationMeta _updatedDateMeta = const VerificationMeta('updatedDate');
+  @override
+  late final GeneratedColumn<DateTime?> updatedDate = GeneratedColumn<DateTime?>('updated_date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false, defaultValue: currentDateAndTime);
 
   @override
-  List<GeneratedColumn> get $columns => [id, title, completed, date, time, createdDate];
+  List<GeneratedColumn> get $columns => [id, title, completed, date, time, createdDate, updatedDate];
 
   @override
   String get aliasedName => _alias ?? 'todo_table';
@@ -299,12 +326,14 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, TodoTabl
     if (data.containsKey('created_date')) {
       context.handle(_createdDateMeta, createdDate.isAcceptableOrUnknown(data['created_date']!, _createdDateMeta));
     }
+    if (data.containsKey('updated_date')) {
+      context.handle(_updatedDateMeta, updatedDate.isAcceptableOrUnknown(data['updated_date']!, _updatedDateMeta));
+    }
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-
   @override
   TodoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return TodoTableData.fromData(data, prefix: tablePrefix != null ? '$tablePrefix.' : null);
@@ -322,10 +351,25 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, TodoTabl
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TodoTableTable todoTable = $TodoTableTable(this);
+  late final Trigger todoUpdatedTimestamp = Trigger(
+      'CREATE TRIGGER todo_updated_timestamp\n    AFTER UPDATE OF title, completed, date, time\n    ON todo_table\n    FOR EACH ROW\n    BEGIN\n        UPDATE todo_table\n        SET updated_date = strftime(\'%s\', CURRENT_TIMESTAMP)\n        WHERE id = old.id;\n    END;',
+      'todo_updated_timestamp');
 
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
 
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [todoTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [todoTable, todoUpdatedTimestamp];
+
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
+        [
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('todo_table', limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('todo_table', kind: UpdateKind.update),
+            ],
+          ),
+        ],
+      );
 }
