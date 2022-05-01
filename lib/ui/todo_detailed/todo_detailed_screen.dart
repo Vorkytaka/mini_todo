@@ -72,29 +72,32 @@ class TodoDetailedScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () async {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
-                        );
-                        if (time != null) {
-                          context.read<Repository>().setTime(todo.id, time);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: SizedBox(
-                          height: 56,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.access_time_outlined),
-                              const SizedBox(width: 16),
-                              todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
-                            ],
+                    AbsorbPointer(
+                      absorbing: todo.date == null,
+                      child: InkWell(
+                        onTap: () async {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
+                          );
+                          if (time != null) {
+                            context.read<Repository>().setTime(todo.id, time);
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: SizedBox(
+                            height: 56,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.access_time_outlined),
+                                const SizedBox(width: 16),
+                                todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
+                              ],
+                            ),
                           ),
                         ),
                       ),
