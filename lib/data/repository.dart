@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart';
+import 'package:mini_todo/data/database/database.dart';
+
 import '../entity/todo.dart';
 
 abstract class Repository {
-  Future<void> create(Todo todo);
-
-  Future<List<Todo>> readAll();
+  Future<int> create(TodoCarcase todo);
 
   Stream<List<Todo>> streamAll();
 
@@ -16,62 +17,52 @@ abstract class Repository {
   Future<void> setCompleted(int id, bool completed);
 }
 
-class TestRepository extends Repository {
-  final List<Todo> _todos = List.empty(growable: true);
-  final StreamController<List<Todo>> _controller = StreamController.broadcast();
+class SqlRepository implements Repository {
+  final Database database;
 
-  TestRepository() {
-    _controller.add(_todos);
+  const SqlRepository({
+    required this.database,
+  });
+
+  @override
+  Future<int> create(TodoCarcase todo) => database.into(database.todoTable).insert(
+        TodoTableCompanion.insert(
+          title: todo.title,
+          date: Value(todo.date),
+          time: Value(todo.time),
+        ),
+      );
+
+  @override
+  Future<void> delete(Todo todo) {
+    // TODO: implement delete
+    throw UnimplementedError();
   }
 
   @override
-  Future<void> create(Todo todo) async {
-    final int lastId = _todos.isEmpty ? 0 : _todos.last.id;
-    _todos.add(
-      Todo(
-        id: lastId + 1,
-        title: todo.title,
-        completed: todo.completed,
-        date: todo.date,
-        time: todo.time,
-      ),
-    );
-    _send();
-  }
-
-  @override
-  Future<List<Todo>> readAll() async {
-    return _todos;
+  Future<void> setCompleted(int id, bool completed) {
+    // TODO: implement setCompleted
+    throw UnimplementedError();
   }
 
   @override
   Stream<List<Todo>> streamAll() {
-    return _controller.stream;
+    return database
+        .select(database.todoTable)
+        .map((todo) => Todo(
+              id: todo.id,
+              title: todo.title,
+              completed: todo.completed,
+              date: todo.date,
+              time: todo.time,
+              createdDate: todo.createdDate,
+            ))
+        .watch();
   }
 
   @override
-  Future<void> update(Todo todo) async {
-    final id = _todos.indexWhere((t) => t.id == todo.id);
-    _todos[id] = todo;
-    _send();
-  }
-
-  @override
-  Future<void> delete(Todo todo) async {
-    _todos.removeWhere((t) => t.id == todo.id);
-    _send();
-  }
-
-  @override
-  Future<void> setCompleted(int id, bool completed) async {
-    final index = _todos.indexWhere((todo) => todo.id == id);
-    final todo = _todos[index];
-    final newTodo = todo.copyWith(completed: completed);
-    _todos[index] = newTodo;
-    _send();
-  }
-
-  void _send() {
-    _controller.add(_todos/*.where((todo) => !todo.completed)*/.toList(growable: false));
+  Future<void> update(Todo todo) {
+    // TODO: implement update
+    throw UnimplementedError();
   }
 }

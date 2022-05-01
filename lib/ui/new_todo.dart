@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
-import 'package:mini_todo/ui/formatter.dart';
 import 'package:mini_todo/ui/select_date.dart';
 
 import '../entity/todo.dart';
@@ -68,10 +67,8 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
             if (form.validate()) {
               form.save();
 
-              final todo = Todo(
-                id: 0,
+              final todo = Todo.carcase(
                 title: title!,
-                completed: false,
                 date: date,
                 time: time,
               );

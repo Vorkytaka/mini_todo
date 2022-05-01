@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
 
+class TodoCarcase {
+  final String title;
+  final DateTime? date;
+  final TimeOfDay? time;
+
+  const TodoCarcase({
+    required this.title,
+    this.date,
+    this.time,
+  });
+
+  @override
+  String toString() => 'TodoCarcase($title)';
+
+  @override
+  bool operator ==(Object other) =>
+      other is TodoCarcase && title == other.title && date == other.date && time == other.time;
+
+  @override
+  int get hashCode => hashValues(title, date, time);
+}
+
 class Todo {
   final int id;
   final String title;
   final bool completed;
   final DateTime? date;
   final TimeOfDay? time;
+  final DateTime createdDate;
 
   const Todo({
     required this.id,
@@ -13,10 +36,22 @@ class Todo {
     required this.completed,
     this.date,
     this.time,
+    required this.createdDate,
   });
 
+  static TodoCarcase carcase({
+    required String title,
+    DateTime? date,
+    TimeOfDay? time,
+  }) =>
+      TodoCarcase(
+        title: title,
+        date: date,
+        time: time,
+      );
+
   @override
-  String toString() => 'Todo($id, $title)';
+  String toString() => 'Todo($title, $completed)';
 
   @override
   bool operator ==(Object other) =>
@@ -42,6 +77,7 @@ class Todo {
         completed: completed ?? this.completed,
         date: date ?? this.date,
         time: time ?? this.time,
+        createdDate: createdDate,
       );
 
   DateTime? get datetime {
