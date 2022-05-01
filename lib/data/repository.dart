@@ -10,11 +10,9 @@ abstract class Repository {
 
   Stream<List<Todo>> streamAll();
 
-  Future<void> update(Todo todo);
+  Future<int> setCompleted(int id, bool completed);
 
-  Future<void> delete(Todo todo);
-
-  Future<void> setCompleted(int id, bool completed);
+  Stream<Todo?> streamTodo(int id);
 }
 
 class SqlRepository implements Repository {
@@ -34,35 +32,34 @@ class SqlRepository implements Repository {
       );
 
   @override
-  Future<void> delete(Todo todo) {
-    // TODO: implement delete
-    throw UnimplementedError();
-  }
+  Future<int> setCompleted(int id, bool completed) =>
+      (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
+        TodoTableCompanion(
+          completed: Value(completed),
+        ),
+      );
 
   @override
-  Future<void> setCompleted(int id, bool completed) {
-    // TODO: implement setCompleted
-    throw UnimplementedError();
-  }
+  Stream<List<Todo>> streamAll() => (database.select(database.todoTable)..where((tbl) => tbl.completed.not()))
+      .map((todo) => Todo(
+            id: todo.id,
+            title: todo.title,
+            completed: todo.completed,
+            date: todo.date,
+            time: todo.time,
+            createdDate: todo.createdDate,
+          ))
+      .watch();
 
   @override
-  Stream<List<Todo>> streamAll() {
-    return database
-        .select(database.todoTable)
-        .map((todo) => Todo(
-              id: todo.id,
-              title: todo.title,
-              completed: todo.completed,
-              date: todo.date,
-              time: todo.time,
-              createdDate: todo.createdDate,
-            ))
-        .watch();
-  }
-
-  @override
-  Future<void> update(Todo todo) {
-    // TODO: implement update
-    throw UnimplementedError();
-  }
+  Stream<Todo?> streamTodo(int id) => (database.select(database.todoTable)..where((tbl) => tbl.id.equals(id)))
+      .map((todo) => Todo(
+            id: todo.id,
+            title: todo.title,
+            completed: todo.completed,
+            date: todo.date,
+            time: todo.time,
+            createdDate: todo.createdDate,
+          ))
+      .watchSingle();
 }

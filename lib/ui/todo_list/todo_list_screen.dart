@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/repository.dart';
-import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
 
@@ -51,33 +50,42 @@ class TodoListScreen extends StatelessWidget {
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: BlocBuilder<TodoListCubit, List<Todo>>(builder: (context, todos) {
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) {
-                        final int itemIndex = i ~/ 2;
+                sliver: StreamBuilder<List<Todo>>(
+                  stream: context.read<Repository>().streamAll(),
+                  builder: (context, snapshot) {
+                    final todos = snapshot.data;
 
-                        if (i.isEven) {
-                          final todo = todos[itemIndex];
-                          return TodoItemWidget(
-                            todo: todo,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => TodoDetailedScreen(id: todo.id),
-                                ),
-                              );
-                            },
-                          );
-                        }
+                    if (todos == null) {
+                      return const SliverToBoxAdapter();
+                    }
 
-                        // divider
-                        return const SizedBox(height: 2);
-                      },
-                      childCount: math.max(0, todos.length * 2 - 1),
-                    ),
-                  );
-                }),
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) {
+                          final int itemIndex = i ~/ 2;
+
+                          if (i.isEven) {
+                            final todo = todos[itemIndex];
+                            return TodoItemWidget(
+                              todo: todo,
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => TodoDetailedScreen(id: todo.id),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+
+                          // divider
+                          return const SizedBox(height: 2);
+                        },
+                        childCount: math.max(0, todos.length * 2 - 1),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/current_time_widget.dart';
-import 'package:mini_todo/data/repository.dart';
-import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
-import 'package:mini_todo/ui/formatter.dart';
 import 'package:mini_todo/ui/select_date.dart';
 import 'package:mini_todo/ui/todo_list/todo_list_screen.dart';
 
+import '../../data/repository.dart';
 import '../../entity/todo.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
@@ -22,9 +20,16 @@ class TodoDetailedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      body: BlocSelector<TodoListCubit, List<Todo>, Todo>(
-        selector: (todos) => todos.firstWhere((todo) => todo.id == id),
-        builder: (context, todo) {
+      body: StreamBuilder<Todo?>(
+        stream: context.read<Repository>().streamTodo(id),
+        initialData: null,
+        builder: (context, snapshot) {
+          final todo = snapshot.data;
+
+          if (todo == null) {
+            return const SizedBox.shrink();
+          }
+
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -47,7 +52,8 @@ class TodoDetailedScreen extends StatelessWidget {
                           selectedDate: todo.date,
                         );
                         if (date != null) {
-                          context.read<Repository>().update(todo.copyWith(date: date));
+                          // todo: ???
+                          // context.read<Repository>().update(todo.copyWith(date: date));
                         }
                       },
                       child: Padding(
@@ -74,7 +80,8 @@ class TodoDetailedScreen extends StatelessWidget {
                           initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
                         );
                         if (time != null) {
-                          context.read<Repository>().update(todo.copyWith(time: time));
+                          // todo: ???
+                          // context.read<Repository>().update(todo.copyWith(time: time));
                         }
                       },
                       child: Padding(
@@ -129,7 +136,8 @@ class _AppBarState extends State<_AppBar> {
     super.initState();
     _titleController = TextEditingController(text: widget.todo.title);
     _titleController.addListener(() {
-      context.read<Repository>().update(widget.todo.copyWith(title: _titleController.text));
+      // todo: ???
+      // context.read<Repository>().update(widget.todo.copyWith(title: _titleController.text));
     });
   }
 
