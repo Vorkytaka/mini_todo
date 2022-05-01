@@ -56,6 +56,9 @@ class DriftRepository implements Repository {
       (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
         TodoTableCompanion(time: Value(time)),
       );
+
+  @override
+  Future<int> delete(int id) => (database.delete(database.todoTable)..where((tbl) => tbl.id.equals(id))).go();
 }
 
 extension on TodoTableData {

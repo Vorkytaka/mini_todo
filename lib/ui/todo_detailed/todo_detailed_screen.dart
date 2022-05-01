@@ -174,6 +174,14 @@ class _AppBarState extends State<_AppBar> {
                 textInputAction: TextInputAction.done,
               ),
             ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                await context.read<Repository>().delete(widget.todo.id);
+                // todo: this is a bad way to navigate back
+                Navigator.of(context).pop();
+              },
+            ),
             TodoCheckbox(todo: widget.todo),
           ],
         ),

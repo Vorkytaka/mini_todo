@@ -20,4 +20,6 @@ abstract class Repository {
   Future<int> setDate(int id, DateTime date);
 
   Future<int> setTime(int id, TimeOfDay time);
+
+  Future<int> delete(int id);
 }
