@@ -27,10 +27,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Inbox"),
+        "common_completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "common_today": MessageLookupByLibrary.simpleMessage("Today"),
         "common_tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
         "common_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
-        "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task...")
+        "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task..."),
+        "new_todo__title_required": MessageLookupByLibrary.simpleMessage("Enter task title")
       };
 }

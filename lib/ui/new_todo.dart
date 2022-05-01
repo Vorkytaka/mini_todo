@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
-import 'package:mini_todo/ui/formatter.dart';
 import 'package:mini_todo/ui/select_date.dart';
 
 import '../entity/todo.dart';
@@ -36,6 +35,9 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
+
     final Widget titleField = TextFormField(
       decoration: InputDecoration(
         border: InputBorder.none,
@@ -49,7 +51,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       initialValue: '',
       validator: (title) {
         if (title == null || title.isEmpty) {
-          return 'Required';
+          return S.of(context).new_todo__title_required;
         }
 
         return null;
@@ -68,10 +70,8 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
             if (form.validate()) {
               form.save();
 
-              final todo = Todo(
-                id: 0,
+              final todo = Todo.carcase(
                 title: title!,
-                completed: false,
                 date: date,
                 time: time,
               );
@@ -88,7 +88,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
               children: [
                 Icon(
                   Icons.send,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: theme.colorScheme.primary,
                 ),
               ],
             ),
@@ -98,7 +98,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     );
 
     return Padding(
-      padding: MediaQuery.of(context).viewInsets + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: Colors.grey.shade50,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -130,16 +130,18 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                               },
                               onChanged: (date) {
                                 this.date = date;
+                                setState(() {});
                               },
                             ),
                             const SizedBox(width: 8),
-                            if (_dateKey.currentState?.value != null)
+                            if (date != null)
                               _TimeFormField(
                                 onSaved: (time) {
                                   this.time = time;
                                 },
                                 onChanged: (time) {
                                   this.time = time;
+                                  setState(() {});
                                 },
                               ),
                           ],

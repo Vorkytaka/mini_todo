@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/data/database/database.dart';
+import 'package:mini_todo/data/drift_repository.dart';
 import 'package:mini_todo/data/repository.dart';
-import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 
 import 'current_time_widget.dart';
 
@@ -16,12 +17,8 @@ class OuterDependencies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<Repository>(
-      create: (context) => TestRepository(),
-      child: BlocProvider(
-        create: (context) => TodoListCubit(repository: context.read()),
-        lazy: false,
-        child: child,
-      ),
+      create: (context) => DriftRepository(database: Database()),
+      child: child,
     );
   }
 }

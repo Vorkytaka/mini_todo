@@ -1,0 +1,22 @@
+import 'table/todo_table.dart';
+
+CREATE TRIGGER todo_updated_timestamp
+    AFTER UPDATE OF title, completed, date, time
+    ON todo_table
+    FOR EACH ROW
+    BEGIN
+        UPDATE todo_table
+        SET updated_date = strftime('%s', CURRENT_TIMESTAMP)
+        WHERE id = old.id;
+    END;
+
+-- CREATE TRIGGER todo_completed_date
+--    AFTER UPDATE OF completed
+--    ON todo_table
+--    FOR EACH ROW
+--    WHEN new.completed == 1
+--    BEGIN
+--        UPDATE todo_table
+--        SET completed_date = strftime('%s', CURRENT_TIMESTAMP)
+--        WHERE id = old.id;
+--    END;

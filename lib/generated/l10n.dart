@@ -130,11 +130,31 @@ class S {
     );
   }
 
+  /// `Completed`
+  String get common_completed {
+    return Intl.message(
+      'Completed',
+      name: 'common_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Task...`
   String get new_todo__title_hint {
     return Intl.message(
       'Task...',
       name: 'new_todo__title_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter task title`
+  String get new_todo__title_required {
+    return Intl.message(
+      'Enter task title',
+      name: 'new_todo__title_required',
       desc: '',
       args: [],
     );

@@ -7,6 +7,8 @@
   "common_yesterday": "Yesterday",
   "common_today": "Today",
   "common_tomorrow": "Tomorrow",
+  "common_completed": "Completed",
   "new_todo__title_hint": "Task...",
+  "new_todo__title_required": "Enter task title",
   "datetime_dialog__time": "Time"
 }

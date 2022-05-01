@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/repository.dart';
-import 'package:mini_todo/domain/todo/todo_list_cubit.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
 
@@ -11,8 +10,15 @@ import '../../current_time_widget.dart';
 import '../../entity/todo.dart';
 import '../new_todo.dart';
 
-class TodoListScreen extends StatelessWidget {
+class TodoListScreen extends StatefulWidget {
   const TodoListScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TodoListScreen> createState() => _TodoListScreenState();
+}
+
+class _TodoListScreenState extends State<TodoListScreen> {
+  bool _showCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,37 +57,97 @@ class TodoListScreen extends StatelessWidget {
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: BlocBuilder<TodoListCubit, List<Todo>>(builder: (context, todos) {
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, i) {
-                        final int itemIndex = i ~/ 2;
+                sliver: StreamBuilder<List<Todo>>(
+                  stream: context.read<Repository>().streamAll(),
+                  builder: (context, snapshot) {
+                    final todos = snapshot.data;
 
-                        if (i.isEven) {
-                          final todo = todos[itemIndex];
-                          return TodoItemWidget(
-                            todo: todo,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => TodoDetailedScreen(id: todo.id),
-                                ),
-                              );
-                            },
-                          );
-                        }
+                    if (todos == null) {
+                      return const SliverToBoxAdapter();
+                    }
 
-                        // divider
-                        return const SizedBox(height: 2);
-                      },
-                      childCount: math.max(0, todos.length * 2 - 1),
-                    ),
-                  );
-                }),
+                    return TodoListSliver(todos: todos);
+                  },
+                ),
               ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                sliver: SliverToBoxAdapter(
+                  child: Center(
+                    child: Material(
+                      color: Colors.grey.shade100,
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      child: InkWell(
+                        onTap: () => setState(() {
+                          _showCompleted = !_showCompleted;
+                        }),
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: Text(S.of(context).common_completed),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              if (_showCompleted)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: StreamBuilder<List<Todo>>(
+                    stream: context.read<Repository>().streamAllCompleted(),
+                    builder: (context, snapshot) {
+                      final todos = snapshot.data;
+
+                      if (todos == null) {
+                        return const SliverToBoxAdapter();
+                      }
+
+                      return TodoListSliver(todos: todos);
+                    },
+                  ),
+                )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TodoListSliver extends StatelessWidget {
+  final List<Todo> todos;
+
+  const TodoListSliver({Key? key, required this.todos}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, i) {
+          final int itemIndex = i ~/ 2;
+
+          if (i.isEven) {
+            final todo = todos[itemIndex];
+            return TodoItemWidget(
+              todo: todo,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => TodoDetailedScreen(id: todo.id),
+                  ),
+                );
+              },
+            );
+          }
+
+          // divider
+          return const SizedBox(height: 2);
+        },
+        childCount: math.max(0, todos.length * 2 - 1),
       ),
     );
   }

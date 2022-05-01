@@ -6,6 +6,8 @@
   "common_yesterday": "Вчера",
   "common_today": "Сегодня",
   "common_tomorrow": "Завтра",
+  "common_completed": "Выполненные",
   "new_todo__title_hint": "Задача...",
+  "new_todo__title_required": "Введите название задачи",
   "datetime_dialog__time": "Время"
 }
