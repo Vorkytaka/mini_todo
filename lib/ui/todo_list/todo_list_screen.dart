@@ -73,8 +73,10 @@ class TodoListScreen extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                          color: Colors.grey.shade100, borderRadius: const BorderRadius.all(Radius.circular(4))),
-                      child: const Text('Выполненные'),
+                        color: Colors.grey.shade100,
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      ),
+                      child: Text(S.of(context).common_completed),
                     ),
                   ),
                 ),

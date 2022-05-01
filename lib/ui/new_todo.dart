@@ -51,7 +51,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       initialValue: '',
       validator: (title) {
         if (title == null || title.isEmpty) {
-          return 'Required';
+          return S.of(context).new_todo__title_required;
         }
 
         return null;

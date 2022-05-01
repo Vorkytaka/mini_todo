@@ -36,6 +36,10 @@ class TodoDetailedScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBar(todo: todo),
+              const Divider(
+                height: 1,
+                indent: 48,
+              ),
               NowStyle(
                 date: todo.date,
                 time: todo.time,
@@ -151,30 +155,27 @@ class _AppBarState extends State<_AppBar> {
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: Material(
-        elevation: 1,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: kToolbarHeight),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const BackButton(),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  style: Theme.of(context).textTheme.headline6,
-                  maxLines: null,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: kToolbarHeight),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const BackButton(),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(border: InputBorder.none),
+                style: Theme.of(context).textTheme.headline6,
+                maxLines: null,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.done,
               ),
-              TodoCheckbox(todo: widget.todo),
-            ],
-          ),
+            ),
+            TodoCheckbox(todo: widget.todo),
+          ],
         ),
       ),
     );
