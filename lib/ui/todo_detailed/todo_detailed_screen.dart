@@ -36,29 +36,91 @@ class TodoDetailedScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBar(todo: todo),
-              const Divider(
-                height: 1,
-                indent: 48,
-              ),
-              NowStyle(
-                date: todo.date,
-                time: todo.time,
-                textStyle: Theme.of(context).textTheme.subtitle1,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
                   children: [
+                    NowStyle(
+                      date: todo.date,
+                      time: todo.time,
+                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              final date = await showDateSelector(
+                                context: context,
+                                selectedDate: todo.date,
+                              );
+                              if (date != null) {
+                                context.read<Repository>().setDate(todo.id, date);
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: SizedBox(
+                                height: 56,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.today),
+                                    const SizedBox(width: 16),
+                                    todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          AbsorbPointer(
+                            absorbing: todo.date == null,
+                            child: InkWell(
+                              onTap: () async {
+                                final time = await showTimePicker(
+                                  context: context,
+                                  initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
+                                );
+                                if (time != null) {
+                                  context.read<Repository>().setTime(todo.id, time);
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                child: SizedBox(
+                                  height: 56,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.access_time_outlined),
+                                      const SizedBox(width: 16),
+                                      todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 1,
+                      indent: 64,
+                    ),
                     InkWell(
                       onTap: () async {
-                        final date = await showDateSelector(
-                          context: context,
-                          selectedDate: todo.date,
-                        );
-                        if (date != null) {
-                          context.read<Repository>().setDate(todo.id, date);
-                        }
+                        await context.read<Repository>().delete(todo.id);
+                        // todo: this is a bad way to navigate back
+                        Navigator.of(context).pop();
                       },
+                      hoverColor: Theme.of(context).errorColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: SizedBox(
@@ -68,50 +130,23 @@ class TodoDetailedScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Icon(Icons.today),
+                              Icon(
+                                Icons.delete,
+                                color: Theme.of(context).errorColor,
+                              ),
                               const SizedBox(width: 16),
-                              todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
+                              Text(
+                                'Удалить',
+                                style:
+                                    Theme.of(context).textTheme.subtitle1?.apply(color: Theme.of(context).errorColor),
+                              ),
                             ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    AbsorbPointer(
-                      absorbing: todo.date == null,
-                      child: InkWell(
-                        onTap: () async {
-                          final time = await showTimePicker(
-                            context: context,
-                            initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
-                          );
-                          if (time != null) {
-                            context.read<Repository>().setTime(todo.id, time);
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                          child: SizedBox(
-                            height: 56,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.access_time_outlined),
-                                const SizedBox(width: 16),
-                                todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
-                              ],
-                            ),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              const Divider(
-                height: 1,
-                indent: 64,
               ),
             ],
           );
@@ -153,37 +188,32 @@ class _AppBarState extends State<_AppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: kToolbarHeight),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const BackButton(),
-            const SizedBox(width: 8),
-            Expanded(
-              child: TextField(
-                controller: _titleController,
-                decoration: const InputDecoration(border: InputBorder.none),
-                style: Theme.of(context).textTheme.headline6,
-                maxLines: null,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
+    return Material(
+      elevation: 1,
+      child: SafeArea(
+        bottom: false,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: kToolbarHeight),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const BackButton(),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  style: Theme.of(context).textTheme.headline6,
+                  maxLines: null,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                await context.read<Repository>().delete(widget.todo.id);
-                // todo: this is a bad way to navigate back
-                Navigator.of(context).pop();
-              },
-            ),
-            TodoCheckbox(todo: widget.todo),
-          ],
+              TodoCheckbox(todo: widget.todo),
+            ],
+          ),
         ),
       ),
     );
