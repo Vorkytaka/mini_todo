@@ -130,16 +130,18 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                               },
                               onChanged: (date) {
                                 this.date = date;
+                                setState(() {});
                               },
                             ),
                             const SizedBox(width: 8),
-                            if (_dateKey.currentState?.value != null)
+                            if (date != null)
                               _TimeFormField(
                                 onSaved: (time) {
                                   this.time = time;
                                 },
                                 onChanged: (time) {
                                   this.time = time;
+                                  setState(() {});
                                 },
                               ),
                           ],

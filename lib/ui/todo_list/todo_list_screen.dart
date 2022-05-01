@@ -10,8 +10,15 @@ import '../../current_time_widget.dart';
 import '../../entity/todo.dart';
 import '../new_todo.dart';
 
-class TodoListScreen extends StatelessWidget {
+class TodoListScreen extends StatefulWidget {
   const TodoListScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TodoListScreen> createState() => _TodoListScreenState();
+}
+
+class _TodoListScreenState extends State<TodoListScreen> {
+  bool _showCompleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,32 +77,39 @@ class TodoListScreen extends StatelessWidget {
                     child: Material(
                       color: Colors.grey.shade100,
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                      child: InkWell(
+                        onTap: () => setState(() {
+                          _showCompleted = !_showCompleted;
+                        }),
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: Text(S.of(context).common_completed),
                         ),
-                        child: Text(S.of(context).common_completed),
                       ),
                     ),
                   ),
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: StreamBuilder<List<Todo>>(
-                  stream: context.read<Repository>().streamAllCompleted(),
-                  builder: (context, snapshot) {
-                    final todos = snapshot.data;
+              if (_showCompleted)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: StreamBuilder<List<Todo>>(
+                    stream: context.read<Repository>().streamAllCompleted(),
+                    builder: (context, snapshot) {
+                      final todos = snapshot.data;
 
-                    if (todos == null) {
-                      return const SliverToBoxAdapter();
-                    }
+                      if (todos == null) {
+                        return const SliverToBoxAdapter();
+                      }
 
-                    return TodoListSliver(todos: todos);
-                  },
-                ),
-              )
+                      return TodoListSliver(todos: todos);
+                    },
+                  ),
+                )
             ],
           ),
         ),
