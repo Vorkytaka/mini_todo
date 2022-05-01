@@ -59,37 +59,79 @@ class TodoListScreen extends StatelessWidget {
                       return const SliverToBoxAdapter();
                     }
 
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, i) {
-                          final int itemIndex = i ~/ 2;
-
-                          if (i.isEven) {
-                            final todo = todos[itemIndex];
-                            return TodoItemWidget(
-                              todo: todo,
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => TodoDetailedScreen(id: todo.id),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-
-                          // divider
-                          return const SizedBox(height: 2);
-                        },
-                        childCount: math.max(0, todos.length * 2 - 1),
-                      ),
-                    );
+                    return TodoListSliver(todos: todos);
                   },
                 ),
               ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                sliver: SliverToBoxAdapter(
+                  child: Center(
+                    child: Ink(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100, borderRadius: const BorderRadius.all(Radius.circular(4))),
+                      child: const Text('Выполненные'),
+                    ),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: StreamBuilder<List<Todo>>(
+                  stream: context.read<Repository>().streamAllCompleted(),
+                  builder: (context, snapshot) {
+                    final todos = snapshot.data;
+
+                    if (todos == null) {
+                      return const SliverToBoxAdapter();
+                    }
+
+                    return TodoListSliver(todos: todos);
+                  },
+                ),
+              )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TodoListSliver extends StatelessWidget {
+  final List<Todo> todos;
+
+  const TodoListSliver({Key? key, required this.todos}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, i) {
+          final int itemIndex = i ~/ 2;
+
+          if (i.isEven) {
+            final todo = todos[itemIndex];
+            return TodoItemWidget(
+              todo: todo,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => TodoDetailedScreen(id: todo.id),
+                  ),
+                );
+              },
+            );
+          }
+
+          // divider
+          return const SizedBox(height: 2);
+        },
+        childCount: math.max(0, todos.length * 2 - 1),
       ),
     );
   }

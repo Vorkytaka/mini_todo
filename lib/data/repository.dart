@@ -10,6 +10,8 @@ abstract class Repository {
 
   Stream<List<Todo>> streamAll();
 
+  Stream<List<Todo>> streamAllCompleted();
+
   Future<int> setCompleted(int id, bool completed);
 
   Stream<Todo?> streamTodo(int id);
@@ -40,26 +42,25 @@ class SqlRepository implements Repository {
       );
 
   @override
-  Stream<List<Todo>> streamAll() => (database.select(database.todoTable)..where((tbl) => tbl.completed.not()))
-      .map((todo) => Todo(
-            id: todo.id,
-            title: todo.title,
-            completed: todo.completed,
-            date: todo.date,
-            time: todo.time,
-            createdDate: todo.createdDate,
-          ))
-      .watch();
+  Stream<List<Todo>> streamAll() =>
+      (database.select(database.todoTable)..where((tbl) => tbl.completed.not())).map((todo) => todo.toTodo).watch();
 
   @override
-  Stream<Todo?> streamTodo(int id) => (database.select(database.todoTable)..where((tbl) => tbl.id.equals(id)))
-      .map((todo) => Todo(
-            id: todo.id,
-            title: todo.title,
-            completed: todo.completed,
-            date: todo.date,
-            time: todo.time,
-            createdDate: todo.createdDate,
-          ))
-      .watchSingle();
+  Stream<List<Todo>> streamAllCompleted() =>
+      (database.select(database.todoTable)..where((tbl) => tbl.completed)).map((todo) => todo.toTodo).watch();
+
+  @override
+  Stream<Todo?> streamTodo(int id) =>
+      (database.select(database.todoTable)..where((tbl) => tbl.id.equals(id))).map((todo) => todo.toTodo).watchSingle();
+}
+
+extension on TodoTableData {
+  Todo get toTodo => Todo(
+        id: id,
+        title: title,
+        completed: completed,
+        date: date,
+        time: time,
+        createdDate: createdDate,
+      );
 }
