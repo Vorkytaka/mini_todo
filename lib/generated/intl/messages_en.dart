@@ -33,6 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
         "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task..."),
-        "new_todo__title_required": MessageLookupByLibrary.simpleMessage("Enter task title")
+        "new_todo__title_required":
+            MessageLookupByLibrary.simpleMessage("Enter task title")
       };
 }

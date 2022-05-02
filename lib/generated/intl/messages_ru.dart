@@ -31,7 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_tomorrow": MessageLookupByLibrary.simpleMessage("Завтра"),
         "common_yesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Время"),
-        "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Задача..."),
-        "new_todo__title_required": MessageLookupByLibrary.simpleMessage("Введите название задачи")
+        "new_todo__title_hint":
+            MessageLookupByLibrary.simpleMessage("Задача..."),
+        "new_todo__title_required":
+            MessageLookupByLibrary.simpleMessage("Введите название задачи")
       };
 }
