@@ -4,11 +4,18 @@
   "common__confirm": "Confirm",
   "common__cancel": "Cancel",
   "common__all": "All",
+  "common__yes": "Yes",
+  "common__no": "No",
   "common_yesterday": "Yesterday",
   "common_today": "Today",
   "common_tomorrow": "Tomorrow",
   "common_completed": "Completed",
+  "common_show_completed": "Show completed",
+  "common_hide_completed": "Hide completed",
   "new_todo__title_hint": "Task...",
   "new_todo__title_required": "Enter task title",
-  "datetime_dialog__time": "Time"
+  "datetime_dialog__time": "Time",
+  "delete_todo__title": "Delete this todo?",
+  "delete_todo__content": "Are you sure you want to delete ",
+  "delete_todo__caution": "This action cannot be undone."
 }

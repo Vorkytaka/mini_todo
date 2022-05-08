@@ -6,9 +6,9 @@ import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
 
-import '../../current_time_widget.dart';
 import '../../entity/todo.dart';
 import '../new_todo.dart';
+import '../todo_item.dart';
 
 class TodoListScreen extends StatefulWidget {
   const TodoListScreen({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.lightBlue,
-        title: Text(S.of(context).common__inbox),
+        title: Text(S.of(context).app_name),
         centerTitle: true,
       ),
       body: Ink(
@@ -87,7 +87,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             horizontal: 16,
                             vertical: 8,
                           ),
-                          child: Text(S.of(context).common_completed),
+                          child: Text(_showCompleted
+                              ? S.of(context).common_hide_completed
+                              : S.of(context).common_show_completed),
                         ),
                       ),
                     ),
@@ -137,7 +139,7 @@ class TodoListSliver extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => TodoDetailedScreen(id: todo.id),
+                    builder: (context) => TodoDetailedScreen(todo: todo),
                   ),
                 );
               },
@@ -168,93 +170,6 @@ class TodoCheckbox extends StatelessWidget {
       onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-    );
-  }
-}
-
-class TodoItemWidget extends StatelessWidget {
-  final Todo todo;
-  final VoidCallback? onTap;
-
-  const TodoItemWidget({
-    Key? key,
-    required this.todo,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    // todo: line through when completed
-    final Widget titleWidget = AnimatedDefaultTextStyle(
-      style: theme.textTheme.subtitle1!.apply(
-        decoration: todo.completed ? TextDecoration.lineThrough : TextDecoration.none,
-      ),
-      duration: kThemeChangeDuration,
-      child: Text(
-        todo.title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-
-    Widget? datetimeWidget;
-    if (todo.date != null) {
-      datetimeWidget = DatetimeOnNowWidget(
-        date: todo.date!,
-        time: todo.time,
-      );
-    }
-
-    final Widget checkbox = TodoCheckbox(todo: todo);
-
-    const BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
-
-    Widget body = Material(
-      color: Colors.grey.shade100,
-      borderRadius: borderRadius,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: borderRadius,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 24, right: 16),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    titleWidget,
-                    if (datetimeWidget != null) ...[
-                      const SizedBox(height: 2),
-                      datetimeWidget,
-                    ],
-                  ],
-                ),
-              ),
-              checkbox,
-            ],
-          ),
-        ),
-      ),
-    );
-
-    if (todo.completed) {
-      body = Opacity(
-        opacity: 0.8,
-        child: body,
-      );
-    }
-
-    return SizedBox(
-      height: 56,
-      child: body,
     );
   }
 }

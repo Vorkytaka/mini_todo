@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mini_todo/dependencies.dart';
-import 'package:mini_todo/ui/todo_list/todo_list_screen.dart';
+import 'package:mini_todo/ui/folder/folder_list_screen.dart';
 
 import 'generated/l10n.dart';
 
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
             child: child!,
           );
         },
-        home: const TodoListScreen(),
+        home: const FolderListScreen(),
       ),
     );
   }
