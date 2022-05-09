@@ -4,6 +4,7 @@ import 'package:mini_todo/domain/folder/folder_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_list.dart';
+import 'package:mini_todo/utils/color.dart';
 
 import '../new_todo.dart';
 
@@ -17,7 +18,7 @@ class FolderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FolderCubit>(
+    Widget screen = BlocProvider<FolderCubit>(
       create: (context) => FolderCubit(
         folder: folder,
         repository: context.read(),
@@ -35,11 +36,36 @@ class FolderScreen extends StatelessWidget {
               onPressed: () => showNewTodoDialog(context: context, folder: state.folder),
               child: const Icon(Icons.add),
             ),
-            body: _Body(state: state),
+            body: Stack(
+              children: [
+                Ink(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        (state.folder.color ?? Theme.of(context).primaryColor).lighten(80),
+                        Colors.grey.shade200,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                ),
+                _Body(state: state),
+              ],
+            ),
           );
         },
       ),
     );
+
+    if (folder.color != null) {
+      screen = Theme(
+        data: Theme.of(context).copyWith(colorScheme: ColorScheme.fromSeed(seedColor: folder.color!)),
+        child: screen,
+      );
+    }
+
+    return screen;
   }
 }
 

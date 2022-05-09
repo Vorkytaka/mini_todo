@@ -23,6 +23,9 @@ class App extends StatelessWidget {
         ],
         theme: ThemeData(
           splashFactory: InkRipple.splashFactory,
+          appBarTheme: const AppBarTheme(
+            elevation: 1,
+          ),
         ),
         builder: (context, child) {
           assert(child != null);
