@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/ui/color_picker.dart';
 
 import '../../constants.dart';
 import '../../data/repository.dart';
@@ -22,7 +23,8 @@ class _NewFolderDialog extends StatefulWidget {
 }
 
 class _NewFolderDialogState extends State<_NewFolderDialog> {
-  String? title;
+  String? _title;
+  Color? _color;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +41,13 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
           child: Form(
             child: Row(
               children: [
-                // todo: folder color
-                // IconButton(
-                //   onPressed: () {},
-                //   icon: Ink(
-                //     decoration: const BoxDecoration(
-                //       color: Colors.blue,
-                //       shape: BoxShape.circle,
-                //     ),
-                //   ),
-                // ),
+                ColorPickerOverlayField(
+                  offset: const Offset(0, 56),
+                  initialValue: Colors.blue,
+                  onSaved: (color) {
+                    _color = color;
+                  },
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
@@ -72,7 +71,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
                       return null;
                     },
                     onSaved: (title) {
-                      this.title = title;
+                      _title = title;
                     },
                   ),
                 ),
@@ -83,7 +82,12 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
                             final form = Form.of(context)!;
                             if (form.validate()) {
                               form.save();
-                              context.read<Repository>().createFolder(FolderCarcass(title: title!));
+                              context.read<Repository>().createFolder(
+                                    FolderCarcass(
+                                      title: _title!,
+                                      color: _color,
+                                    ),
+                                  );
                               Navigator.of(context).pop();
                             }
                           },
