@@ -27,7 +27,6 @@ class FolderScreen extends StatelessWidget {
       child: BlocBuilder<FolderCubit, FolderState>(
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.lightBlue.shade50,
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text(state.folder.title),
@@ -79,16 +78,30 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (state.isEmpty) {
       return Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Icon(
+            Icons.playlist_add,
+            size: 80,
+            color: theme.colorScheme.primary,
+          ),
+          const SizedBox(height: 24),
           Text(
-            'Добавьте свою первую задачу!',
+            'Сейчас список пуст',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: theme.textTheme.headline5,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Добавьте первую задачу,\nне ленитесь!',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.subtitle1,
           ),
         ],
       );
