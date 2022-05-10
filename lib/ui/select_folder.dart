@@ -14,7 +14,7 @@ Future<Folder?> showSelectFolderDialog({
       final theme = Theme.of(context);
       return BlocBuilder<FoldersCubit, List<Folder>>(
         builder: (context, folders) => SimpleDialog(
-          title: const Text('Выберите папку'),
+          title: Text(S.of(context).select_folder_dialog__title),
           children: [
             ListTile(
               leading: const Icon(Icons.inbox_outlined),

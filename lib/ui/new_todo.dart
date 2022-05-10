@@ -53,7 +53,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     final Widget titleField = TextFormField(
       decoration: InputDecoration(
         border: InputBorder.none,
-        hintText: S.of(context).new_todo__title_hint,
+        hintText: S.of(context).new_todo_dialog__title_hint,
       ),
       autofocus: true,
       textInputAction: TextInputAction.done,
@@ -63,7 +63,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       initialValue: '',
       validator: (title) {
         if (title == null || title.isEmpty) {
-          return S.of(context).new_todo__title_required;
+          return S.of(context).new_todo_dialog__title_required;
         }
 
         return null;

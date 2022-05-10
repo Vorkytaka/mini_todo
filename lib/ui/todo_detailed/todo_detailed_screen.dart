@@ -88,7 +88,7 @@ class TodoDetailedScreen extends StatelessWidget {
                         children: [
                           ListItem(
                             icon: const Icon(Icons.today),
-                            title: todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
+                            title: todo.date != null ? DateTextWidget(date: todo.date!) : Text(S.of(context).todo_detailed_screen__no_date),
                             onTap: () async {
                               final date = await showDateSelector(
                                 context: context,
@@ -122,7 +122,7 @@ class TodoDetailedScreen extends StatelessWidget {
                                     children: [
                                       const Icon(Icons.access_time_outlined),
                                       const SizedBox(width: 16),
-                                      todo.time != null ? Text(todo.time!.format(context)) : const Text('Без времени'),
+                                      todo.time != null ? Text(todo.time!.format(context)) : Text(S.of(context).todo_detailed_screen__no_date),
                                     ],
                                   ),
                                 ),
@@ -156,7 +156,7 @@ class TodoDetailedScreen extends StatelessWidget {
                               ),
                               const SizedBox(width: 16),
                               Text(
-                                'Удалить',
+                                S.of(context).todo_detailed_screen__delete,
                                 style:
                                 theme.textTheme.subtitle1?.apply(color: theme.errorColor),
                               ),
@@ -247,7 +247,7 @@ Future<void> showDeleteTodoDialog({
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(S.of(context).delete_todo__title),
+        title: Text(S.of(context).delete_todo_dialog__title),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -257,7 +257,7 @@ Future<void> showDeleteTodoDialog({
               text: TextSpan(
                 style: Theme.of(context).textTheme.bodyText2,
                 children: [
-                  TextSpan(text: S.of(context).delete_todo__content),
+                  TextSpan(text: S.of(context).delete_todo_dialog__content),
                   TextSpan(text: todo.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const TextSpan(text: '?'),
                 ],
@@ -265,7 +265,7 @@ Future<void> showDeleteTodoDialog({
             ),
             const SizedBox(height: 16),
             Text(
-              S.of(context).delete_todo__caution,
+              S.of(context).delete_todo_dialog__caution,
               style: Theme.of(context).textTheme.bodyText2,
             ),
           ],

@@ -89,8 +89,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
                             vertical: 8,
                           ),
                           child: Text(_showCompleted
-                              ? S.of(context).common_hide_completed
-                              : S.of(context).common_show_completed),
+                              ? S.of(context).common__hide_completed
+                              : S.of(context).common__show_completed),
                         ),
                       ),
                     ),

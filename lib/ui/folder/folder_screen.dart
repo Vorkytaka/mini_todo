@@ -71,11 +71,11 @@ class _Screen extends StatelessWidget {
                   PopupMenuButton<_MenuItem>(
                     shape: const RoundedRectangleBorder(borderRadius: borderRadius),
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         child: ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.edit_outlined),
-                          title: Text('Изменить папку'),
+                          leading: const Icon(Icons.edit_outlined),
+                          title: Text(S.of(context).folder_screen__update_folder),
                           minLeadingWidth: 0,
                           dense: true,
                         ),
@@ -85,7 +85,7 @@ class _Screen extends StatelessWidget {
                         child: ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: const Icon(Icons.delete_outline),
-                          title: const Text('Удалить папку'),
+                          title: Text(S.of(context).folder_screen__delete_folder),
                           minLeadingWidth: 0,
                           dense: true,
                           iconColor: Theme.of(context).errorColor,
@@ -172,13 +172,13 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'Сейчас список пуст',
+            S.of(context).folder_screen__empty_title,
             textAlign: TextAlign.center,
             style: theme.textTheme.headline5,
           ),
           const SizedBox(height: 16),
           Text(
-            'Добавьте первую задачу,\nне ленитесь!',
+            S.of(context).folder_screen__empty_caution,
             textAlign: TextAlign.center,
             style: theme.textTheme.subtitle1,
           ),
@@ -225,7 +225,7 @@ class _TodosListState extends State<_TodosList> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Text(
-                    _showCompleted ? S.of(context).common_hide_completed : S.of(context).common_show_completed,
+                    _showCompleted ? S.of(context).common__hide_completed : S.of(context).common__show_completed,
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
@@ -270,7 +270,7 @@ class _DeleteFolderDialogState extends State<DeleteFolderDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Удалить папку?'),
+      title: Text(S.of(context).delete_folder_dialog__title),
       contentPadding: const EdgeInsets.only(left: 24, top: 20, right: 24),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -280,7 +280,7 @@ class _DeleteFolderDialogState extends State<DeleteFolderDialog> {
           RichText(
             text: TextSpan(
               children: [
-                const TextSpan(text: 'Вы действительно хотите удалить папку '),
+                TextSpan(text: S.of(context).delete_folder_dialog__content),
                 TextSpan(text: widget.folder.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                 const TextSpan(text: '?'),
               ],
@@ -296,7 +296,7 @@ class _DeleteFolderDialogState extends State<DeleteFolderDialog> {
             }),
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(
-              'Удалить все задачи из папки',
+              S.of(context).delete_folder_dialog__delete_todos_toggle,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             contentPadding: EdgeInsets.zero,

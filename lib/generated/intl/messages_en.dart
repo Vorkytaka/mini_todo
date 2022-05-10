@@ -25,27 +25,59 @@ class MessageLookup extends MessageLookupByLibrary {
         "app_name": MessageLookupByLibrary.simpleMessage("miniTodo"),
         "common__all": MessageLookupByLibrary.simpleMessage("All"),
         "common__cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "common__completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "common__hide_completed":
+            MessageLookupByLibrary.simpleMessage("Hide completed"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Inbox"),
         "common__no": MessageLookupByLibrary.simpleMessage("No"),
-        "common__yes": MessageLookupByLibrary.simpleMessage("Yes"),
-        "common_completed": MessageLookupByLibrary.simpleMessage("Completed"),
-        "common_hide_completed":
-            MessageLookupByLibrary.simpleMessage("Hide completed"),
-        "common_show_completed":
+        "common__show_completed":
             MessageLookupByLibrary.simpleMessage("Show completed"),
-        "common_today": MessageLookupByLibrary.simpleMessage("Today"),
-        "common_tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
-        "common_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
+        "common__today": MessageLookupByLibrary.simpleMessage("Today"),
+        "common__tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
+        "common__yes": MessageLookupByLibrary.simpleMessage("Yes"),
+        "common__yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
-        "delete_todo__caution": MessageLookupByLibrary.simpleMessage(
+        "delete_folder_dialog__content": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete folder "),
+        "delete_folder_dialog__delete_todos_toggle":
+            MessageLookupByLibrary.simpleMessage(
+                "Also delete all todos from this folder"),
+        "delete_folder_dialog__title":
+            MessageLookupByLibrary.simpleMessage("Delete folder?"),
+        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage(
             "This action cannot be undone."),
-        "delete_todo__content": MessageLookupByLibrary.simpleMessage(
+        "delete_todo_dialog__content": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete "),
-        "delete_todo__title":
+        "delete_todo_dialog__title":
             MessageLookupByLibrary.simpleMessage("Delete this todo?"),
-        "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task..."),
-        "new_todo__title_required":
-            MessageLookupByLibrary.simpleMessage("Enter task title")
+        "editable_folder_dialog__hint":
+            MessageLookupByLibrary.simpleMessage("Folder title"),
+        "editable_folder_dialog__title_error":
+            MessageLookupByLibrary.simpleMessage("Enter folder title"),
+        "folder_list_screen__create_folder_tooltip":
+            MessageLookupByLibrary.simpleMessage("Create folder"),
+        "folder_list_screen__create_todo_tooltip":
+            MessageLookupByLibrary.simpleMessage("Create todo"),
+        "folder_screen__delete_folder":
+            MessageLookupByLibrary.simpleMessage("Delete folder"),
+        "folder_screen__empty_caution": MessageLookupByLibrary.simpleMessage(
+            "Don\'t be lazy,\nadd your first todo!"),
+        "folder_screen__empty_title":
+            MessageLookupByLibrary.simpleMessage("Folder is empty"),
+        "folder_screen__update_folder":
+            MessageLookupByLibrary.simpleMessage("Update folder"),
+        "new_todo_dialog__title_hint":
+            MessageLookupByLibrary.simpleMessage("Task"),
+        "new_todo_dialog__title_required":
+            MessageLookupByLibrary.simpleMessage("Enter task title"),
+        "select_folder_dialog__title":
+            MessageLookupByLibrary.simpleMessage("Select the folder"),
+        "todo_detailed_screen__delete":
+            MessageLookupByLibrary.simpleMessage("Delete"),
+        "todo_detailed_screen__no_date":
+            MessageLookupByLibrary.simpleMessage("No date"),
+        "todo_detailed_screen__no_time":
+            MessageLookupByLibrary.simpleMessage("No time")
       };
 }

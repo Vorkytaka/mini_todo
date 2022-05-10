@@ -24,28 +24,59 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common__all": MessageLookupByLibrary.simpleMessage("Все"),
         "common__cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "common__completed":
+            MessageLookupByLibrary.simpleMessage("Выполненные"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Принять"),
+        "common__hide_completed":
+            MessageLookupByLibrary.simpleMessage("Скрыть выполненные"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Входящие"),
         "common__no": MessageLookupByLibrary.simpleMessage("Нет"),
-        "common__yes": MessageLookupByLibrary.simpleMessage("Да"),
-        "common_completed": MessageLookupByLibrary.simpleMessage("Выполненные"),
-        "common_hide_completed":
-            MessageLookupByLibrary.simpleMessage("Скрыть выполненные"),
-        "common_show_completed":
+        "common__show_completed":
             MessageLookupByLibrary.simpleMessage("Показать выполненные"),
-        "common_today": MessageLookupByLibrary.simpleMessage("Сегодня"),
-        "common_tomorrow": MessageLookupByLibrary.simpleMessage("Завтра"),
-        "common_yesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
+        "common__today": MessageLookupByLibrary.simpleMessage("Сегодня"),
+        "common__tomorrow": MessageLookupByLibrary.simpleMessage("Завтра"),
+        "common__yes": MessageLookupByLibrary.simpleMessage("Да"),
+        "common__yesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Время"),
-        "delete_todo__caution": MessageLookupByLibrary.simpleMessage(
-            "Это действие нельзя отменить"),
-        "delete_todo__content": MessageLookupByLibrary.simpleMessage(
-            "Вы уверены, что хотите удалить задачу "),
-        "delete_todo__title":
+        "delete_folder_dialog__content": MessageLookupByLibrary.simpleMessage(
+            "Вы точно хотите удалить папку "),
+        "delete_folder_dialog__delete_todos_toggle":
+            MessageLookupByLibrary.simpleMessage("Удалить все задачи из папки"),
+        "delete_folder_dialog__title":
+            MessageLookupByLibrary.simpleMessage("Удалить папку?"),
+        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage(
+            "Это действие нельзя отменить."),
+        "delete_todo_dialog__content":
+            MessageLookupByLibrary.simpleMessage("Вы точно хотите удалить "),
+        "delete_todo_dialog__title":
             MessageLookupByLibrary.simpleMessage("Удалить задачу?"),
-        "new_todo__title_hint":
-            MessageLookupByLibrary.simpleMessage("Задача..."),
-        "new_todo__title_required":
-            MessageLookupByLibrary.simpleMessage("Введите название задачи")
+        "editable_folder_dialog__hint":
+            MessageLookupByLibrary.simpleMessage("Название папки"),
+        "editable_folder_dialog__title_error":
+            MessageLookupByLibrary.simpleMessage("Введите название папки"),
+        "folder_list_screen__create_folder_tooltip":
+            MessageLookupByLibrary.simpleMessage("Создать папку"),
+        "folder_list_screen__create_todo_tooltip":
+            MessageLookupByLibrary.simpleMessage("Создать задачу"),
+        "folder_screen__delete_folder":
+            MessageLookupByLibrary.simpleMessage("Удалить папку"),
+        "folder_screen__empty_caution": MessageLookupByLibrary.simpleMessage(
+            "Не ленись, добавь первую задачу!"),
+        "folder_screen__empty_title":
+            MessageLookupByLibrary.simpleMessage("Здесь пусто"),
+        "folder_screen__update_folder":
+            MessageLookupByLibrary.simpleMessage("Изменить папку"),
+        "new_todo_dialog__title_hint":
+            MessageLookupByLibrary.simpleMessage("Задача"),
+        "new_todo_dialog__title_required":
+            MessageLookupByLibrary.simpleMessage("Введите название задачи"),
+        "select_folder_dialog__title":
+            MessageLookupByLibrary.simpleMessage("Выберите папку"),
+        "todo_detailed_screen__delete":
+            MessageLookupByLibrary.simpleMessage("Удалить"),
+        "todo_detailed_screen__no_date":
+            MessageLookupByLibrary.simpleMessage("Без даты"),
+        "todo_detailed_screen__no_time":
+            MessageLookupByLibrary.simpleMessage("Без времени")
       };
 }

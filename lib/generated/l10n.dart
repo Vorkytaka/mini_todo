@@ -121,80 +121,80 @@ class S {
   }
 
   /// `Yesterday`
-  String get common_yesterday {
+  String get common__yesterday {
     return Intl.message(
       'Yesterday',
-      name: 'common_yesterday',
+      name: 'common__yesterday',
       desc: '',
       args: [],
     );
   }
 
   /// `Today`
-  String get common_today {
+  String get common__today {
     return Intl.message(
       'Today',
-      name: 'common_today',
+      name: 'common__today',
       desc: '',
       args: [],
     );
   }
 
   /// `Tomorrow`
-  String get common_tomorrow {
+  String get common__tomorrow {
     return Intl.message(
       'Tomorrow',
-      name: 'common_tomorrow',
+      name: 'common__tomorrow',
       desc: '',
       args: [],
     );
   }
 
   /// `Completed`
-  String get common_completed {
+  String get common__completed {
     return Intl.message(
       'Completed',
-      name: 'common_completed',
+      name: 'common__completed',
       desc: '',
       args: [],
     );
   }
 
   /// `Show completed`
-  String get common_show_completed {
+  String get common__show_completed {
     return Intl.message(
       'Show completed',
-      name: 'common_show_completed',
+      name: 'common__show_completed',
       desc: '',
       args: [],
     );
   }
 
   /// `Hide completed`
-  String get common_hide_completed {
+  String get common__hide_completed {
     return Intl.message(
       'Hide completed',
-      name: 'common_hide_completed',
+      name: 'common__hide_completed',
       desc: '',
       args: [],
     );
   }
 
-  /// `Task...`
-  String get new_todo__title_hint {
+  /// `Task`
+  String get new_todo_dialog__title_hint {
     return Intl.message(
-      'Task...',
-      name: 'new_todo__title_hint',
+      'Task',
+      name: 'new_todo_dialog__title_hint',
       desc: '',
       args: [],
     );
   }
 
   /// `Enter task title`
-  String get new_todo__title_required {
+  String get new_todo_dialog__title_required {
     return Intl.message(
       'Enter task title',
-      name: 'new_todo__title_required',
+      name: 'new_todo_dialog__title_required',
       desc: '',
       args: [],
     );
@@ -211,30 +211,180 @@ class S {
   }
 
   /// `Delete this todo?`
-  String get delete_todo__title {
+  String get delete_todo_dialog__title {
     return Intl.message(
       'Delete this todo?',
-      name: 'delete_todo__title',
+      name: 'delete_todo_dialog__title',
       desc: '',
       args: [],
     );
   }
 
   /// `Are you sure you want to delete `
-  String get delete_todo__content {
+  String get delete_todo_dialog__content {
     return Intl.message(
       'Are you sure you want to delete ',
-      name: 'delete_todo__content',
+      name: 'delete_todo_dialog__content',
       desc: '',
       args: [],
     );
   }
 
   /// `This action cannot be undone.`
-  String get delete_todo__caution {
+  String get delete_todo_dialog__caution {
     return Intl.message(
       'This action cannot be undone.',
-      name: 'delete_todo__caution',
+      name: 'delete_todo_dialog__caution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No date`
+  String get todo_detailed_screen__no_date {
+    return Intl.message(
+      'No date',
+      name: 'todo_detailed_screen__no_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No time`
+  String get todo_detailed_screen__no_time {
+    return Intl.message(
+      'No time',
+      name: 'todo_detailed_screen__no_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get todo_detailed_screen__delete {
+    return Intl.message(
+      'Delete',
+      name: 'todo_detailed_screen__delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folder title`
+  String get editable_folder_dialog__hint {
+    return Intl.message(
+      'Folder title',
+      name: 'editable_folder_dialog__hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter folder title`
+  String get editable_folder_dialog__title_error {
+    return Intl.message(
+      'Enter folder title',
+      name: 'editable_folder_dialog__title_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update folder`
+  String get folder_screen__update_folder {
+    return Intl.message(
+      'Update folder',
+      name: 'folder_screen__update_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete folder`
+  String get folder_screen__delete_folder {
+    return Intl.message(
+      'Delete folder',
+      name: 'folder_screen__delete_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folder is empty`
+  String get folder_screen__empty_title {
+    return Intl.message(
+      'Folder is empty',
+      name: 'folder_screen__empty_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't be lazy,\nadd your first todo!`
+  String get folder_screen__empty_caution {
+    return Intl.message(
+      'Don\'t be lazy,\nadd your first todo!',
+      name: 'folder_screen__empty_caution',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete folder?`
+  String get delete_folder_dialog__title {
+    return Intl.message(
+      'Delete folder?',
+      name: 'delete_folder_dialog__title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete folder `
+  String get delete_folder_dialog__content {
+    return Intl.message(
+      'Are you sure you want to delete folder ',
+      name: 'delete_folder_dialog__content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Also delete all todos from this folder`
+  String get delete_folder_dialog__delete_todos_toggle {
+    return Intl.message(
+      'Also delete all todos from this folder',
+      name: 'delete_folder_dialog__delete_todos_toggle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create folder`
+  String get folder_list_screen__create_folder_tooltip {
+    return Intl.message(
+      'Create folder',
+      name: 'folder_list_screen__create_folder_tooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create todo`
+  String get folder_list_screen__create_todo_tooltip {
+    return Intl.message(
+      'Create todo',
+      name: 'folder_list_screen__create_todo_tooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the folder`
+  String get select_folder_dialog__title {
+    return Intl.message(
+      'Select the folder',
+      name: 'select_folder_dialog__title',
       desc: '',
       args: [],
     );

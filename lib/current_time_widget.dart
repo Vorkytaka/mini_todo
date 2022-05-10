@@ -183,11 +183,11 @@ class DateTextWidget extends StatelessWidget {
 
     String str;
     if (DateUtils.isSameDay(date, now)) {
-      str = S.of(context).common_today;
+      str = S.of(context).common__today;
     } else if (DateUtils.isSameDay(date, now + const Duration(days: 1))) {
-      str = S.of(context).common_tomorrow;
+      str = S.of(context).common__tomorrow;
     } else if (DateUtils.isSameDay(date, now - const Duration(days: 1))) {
-      str = S.of(context).common_yesterday;
+      str = S.of(context).common__yesterday;
     } else {
       str = dateFormatter.format(date);
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/color_picker.dart';
 
 import '../../constants.dart';
@@ -94,9 +95,9 @@ class _EditableHabitDialogState extends State<_EditableHabitDialog> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Название папки',
+                      hintText: S.of(context).editable_folder_dialog__hint,
                       counterText: '',
                     ),
                     autofocus: true,
@@ -108,7 +109,7 @@ class _EditableHabitDialogState extends State<_EditableHabitDialog> {
                     initialValue: widget.folder?.title,
                     validator: (title) {
                       if (title == null || title.isEmpty) {
-                        return 'Введите название папки';
+                        return S.of(context).editable_folder_dialog__title_error;
                       }
 
                       return null;
