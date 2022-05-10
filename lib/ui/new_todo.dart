@@ -290,13 +290,22 @@ class _FolderFormField extends FormField<Folder?> {
           initialValue: initialValue,
           onSaved: onSaved,
           builder: (field) {
+            final theme = Theme.of(field.context);
             final s = S.of(field.context);
             final folder = field.value ?? Folder(id: null, title: s.common__inbox);
 
             return _IconButton(
-              icon: folder.id == null ? const Icon(Icons.inbox_outlined) : const Icon(Icons.folder_outlined),
+              icon: folder.id == null
+                  ? Icon(
+                      Icons.inbox_outlined,
+                      color: theme.primaryColor,
+                    )
+                  : Icon(
+                      Icons.folder_outlined,
+                      color: folder.color,
+                    ),
               text: DefaultTextStyle(
-                style: Theme.of(field.context).textTheme.caption!,
+                style: theme.textTheme.caption!,
                 child: Text(folder.title),
               ),
               onTap: () async {
