@@ -28,6 +28,7 @@ class TodoDetailedScreen extends StatelessWidget {
         stream: context.read<Repository>().streamTodo(todo.id),
         initialData: todo,
         builder: (context, snapshot) {
+          final theme = Theme.of(context);
           final todo = snapshot.data;
 
           if (todo == null) {
@@ -52,10 +53,10 @@ class TodoDetailedScreen extends StatelessWidget {
                             folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
                         return IconTheme.merge(
                           data: IconThemeData(
-                            color: folder.color ?? Theme.of(context).primaryColor,
+                            color: folder.color ?? theme.primaryColor,
                           ),
                           child: DefaultTextStyle(
-                            style: Theme.of(context).textTheme.subtitle1!,
+                            style: theme.textTheme.subtitle1!,
                             child: ListItem(
                               icon: folder.id == null
                                   ? const Icon(Icons.inbox_outlined)
@@ -79,7 +80,7 @@ class TodoDetailedScreen extends StatelessWidget {
                     NowStyle(
                       date: todo.date,
                       time: todo.time,
-                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      textStyle: theme.textTheme.subtitle1,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -139,7 +140,7 @@ class TodoDetailedScreen extends StatelessWidget {
                       onTap: () async {
                         showDeleteTodoDialog(context: context, todo: todo);
                       },
-                      hoverColor: Theme.of(context).errorColor,
+                      hoverColor: theme.errorColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: SizedBox(
@@ -151,13 +152,13 @@ class TodoDetailedScreen extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.delete,
-                                color: Theme.of(context).errorColor,
+                                color: theme.errorColor,
                               ),
                               const SizedBox(width: 16),
                               Text(
                                 'Удалить',
                                 style:
-                                    Theme.of(context).textTheme.subtitle1?.apply(color: Theme.of(context).errorColor),
+                                theme.textTheme.subtitle1?.apply(color: theme.errorColor),
                               ),
                             ],
                           ),
