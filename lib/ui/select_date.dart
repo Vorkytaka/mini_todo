@@ -52,7 +52,7 @@ class _DateSelectorState extends State<_DateSelector> {
                 if (DateUtils.isSameDay(_selected, DateTime.now()))
                   Chip(
                     backgroundColor: theme.colorScheme.primary,
-                    label: Text(s.common_today),
+                    label: Text(s.common_today, style: TextStyle(color: theme.colorScheme.onPrimary)),
                   )
                 else
                   ActionChip(
@@ -64,7 +64,7 @@ class _DateSelectorState extends State<_DateSelector> {
                 if (DateUtils.isSameDay(_selected, DateTime.now().add(const Duration(days: 1))))
                   Chip(
                     backgroundColor: theme.colorScheme.primary,
-                    label: Text(s.common_tomorrow),
+                    label: Text(s.common_tomorrow, style: TextStyle(color: theme.colorScheme.onPrimary)),
                   )
                 else
                   ActionChip(

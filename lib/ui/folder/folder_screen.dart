@@ -10,8 +10,8 @@ import 'package:mini_todo/ui/folder/new_folder_dialog.dart';
 import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
-import '../new_todo.dart';
 import '../../utils/collections.dart';
+import '../new_todo.dart';
 
 enum _MenuItem {
   edit,
@@ -22,6 +22,32 @@ class FolderScreen extends StatelessWidget {
   final Folder folder;
 
   const FolderScreen({
+    Key? key,
+    required this.folder,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<FoldersCubit, List<Folder>>(
+      listener: (context, state) {
+        final folder = state.firstOrNull((folder) => folder.id == this.folder.id);
+        if (folder == null) {
+          Navigator.of(context).pop();
+        }
+      },
+      buildWhen: (prev, curr) => curr.firstOrNull((folder) => folder.id == this.folder.id) != null,
+      builder: (context, folders) {
+        final folder = this.folder.id == null ? this.folder : folders.firstWhere((folder) => folder.id == this.folder.id);
+        return _Screen(folder: folder);
+      },
+    );
+  }
+}
+
+class _Screen extends StatelessWidget {
+  final Folder folder;
+
+  const _Screen({
     Key? key,
     required this.folder,
   }) : super(key: key);
@@ -39,7 +65,7 @@ class FolderScreen extends StatelessWidget {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: Text(state.folder.title),
+              title: Text(folder.title),
               actions: [
                 if (folder.id != null)
                   PopupMenuButton<_MenuItem>(
@@ -58,8 +84,8 @@ class FolderScreen extends StatelessWidget {
                       PopupMenuItem(
                         child: ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.delete_outline),
-                          title: Text('Удалить папку'),
+                          leading: const Icon(Icons.delete_outline),
+                          title: const Text('Удалить папку'),
                           minLeadingWidth: 0,
                           dense: true,
                           iconColor: Theme.of(context).errorColor,
@@ -82,7 +108,7 @@ class FolderScreen extends StatelessWidget {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () => showNewTodoDialog(context: context, folder: state.folder),
+              onPressed: () => showNewTodoDialog(context: context, folder: folder),
               child: const Icon(Icons.add),
             ),
             body: Stack(
@@ -91,7 +117,7 @@ class FolderScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        (state.folder.color ?? Theme.of(context).primaryColor).lighten(80),
+                        (folder.color ?? Theme.of(context).primaryColor).lighten(80),
                         Colors.grey.shade200,
                       ],
                       begin: Alignment.topLeft,
@@ -117,15 +143,7 @@ class FolderScreen extends StatelessWidget {
       );
     }
 
-    return BlocListener<FoldersCubit, List<Folder>>(
-      listener: (context, state) {
-        final folder = state.firstOrNull((folder) => folder.id == folder.id);
-        if(folder == null) {
-          Navigator.of(context).pop();
-        }
-      },
-      child: screen,
-    );
+    return screen;
   }
 }
 

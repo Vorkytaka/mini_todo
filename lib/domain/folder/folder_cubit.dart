@@ -14,11 +14,11 @@ class FolderCubit extends Cubit<FolderState> {
   FolderCubit({
     required Folder folder,
     required Repository repository,
-  }) : super(FolderState.init(folder: folder)) {
-    _todosSubscription = repository.streamTodoFromFolder(state.folder.id).listen((todos) {
+  }) : super(FolderState.init(folderId: folder.id)) {
+    _todosSubscription = repository.streamTodoFromFolder(state.folderId).listen((todos) {
       emit(state.copyWith(todos: todos));
     });
-    _completedSubscription = repository.streamCompletedTodoFromFolder(state.folder.id).listen((completed) {
+    _completedSubscription = repository.streamCompletedTodoFromFolder(state.folderId).listen((completed) {
       emit(state.copyWith(completed: completed));
     });
   }
@@ -33,29 +33,28 @@ class FolderCubit extends Cubit<FolderState> {
 
 @immutable
 class FolderState {
-  final Folder folder;
+  final int? folderId;
   final List<Todo> todos;
   final List<Todo> completed;
 
   const FolderState({
-    required this.folder,
+    required this.folderId,
     required this.todos,
     required this.completed,
   });
 
   const FolderState.init({
-    required this.folder,
+    required this.folderId,
   })
       : todos = const [],
         completed = const [];
 
   FolderState copyWith({
-    Folder? folder,
     List<Todo>? todos,
     List<Todo>? completed,
   }) =>
       FolderState(
-        folder: folder ?? this.folder,
+        folderId: folderId,
         todos: todos ?? this.todos,
         completed: completed ?? this.completed,
       );
