@@ -120,6 +120,17 @@ class DriftRepository implements Repository {
     query.where((tbl) => tbl.id.equals(todoId));
     return query.write(TodoTableCompanion(folderId: Value(folderId)));
   }
+
+  @override
+  Future<int> updateFolder(Folder folder) async {
+    assert(folder.id != null);
+    final query = database.update(database.folderTable);
+    query.where((tbl) => tbl.id.equals(folder.id));
+    return query.write(FolderTableCompanion(
+      title: Value(folder.title),
+      color: Value(folder.color),
+    ));
+  }
 }
 
 extension on TodoTableData {

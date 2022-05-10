@@ -35,4 +35,6 @@ abstract class Repository {
   Future<int> deleteFolder(int folderId, bool deleteTodos);
 
   Future<int> changeTodoFolder(int todoId, int? folderId);
+
+  Future<int> updateFolder(Folder folder);
 }

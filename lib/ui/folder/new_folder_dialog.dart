@@ -11,19 +11,63 @@ Future<void> showNewFolderDialog({required BuildContext context}) => showModalBo
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       isDismissible: true,
-      builder: (context) => const _NewFolderDialog(),
+      builder: (context) => _EditableHabitDialog(
+        onConfirm: (folder) async {
+          await context.read<Repository>().createFolder(folder);
+          Navigator.of(context).pop();
+        },
+      ),
     );
 
-class _NewFolderDialog extends StatefulWidget {
-  const _NewFolderDialog({Key? key}) : super(key: key);
+Future<void> showEditFolderDialog({
+  required BuildContext context,
+  required Folder folder,
+}) =>
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: true,
+      builder: (context) => _EditableHabitDialog(
+        folder: folder,
+        onConfirm: (carcass) async {
+          final newFolder = Folder(
+            id: folder.id,
+            title: carcass.title,
+            color: carcass.color,
+          );
+          await context.read<Repository>().updateFolder(newFolder);
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+
+typedef _OnConfirm = void Function(FolderCarcass carcass);
+
+class _EditableHabitDialog extends StatefulWidget {
+  final Folder? folder;
+  final _OnConfirm onConfirm;
+
+  const _EditableHabitDialog({
+    Key? key,
+    this.folder,
+    required this.onConfirm,
+  }) : super(key: key);
 
   @override
-  State<_NewFolderDialog> createState() => _NewFolderDialogState();
+  State<_EditableHabitDialog> createState() => _EditableHabitDialogState();
 }
 
-class _NewFolderDialogState extends State<_NewFolderDialog> {
+class _EditableHabitDialogState extends State<_EditableHabitDialog> {
   String? _title;
   Color? _color;
+
+  @override
+  void initState() {
+    super.initState();
+    _title = widget.folder?.title;
+    _color = widget.folder?.color;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +86,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
               children: [
                 ColorPickerOverlayField(
                   offset: const Offset(0, 56),
-                  initialValue: Colors.blue,
+                  initialValue: widget.folder?.color ?? Colors.blue,
                   onSaved: (color) {
                     _color = color;
                   },
@@ -61,7 +105,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
                     maxLength: kFolderTitleMaxLength,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
-                    initialValue: '',
+                    initialValue: widget.folder?.title,
                     validator: (title) {
                       if (title == null || title.isEmpty) {
                         return 'Введите название папки';
@@ -81,13 +125,11 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
                             final form = Form.of(context)!;
                             if (form.validate()) {
                               form.save();
-                              context.read<Repository>().createFolder(
-                                    FolderCarcass(
-                                      title: _title!,
-                                      color: _color,
-                                    ),
-                                  );
-                              Navigator.of(context).pop();
+                              final carcass = FolderCarcass(
+                                title: _title!,
+                                color: _color,
+                              );
+                              widget.onConfirm(carcass);
                             }
                           },
                           icon: const Icon(Icons.done),

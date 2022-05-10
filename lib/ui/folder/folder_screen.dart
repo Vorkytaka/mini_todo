@@ -6,6 +6,7 @@ import 'package:mini_todo/domain/folder/folder_cubit.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
+import 'package:mini_todo/ui/folder/new_folder_dialog.dart';
 import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
@@ -52,6 +53,7 @@ class FolderScreen extends StatelessWidget {
                           minLeadingWidth: 0,
                           dense: true,
                         ),
+                        value: _MenuItem.edit,
                       ),
                       PopupMenuItem(
                         child: ListTile(
@@ -69,6 +71,7 @@ class FolderScreen extends StatelessWidget {
                     onSelected: (item) async {
                       switch (item) {
                         case _MenuItem.edit:
+                          await showEditFolderDialog(context: context, folder: folder);
                           break;
                         case _MenuItem.delete:
                           await showDeleteFolderDialog(context: context, folder: folder);
