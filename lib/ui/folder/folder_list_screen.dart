@@ -25,11 +25,13 @@ class FolderListScreen extends StatelessWidget {
             onPressed: () => showNewFolderDialog(context: context),
             heroTag: null,
             child: const Icon(Icons.create_new_folder_outlined),
+            tooltip: 'Создать папку',
           ),
           const SizedBox(height: 8),
           FloatingActionButton(
             onPressed: () => showNewTodoDialog(context: context),
             child: const Icon(Icons.add),
+            tooltip: 'Создать задачу',
           ),
         ],
       ),

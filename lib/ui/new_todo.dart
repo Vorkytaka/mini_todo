@@ -93,7 +93,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
               Navigator.of(context).pop();
             }
           },
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: borderRadius,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -201,7 +201,7 @@ class _IconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: const BorderRadius.all(Radius.circular(4)),
+      borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(

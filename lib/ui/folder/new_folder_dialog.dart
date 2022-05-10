@@ -5,7 +5,6 @@ import 'package:mini_todo/ui/color_picker.dart';
 import '../../constants.dart';
 import '../../data/repository.dart';
 import '../../entity/folder.dart';
-import '../../generated/l10n.dart';
 
 Future<void> showNewFolderDialog({required BuildContext context}) => showModalBottomSheet(
       context: context,
@@ -35,7 +34,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
       padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: theme.dialogBackgroundColor,
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        borderRadius: borderRadius,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Form(
@@ -65,7 +64,7 @@ class _NewFolderDialogState extends State<_NewFolderDialog> {
                     initialValue: '',
                     validator: (title) {
                       if (title == null || title.isEmpty) {
-                        return S.of(context).new_todo__title_required;
+                        return 'Введите название папки';
                       }
 
                       return null;

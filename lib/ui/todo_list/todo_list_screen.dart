@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/data/repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
@@ -76,12 +77,12 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   child: Center(
                     child: Material(
                       color: Colors.grey.shade100,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      borderRadius: borderRadius,
                       child: InkWell(
                         onTap: () => setState(() {
                           _showCompleted = !_showCompleted;
                         }),
-                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        borderRadius: borderRadius,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -169,7 +170,7 @@ class TodoCheckbox extends StatelessWidget {
       value: todo.completed,
       onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+      shape: const RoundedRectangleBorder(borderRadius: borderRadius),
     );
   }
 }

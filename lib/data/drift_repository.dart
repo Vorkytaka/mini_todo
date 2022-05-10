@@ -94,6 +94,25 @@ class DriftRepository implements Repository {
         ..limit(10))
       .map((todo) => todo.toTodo)
       .watch();
+
+  @override
+  Future<int> deleteFolder(int folderId, bool deleteTodos) async {
+    return database.transaction(() async {
+      if (deleteTodos) {
+        final query = database.delete(database.todoTable);
+        query.where((tbl) => tbl.folderId.equals(folderId));
+        await query.go();
+      } else {
+        final query = database.update(database.todoTable);
+        query.where((tbl) => tbl.folderId.equals(folderId));
+        await query.write(const TodoTableCompanion(folderId: Value(null)));
+      }
+
+      final query = database.delete(database.folderTable);
+      query.where((tbl) => tbl.id.equals(folderId));
+      return query.go();
+    });
+  }
 }
 
 extension on TodoTableData {

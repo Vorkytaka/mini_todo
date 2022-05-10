@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../current_time_widget.dart';
 import '../entity/todo.dart';
 import 'todo_list/todo_list_screen.dart';
@@ -40,8 +41,6 @@ class TodoItemWidget extends StatelessWidget {
     }
 
     final Widget checkbox = TodoCheckbox(todo: todo);
-
-    const BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
 
     Widget body = Material(
       color: Colors.grey.shade100,
