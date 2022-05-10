@@ -33,4 +33,6 @@ abstract class Repository {
   Stream<List<Todo>> streamCompletedTodoFromFolder(int? folderId);
 
   Future<int> deleteFolder(int folderId, bool deleteTodos);
+
+  Future<int> changeTodoFolder(int todoId, int? folderId);
 }

@@ -61,8 +61,11 @@ class TodoDetailedScreen extends StatelessWidget {
                                   ? const Icon(Icons.inbox_outlined)
                                   : const Icon(Icons.folder_outlined),
                               title: Text(folder.title),
-                              onTap: () {
-                                showSelectFolderDialog(context: context);
+                              onTap: () async {
+                                final folder = await showSelectFolderDialog(context: context);
+                                if(folder != null) {
+                                  context.read<Repository>().changeTodoFolder(todo.id, folder.id);
+                                }
                               },
                             ),
                           ),

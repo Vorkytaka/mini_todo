@@ -113,6 +113,13 @@ class DriftRepository implements Repository {
       return query.go();
     });
   }
+
+  @override
+  Future<int> changeTodoFolder(int todoId, int? folderId) async {
+    final query = database.update(database.todoTable);
+    query.where((tbl) => tbl.id.equals(todoId));
+    return query.write(TodoTableCompanion(folderId: Value(folderId)));
+  }
 }
 
 extension on TodoTableData {
