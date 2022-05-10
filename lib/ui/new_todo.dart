@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/select_date.dart';
+import 'package:mini_todo/ui/select_folder.dart';
 
 import '../entity/todo.dart';
 
-Future<void> showNewTodoDialog({required BuildContext context}) async {
+Future<void> showNewTodoDialog({
+  required BuildContext context,
+  Folder? folder,
+}) async {
   return showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     isDismissible: true,
     builder: (context) {
-      return const _NewTodoDialog();
+      return _NewTodoDialog(folder: folder);
     },
   );
 }
 
 class _NewTodoDialog extends StatefulWidget {
-  const _NewTodoDialog({Key? key}) : super(key: key);
+  final Folder? folder;
+
+  const _NewTodoDialog({
+    Key? key,
+    this.folder,
+  }) : super(key: key);
 
   @override
   State<_NewTodoDialog> createState() => _NewTodoDialogState();
@@ -32,6 +43,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
   String? title;
   DateTime? date;
   TimeOfDay? time;
+  Folder? folder;
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +86,14 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                 title: title!,
                 date: date,
                 time: time,
+                folderId: folder?.id,
               );
 
               context.read<Repository>().create(todo);
               Navigator.of(context).pop();
             }
           },
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: borderRadius,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -101,7 +114,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: Colors.grey.shade50,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: borderRadius,
         child: Form(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -117,13 +130,13 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    NowStyle(
-                      date: date,
-                      time: time,
-                      child: Expanded(
-                        child: Wrap(
-                          children: [
-                            _DateFormField(
+                    Expanded(
+                      child: Wrap(
+                        children: [
+                          NowStyle(
+                            date: date,
+                            time: time,
+                            child: _DateFormField(
                               key: _dateKey,
                               onSaved: (date) {
                                 this.date = date;
@@ -133,9 +146,13 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                                 setState(() {});
                               },
                             ),
-                            const SizedBox(width: 8),
-                            if (date != null)
-                              _TimeFormField(
+                          ),
+                          const SizedBox(width: 8),
+                          if (date != null) ...[
+                            NowStyle(
+                              date: date,
+                              time: time,
+                              child: _TimeFormField(
                                 onSaved: (time) {
                                   this.time = time;
                                 },
@@ -144,8 +161,16 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                                   setState(() {});
                                 },
                               ),
+                            ),
+                            const SizedBox(width: 8),
                           ],
-                        ),
+                          _FolderFormField(
+                            initialValue: widget.folder,
+                            onSaved: (folder) {
+                              this.folder = folder;
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     submitBtn,
@@ -176,7 +201,7 @@ class _IconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: const BorderRadius.all(Radius.circular(4)),
+      borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(
@@ -250,6 +275,36 @@ class _TimeFormField extends FormField<TimeOfDay?> {
                 color: field.value == null ? Theme.of(field.context).hintColor : null,
               ),
               text: field.value != null ? Text(field.value!.format(field.context)) : null,
+            );
+          },
+        );
+}
+
+class _FolderFormField extends FormField<Folder?> {
+  _FolderFormField({
+    Key? key,
+    Folder? initialValue,
+    FormFieldSetter<Folder?>? onSaved,
+  }) : super(
+          key: key,
+          initialValue: initialValue,
+          onSaved: onSaved,
+          builder: (field) {
+            final s = S.of(field.context);
+            final folder = field.value ?? Folder(id: null, title: s.common__inbox);
+
+            return _IconButton(
+              icon: folder.id == null ? const Icon(Icons.inbox_outlined) : const Icon(Icons.folder_outlined),
+              text: DefaultTextStyle(
+                style: Theme.of(field.context).textTheme.caption!,
+                child: Text(folder.title),
+              ),
+              onTap: () async {
+                final folder = await showSelectFolderDialog(context: field.context);
+                if (folder != null) {
+                  field.didChange(folder);
+                }
+              },
             );
           },
         );

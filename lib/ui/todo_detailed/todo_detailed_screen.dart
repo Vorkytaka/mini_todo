@@ -1,32 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/current_time_widget.dart';
+import 'package:mini_todo/domain/folders/folders_cubit.dart';
+import 'package:mini_todo/generated/l10n.dart';
+import 'package:mini_todo/ui/list_item.dart';
 import 'package:mini_todo/ui/select_date.dart';
+import 'package:mini_todo/ui/select_folder.dart';
 import 'package:mini_todo/ui/todo_list/todo_list_screen.dart';
 
 import '../../data/repository.dart';
+import '../../entity/folder.dart';
 import '../../entity/todo.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
-  final int id;
+  final Todo todo;
 
   const TodoDetailedScreen({
     Key? key,
-    required this.id,
-  })  : assert(id > 0),
-        super(key: key);
+    required this.todo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: StreamBuilder<Todo?>(
-        stream: context.read<Repository>().streamTodo(id),
-        initialData: null,
+        stream: context.read<Repository>().streamTodo(todo.id),
+        initialData: todo,
         builder: (context, snapshot) {
+          final theme = Theme.of(context);
           final todo = snapshot.data;
 
           if (todo == null) {
+            WidgetsBinding.instance?.addPostFrameCallback((_) => Navigator.of(context).pop());
             return const SizedBox.shrink();
           }
 
@@ -41,16 +47,48 @@ class TodoDetailedScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   children: [
+                    BlocBuilder<FoldersCubit, List<Folder>>(
+                      builder: (context, folders) {
+                        final folder =
+                            folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
+                        return IconTheme.merge(
+                          data: IconThemeData(
+                            color: folder.color ?? theme.primaryColor,
+                          ),
+                          child: DefaultTextStyle(
+                            style: theme.textTheme.subtitle1!,
+                            child: ListItem(
+                              icon: folder.id == null
+                                  ? const Icon(Icons.inbox_outlined)
+                                  : const Icon(Icons.folder_outlined),
+                              title: Text(folder.title),
+                              onTap: () async {
+                                final folder = await showSelectFolderDialog(context: context);
+                                if(folder != null) {
+                                  context.read<Repository>().changeTodoFolder(todo.id, folder.id);
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(
+                      height: 1,
+                      indent: 64,
+                    ),
                     NowStyle(
                       date: todo.date,
                       time: todo.time,
-                      textStyle: Theme.of(context).textTheme.subtitle1,
+                      textStyle: theme.textTheme.subtitle1,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          InkWell(
+                          ListItem(
+                            icon: const Icon(Icons.today),
+                            title: todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
                             onTap: () async {
                               final date = await showDateSelector(
                                 context: context,
@@ -60,22 +98,6 @@ class TodoDetailedScreen extends StatelessWidget {
                                 context.read<Repository>().setDate(todo.id, date);
                               }
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                              child: SizedBox(
-                                height: 56,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.today),
-                                    const SizedBox(width: 16),
-                                    todo.date != null ? DateTextWidget(date: todo.date!) : const Text('Без даты'),
-                                  ],
-                                ),
-                              ),
-                            ),
                           ),
                           AbsorbPointer(
                             absorbing: todo.date == null,
@@ -116,11 +138,9 @@ class TodoDetailedScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () async {
-                        await context.read<Repository>().delete(todo.id);
-                        // todo: this is a bad way to navigate back
-                        Navigator.of(context).pop();
+                        showDeleteTodoDialog(context: context, todo: todo);
                       },
-                      hoverColor: Theme.of(context).errorColor,
+                      hoverColor: theme.errorColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: SizedBox(
@@ -132,13 +152,13 @@ class TodoDetailedScreen extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.delete,
-                                color: Theme.of(context).errorColor,
+                                color: theme.errorColor,
                               ),
                               const SizedBox(width: 16),
                               Text(
                                 'Удалить',
                                 style:
-                                    Theme.of(context).textTheme.subtitle1?.apply(color: Theme.of(context).errorColor),
+                                theme.textTheme.subtitle1?.apply(color: theme.errorColor),
                               ),
                             ],
                           ),
@@ -219,3 +239,50 @@ class _AppBarState extends State<_AppBar> {
     );
   }
 }
+
+Future<void> showDeleteTodoDialog({
+  required BuildContext context,
+  required Todo todo,
+}) =>
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).delete_todo__title),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.bodyText2,
+                children: [
+                  TextSpan(text: S.of(context).delete_todo__content),
+                  TextSpan(text: todo.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const TextSpan(text: '?'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              S.of(context).delete_todo__caution,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(S.of(context).common__no),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            onPressed: () async {
+              await context.read<Repository>().delete(todo.id);
+              Navigator.of(context).pop();
+            },
+            child: Text(S.of(context).common__yes),
+          ),
+        ],
+      ),
+    );

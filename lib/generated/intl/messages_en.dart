@@ -27,11 +27,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Inbox"),
+        "common__no": MessageLookupByLibrary.simpleMessage("No"),
+        "common__yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "common_completed": MessageLookupByLibrary.simpleMessage("Completed"),
+        "common_hide_completed":
+            MessageLookupByLibrary.simpleMessage("Hide completed"),
+        "common_show_completed":
+            MessageLookupByLibrary.simpleMessage("Show completed"),
         "common_today": MessageLookupByLibrary.simpleMessage("Today"),
         "common_tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
         "common_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
+        "delete_todo__caution": MessageLookupByLibrary.simpleMessage(
+            "This action cannot be undone."),
+        "delete_todo__content": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete "),
+        "delete_todo__title":
+            MessageLookupByLibrary.simpleMessage("Delete this todo?"),
         "new_todo__title_hint": MessageLookupByLibrary.simpleMessage("Task..."),
         "new_todo__title_required":
             MessageLookupByLibrary.simpleMessage("Enter task title")

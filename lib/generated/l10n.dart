@@ -100,6 +100,26 @@ class S {
     );
   }
 
+  /// `Yes`
+  String get common__yes {
+    return Intl.message(
+      'Yes',
+      name: 'common__yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No`
+  String get common__no {
+    return Intl.message(
+      'No',
+      name: 'common__no',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Yesterday`
   String get common_yesterday {
     return Intl.message(
@@ -140,6 +160,26 @@ class S {
     );
   }
 
+  /// `Show completed`
+  String get common_show_completed {
+    return Intl.message(
+      'Show completed',
+      name: 'common_show_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide completed`
+  String get common_hide_completed {
+    return Intl.message(
+      'Hide completed',
+      name: 'common_hide_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Task...`
   String get new_todo__title_hint {
     return Intl.message(
@@ -165,6 +205,36 @@ class S {
     return Intl.message(
       'Time',
       name: 'datetime_dialog__time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete this todo?`
+  String get delete_todo__title {
+    return Intl.message(
+      'Delete this todo?',
+      name: 'delete_todo__title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete `
+  String get delete_todo__content {
+    return Intl.message(
+      'Are you sure you want to delete ',
+      name: 'delete_todo__content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This action cannot be undone.`
+  String get delete_todo__caution {
+    return Intl.message(
+      'This action cannot be undone.',
+      name: 'delete_todo__caution',
       desc: '',
       args: [],
     );

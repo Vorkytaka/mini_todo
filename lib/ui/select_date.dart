@@ -35,6 +35,9 @@ class _DateSelectorState extends State<_DateSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = S.of(context);
+
     return Dialog(
       child: SingleChildScrollView(
         child: Column(
@@ -48,24 +51,24 @@ class _DateSelectorState extends State<_DateSelector> {
               children: [
                 if (DateUtils.isSameDay(_selected, DateTime.now()))
                   Chip(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: Text(S.of(context).common_today),
+                    backgroundColor: theme.colorScheme.primary,
+                    label: Text(s.common_today, style: TextStyle(color: theme.colorScheme.onPrimary)),
                   )
                 else
                   ActionChip(
-                    label: Text(S.of(context).common_today),
+                    label: Text(s.common_today),
                     onPressed: () => setState(() {
                       _selected = DateTime.now();
                     }),
                   ),
                 if (DateUtils.isSameDay(_selected, DateTime.now().add(const Duration(days: 1))))
                   Chip(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: Text(S.of(context).common_tomorrow),
+                    backgroundColor: theme.colorScheme.primary,
+                    label: Text(s.common_tomorrow, style: TextStyle(color: theme.colorScheme.onPrimary)),
                   )
                 else
                   ActionChip(
-                    label: Text(S.of(context).common_tomorrow),
+                    label: Text(s.common_tomorrow),
                     onPressed: () => setState(() {
                       _selected = DateTime.now().add(const Duration(days: 1));
                     }),
@@ -88,12 +91,12 @@ class _DateSelectorState extends State<_DateSelector> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextButton(
-                    child: Text(S.of(context).common__cancel),
+                    child: Text(s.common__cancel),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   const SizedBox(width: 16),
                   TextButton(
-                    child: Text(S.of(context).common__confirm),
+                    child: Text(s.common__confirm),
                     onPressed: () => Navigator.of(context).pop(_selected),
                   ),
                 ],

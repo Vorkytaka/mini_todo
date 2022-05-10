@@ -4,11 +4,13 @@ class TodoCarcase {
   final String title;
   final DateTime? date;
   final TimeOfDay? time;
+  final int? folderId;
 
   const TodoCarcase({
     required this.title,
     this.date,
     this.time,
+    this.folderId,
   });
 
   @override
@@ -16,10 +18,14 @@ class TodoCarcase {
 
   @override
   bool operator ==(Object other) =>
-      other is TodoCarcase && title == other.title && date == other.date && time == other.time;
+      other is TodoCarcase &&
+      title == other.title &&
+      date == other.date &&
+      time == other.time &&
+      folderId != other.folderId;
 
   @override
-  int get hashCode => hashValues(title, date, time);
+  int get hashCode => hashValues(title, date, time, folderId);
 }
 
 class Todo {
@@ -30,6 +36,7 @@ class Todo {
   final TimeOfDay? time;
   final DateTime createdDate;
   final DateTime updatedDate;
+  final int? folderId;
 
   const Todo({
     required this.id,
@@ -39,18 +46,21 @@ class Todo {
     this.time,
     required this.createdDate,
     required this.updatedDate,
+    required this.folderId,
   });
 
   static TodoCarcase carcase({
     required String title,
     DateTime? date,
     TimeOfDay? time,
+    int? folderId,
   }) =>
       TodoCarcase(
         title: title,
         date: date,
         time: time,
-      );
+        folderId: folderId,
+        );
 
   @override
   String toString() => 'Todo($title, $completed)';
@@ -72,6 +82,7 @@ class Todo {
     bool? completed,
     DateTime? date,
     TimeOfDay? time,
+    int? folderId,
   }) =>
       Todo(
         id: id,
@@ -81,6 +92,7 @@ class Todo {
         time: time ?? this.time,
         createdDate: createdDate,
         updatedDate: updatedDate,
+        folderId: folderId ?? this.folderId,
       );
 
   DateTime? get datetime {

@@ -3,11 +3,18 @@
   "common__confirm": "Принять",
   "common__cancel": "Отмена",
   "common__all": "Все",
+  "common__yes": "Да",
+  "common__no": "Нет",
   "common_yesterday": "Вчера",
   "common_today": "Сегодня",
   "common_tomorrow": "Завтра",
   "common_completed": "Выполненные",
+  "common_show_completed": "Показать выполненные",
+  "common_hide_completed": "Скрыть выполненные",
   "new_todo__title_hint": "Задача...",
   "new_todo__title_required": "Введите название задачи",
-  "datetime_dialog__time": "Время"
+  "datetime_dialog__time": "Время",
+  "delete_todo__title": "Удалить задачу?",
+  "delete_todo__content": "Вы уверены, что хотите удалить задачу ",
+  "delete_todo__caution": "Это действие нельзя отменить"
 }
