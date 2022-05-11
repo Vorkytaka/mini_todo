@@ -12,7 +12,7 @@ Future<void> showNewFolderDialog({required BuildContext context}) => showModalBo
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       isDismissible: true,
-      builder: (context) => _EditableHabitDialog(
+      builder: (context) => _EditableFolderDialog(
         onConfirm: (folder) async {
           await context.read<Repository>().createFolder(folder);
           Navigator.of(context).pop();
@@ -29,7 +29,7 @@ Future<void> showEditFolderDialog({
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       isDismissible: true,
-      builder: (context) => _EditableHabitDialog(
+      builder: (context) => _EditableFolderDialog(
         folder: folder,
         onConfirm: (carcass) async {
           final newFolder = Folder(
@@ -45,21 +45,21 @@ Future<void> showEditFolderDialog({
 
 typedef _OnConfirm = void Function(FolderCarcass carcass);
 
-class _EditableHabitDialog extends StatefulWidget {
+class _EditableFolderDialog extends StatefulWidget {
   final Folder? folder;
   final _OnConfirm onConfirm;
 
-  const _EditableHabitDialog({
+  const _EditableFolderDialog({
     Key? key,
     this.folder,
     required this.onConfirm,
   }) : super(key: key);
 
   @override
-  State<_EditableHabitDialog> createState() => _EditableHabitDialogState();
+  State<_EditableFolderDialog> createState() => _EditableFolderDialogState();
 }
 
-class _EditableHabitDialogState extends State<_EditableHabitDialog> {
+class _EditableFolderDialogState extends State<_EditableFolderDialog> {
   String? _title;
   Color? _color;
 
@@ -79,7 +79,7 @@ class _EditableHabitDialogState extends State<_EditableHabitDialog> {
       padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: theme.dialogBackgroundColor,
-        borderRadius: borderRadius,
+        borderRadius: borderRadiusMedium,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Form(

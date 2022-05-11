@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/utils/color.dart';
 
 const double _kMenuScreenPadding = 8.0;
@@ -73,11 +74,12 @@ class ColorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor = this.borderColor ?? color;
-    return Container(
+    return AnimatedContainer(
+      duration: kThemeChangeDuration,
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
+        borderRadius: borderRadius,
         border: Border.all(
           color: borderColor,
           width: 4,
@@ -320,7 +322,7 @@ class _ColorPicker extends StatelessWidget {
         child: Material(
           type: MaterialType.card,
           elevation: PopupMenuTheme.of(context).elevation ?? elevation,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
+          shape: const RoundedRectangleBorder(borderRadius: borderRadiusLarge),
           color: PopupMenuTheme.of(context).color,
           clipBehavior: Clip.hardEdge,
           child: Stack(

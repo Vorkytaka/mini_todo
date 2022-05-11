@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/dependencies.dart';
 import 'package:mini_todo/ui/folder/folder_list_screen.dart';
 
@@ -25,6 +26,11 @@ class App extends StatelessWidget {
           splashFactory: InkRipple.splashFactory,
           appBarTheme: const AppBarTheme(
             elevation: 1,
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            shape: RoundedRectangleBorder(borderRadius: borderRadiusLarge),
+            elevation: 3,
+            highlightElevation: 0,
           ),
         ),
         builder: (context, child) {

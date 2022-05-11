@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
@@ -26,6 +27,7 @@ class FolderListScreen extends StatelessWidget {
             heroTag: null,
             child: const Icon(Icons.create_new_folder_outlined),
             tooltip: S.of(context).folder_list_screen__create_folder_tooltip,
+            shape: const RoundedRectangleBorder(borderRadius: borderRadiusMedium),
           ),
           const SizedBox(height: 8),
           FloatingActionButton(

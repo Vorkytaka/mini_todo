@@ -114,7 +114,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
       padding: mediaQuery.viewInsets + mediaQuery.padding + const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Material(
         color: Colors.grey.shade50,
-        borderRadius: borderRadius,
+        borderRadius: borderRadiusMedium,
         child: Form(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
