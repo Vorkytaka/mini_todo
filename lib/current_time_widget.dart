@@ -126,35 +126,13 @@ class NowStyle extends StatelessWidget {
     this.textStyle,
   }) : super(key: key);
 
-  Color? _color(ThemeData theme, DateTime now) {
-    if (date == null) {
-      return null;
-    }
-
-    if (time == null) {
-      final nowDate = DateUtils.dateOnly(now);
-      if (date!.isBefore(nowDate)) {
-        return theme.errorColor;
-      } else {
-        return theme.primaryColor;
-      }
-    }
-
-    final datetime = date! & time;
-    if (datetime.isBefore(now)) {
-      return theme.errorColor;
-    } else {
-      return theme.primaryColor;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final now = CurrentTime.of(context);
 
-    final color = _color(theme, now);
-    final textStyle = (this.textStyle ?? theme.textTheme.caption!).apply(color: color);
+    final color = colorRelativeToDate(theme, now, date, time);
+    final textStyle = (this.textStyle ?? theme.textTheme.labelMedium!).apply(color: color);
 
     return AnimatedDefaultTextStyle(
       style: textStyle,
@@ -164,6 +142,33 @@ class NowStyle extends StatelessWidget {
         child: child,
       ),
     );
+  }
+}
+
+Color? colorRelativeToDate(
+  ThemeData theme,
+  DateTime now,
+  DateTime? date,
+  TimeOfDay? time,
+) {
+  if (date == null) {
+    return null;
+  }
+
+  if (time == null) {
+    final nowDate = DateUtils.dateOnly(now);
+    if (date.isBefore(nowDate)) {
+      return theme.errorColor;
+    } else {
+      return theme.primaryColor;
+    }
+  }
+
+  final datetime = date & time;
+  if (datetime.isBefore(now)) {
+    return theme.errorColor;
+  } else {
+    return theme.primaryColor;
   }
 }
 

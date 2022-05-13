@@ -60,6 +60,8 @@ class _EditableFolderDialog extends StatefulWidget {
 }
 
 class _EditableFolderDialogState extends State<_EditableFolderDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   String? _title;
   Color? _color;
 
@@ -83,6 +85,7 @@ class _EditableFolderDialogState extends State<_EditableFolderDialog> {
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Form(
+            key: _formKey,
             child: Row(
               children: [
                 ColorPickerOverlayField(
@@ -117,29 +120,33 @@ class _EditableFolderDialogState extends State<_EditableFolderDialog> {
                     onSaved: (title) {
                       _title = title;
                     },
+                    onFieldSubmitted: (str) {
+                      _submit();
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
-                Builder(
-                    builder: (context) => IconButton(
-                          onPressed: () {
-                            final form = Form.of(context)!;
-                            if (form.validate()) {
-                              form.save();
-                              final carcass = FolderCarcass(
-                                title: _title!,
-                                color: _color,
-                              );
-                              widget.onConfirm(carcass);
-                            }
-                          },
-                          icon: const Icon(Icons.done),
-                        )),
+                IconButton(
+                  onPressed: _submit,
+                  icon: const Icon(Icons.done),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _submit() async {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+      final carcass = FolderCarcass(
+        title: _title!,
+        color: _color,
+      );
+      widget.onConfirm(carcass);
+    }
   }
 }

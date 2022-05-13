@@ -8,6 +8,8 @@ import 'package:mini_todo/ui/folder/folder_screen.dart';
 import 'package:mini_todo/ui/folder/new_folder_dialog.dart';
 import 'package:mini_todo/ui/new_todo.dart';
 
+import '../list_item.dart';
+
 class FolderListScreen extends StatelessWidget {
   const FolderListScreen({Key? key}) : super(key: key);
 
@@ -87,11 +89,11 @@ class FolderItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return ListItem(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => FolderScreen(folder: folder)),
       ),
-      leading: icon ?? const Icon(Icons.folder_outlined),
+      icon: icon ?? const Icon(Icons.folder_outlined),
       iconColor: folder.color ?? Theme.of(context).primaryColor,
       title: Text(
         folder.title,

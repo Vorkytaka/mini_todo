@@ -6,11 +6,11 @@ import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/list_item.dart';
 import 'package:mini_todo/ui/select_date.dart';
 import 'package:mini_todo/ui/select_folder.dart';
-import 'package:mini_todo/ui/todo_list/todo_list_screen.dart';
 
 import '../../data/repository.dart';
 import '../../entity/folder.dart';
 import '../../entity/todo.dart';
+import '../todo_checkbox.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
   final Todo todo;
@@ -29,12 +29,90 @@ class TodoDetailedScreen extends StatelessWidget {
         initialData: todo,
         builder: (context, snapshot) {
           final theme = Theme.of(context);
+          final now = CurrentTime.of(context);
           final todo = snapshot.data;
 
           if (todo == null) {
             WidgetsBinding.instance?.addPostFrameCallback((_) => Navigator.of(context).pop());
             return const SizedBox.shrink();
           }
+
+          final folderPicker = BlocBuilder<FoldersCubit, List<Folder>>(
+            builder: (context, folders) {
+              final folder = folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
+              return IconTheme.merge(
+                data: IconThemeData(
+                  color: folder.color ?? theme.primaryColor,
+                ),
+                child: DefaultTextStyle(
+                  style: theme.textTheme.titleMedium!,
+                  child: ListItem(
+                    icon: folder.id == null ? const Icon(Icons.inbox_outlined) : const Icon(Icons.folder_outlined),
+                    title: Text(folder.title),
+                    onTap: () async {
+                      final folder = await showSelectFolderDialog(context: context);
+                      if (folder != null) {
+                        context.read<Repository>().changeTodoFolder(todo.id, folder.id);
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+
+          final datePickerColor =
+              todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+          final datePicker = ListItem(
+            icon: const Icon(Icons.today),
+            title: todo.date != null
+                ? DateTextWidget(date: todo.date!)
+                : Text(S.of(context).todo_detailed_screen__no_date),
+            titleColor: datePickerColor,
+            iconColor: datePickerColor,
+            onTap: () async {
+              final date = await showDateSelector(
+                context: context,
+                selectedDate: todo.date,
+              );
+              if (date != null) {
+                context.read<Repository>().setDate(todo.id, date);
+              }
+            },
+          );
+
+          final timePickerColor =
+              todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+          final timePicker = ListItem(
+            icon: const Icon(Icons.access_time_outlined),
+            title: todo.time != null
+                ? Text(todo.time!.format(context))
+                : Text(S.of(context).todo_detailed_screen__no_time),
+            titleColor: timePickerColor,
+            iconColor: timePickerColor,
+            onTap: () async {
+              final time = await showTimePicker(
+                context: context,
+                initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
+              );
+              if (time != null) {
+                context.read<Repository>().setTime(todo.id, time);
+              }
+            },
+          );
+
+          final deleteItem = ListItem(
+            icon: const Icon(Icons.delete),
+            title: Text(S.of(context).todo_detailed_screen__delete),
+            titleColor: theme.errorColor,
+            iconColor: theme.errorColor,
+            onTap: () async => showDeleteTodoDialog(context: context, todo: todo),
+          );
+
+          const divider = Divider(
+            height: 1,
+            indent: 56,
+          );
 
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -47,124 +125,22 @@ class TodoDetailedScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   children: [
-                    BlocBuilder<FoldersCubit, List<Folder>>(
-                      builder: (context, folders) {
-                        final folder =
-                            folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
-                        return IconTheme.merge(
-                          data: IconThemeData(
-                            color: folder.color ?? theme.primaryColor,
-                          ),
-                          child: DefaultTextStyle(
-                            style: theme.textTheme.subtitle1!,
-                            child: ListItem(
-                              icon: folder.id == null
-                                  ? const Icon(Icons.inbox_outlined)
-                                  : const Icon(Icons.folder_outlined),
-                              title: Text(folder.title),
-                              onTap: () async {
-                                final folder = await showSelectFolderDialog(context: context);
-                                if(folder != null) {
-                                  context.read<Repository>().changeTodoFolder(todo.id, folder.id);
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const Divider(
-                      height: 1,
-                      indent: 64,
-                    ),
-                    NowStyle(
-                      date: todo.date,
-                      time: todo.time,
-                      textStyle: theme.textTheme.subtitle1,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ListItem(
-                            icon: const Icon(Icons.today),
-                            title: todo.date != null ? DateTextWidget(date: todo.date!) : Text(S.of(context).todo_detailed_screen__no_date),
-                            onTap: () async {
-                              final date = await showDateSelector(
-                                context: context,
-                                selectedDate: todo.date,
-                              );
-                              if (date != null) {
-                                context.read<Repository>().setDate(todo.id, date);
-                              }
-                            },
-                          ),
-                          AbsorbPointer(
-                            absorbing: todo.date == null,
-                            child: InkWell(
-                              onTap: () async {
-                                final time = await showTimePicker(
-                                  context: context,
-                                  initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
-                                );
-                                if (time != null) {
-                                  context.read<Repository>().setTime(todo.id, time);
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                                child: SizedBox(
-                                  height: 56,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.access_time_outlined),
-                                      const SizedBox(width: 16),
-                                      todo.time != null ? Text(todo.time!.format(context)) : Text(S.of(context).todo_detailed_screen__no_date),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      height: 1,
-                      indent: 64,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        showDeleteTodoDialog(context: context, todo: todo);
-                      },
-                      hoverColor: theme.errorColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                        child: SizedBox(
-                          height: 56,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.delete,
-                                color: theme.errorColor,
-                              ),
-                              const SizedBox(width: 16),
-                              Text(
-                                S.of(context).todo_detailed_screen__delete,
-                                style:
-                                theme.textTheme.subtitle1?.apply(color: theme.errorColor),
-                              ),
-                            ],
-                          ),
+                    folderPicker,
+                    divider,
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        datePicker,
+                        AbsorbPointer(
+                          absorbing: todo.date == null,
+                          child: timePicker,
                         ),
-                      ),
+                      ],
                     ),
+                    divider,
+                    deleteItem,
                   ],
                 ),
               ),
@@ -219,6 +195,7 @@ class _AppBarState extends State<_AppBar> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(width: 4),
               const BackButton(),
               const SizedBox(width: 8),
               Expanded(

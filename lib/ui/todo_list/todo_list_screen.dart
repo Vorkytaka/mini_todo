@@ -155,22 +155,3 @@ class TodoListSliver extends StatelessWidget {
     );
   }
 }
-
-class TodoCheckbox extends StatelessWidget {
-  final Todo todo;
-
-  const TodoCheckbox({
-    Key? key,
-    required this.todo,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      value: todo.completed,
-      onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: const RoundedRectangleBorder(borderRadius: borderRadius),
-    );
-  }
-}

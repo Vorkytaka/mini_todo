@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mini_todo/ui/todo_checkbox.dart';
 
 import '../constants.dart';
 import '../current_time_widget.dart';
 import '../entity/todo.dart';
-import 'todo_list/todo_list_screen.dart';
 
 class TodoItemWidget extends StatelessWidget {
   final Todo todo;
@@ -21,7 +21,7 @@ class TodoItemWidget extends StatelessWidget {
 
     // todo: line through when completed
     final Widget titleWidget = AnimatedDefaultTextStyle(
-      style: theme.textTheme.subtitle1!.apply(
+      style: theme.textTheme.titleMedium!.apply(
         decoration: todo.completed ? TextDecoration.lineThrough : TextDecoration.none,
       ),
       duration: kThemeChangeDuration,
@@ -49,7 +49,7 @@ class TodoItemWidget extends StatelessWidget {
         onTap: onTap,
         borderRadius: borderRadius,
         child: Padding(
-          padding: const EdgeInsets.only(left: 24, right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 8),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

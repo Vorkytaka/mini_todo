@@ -37,7 +37,8 @@ class FolderScreen extends StatelessWidget {
       },
       buildWhen: (prev, curr) => curr.firstOrNull((folder) => folder.id == this.folder.id) != null,
       builder: (context, folders) {
-        final folder = this.folder.id == null ? this.folder : folders.firstWhere((folder) => folder.id == this.folder.id);
+        final folder =
+            this.folder.id == null ? this.folder : folders.firstWhere((folder) => folder.id == this.folder.id);
         return _Screen(folder: folder);
       },
     );
@@ -207,7 +208,7 @@ class _TodosListState extends State<_TodosList> {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           sliver: TodoList(todos: widget.state.todos),
         ),
         SliverToBoxAdapter(
@@ -235,7 +236,7 @@ class _TodosListState extends State<_TodosList> {
         ),
         if (_showCompleted)
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             sliver: TodoList(todos: widget.state.completed),
           ),
       ],

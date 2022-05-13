@@ -38,6 +38,7 @@ class _NewTodoDialog extends StatefulWidget {
 }
 
 class _NewTodoDialogState extends State<_NewTodoDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   final GlobalKey<FormFieldState<DateTime?>> _dateKey = GlobalKey();
 
   String? title;
@@ -55,6 +56,9 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
         border: InputBorder.none,
         hintText: S.of(context).new_todo_dialog__title_hint,
       ),
+      onFieldSubmitted: (str) {
+        _submit();
+      },
       autofocus: true,
       textInputAction: TextInputAction.done,
       maxLines: null,
@@ -77,22 +81,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     final Widget submitBtn = Builder(
       builder: (context) {
         return InkWell(
-          onTap: () {
-            final form = Form.of(context)!;
-            if (form.validate()) {
-              form.save();
-
-              final todo = Todo.carcase(
-                title: title!,
-                date: date,
-                time: time,
-                folderId: folder?.id,
-              );
-
-              context.read<Repository>().create(todo);
-              Navigator.of(context).pop();
-            }
-          },
+          onTap: _submit,
           borderRadius: borderRadius,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -116,6 +105,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
         color: Colors.grey.shade50,
         borderRadius: borderRadiusMedium,
         child: Form(
+          key: _formKey,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
@@ -182,6 +172,23 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
         ),
       ),
     );
+  }
+
+  Future<void> _submit() async {
+    final form = _formKey.currentState!;
+    if (form.validate()) {
+      form.save();
+
+      final todo = Todo.carcase(
+        title: title!,
+        date: date,
+        time: time,
+        folderId: folder?.id,
+      );
+
+      context.read<Repository>().create(todo);
+      Navigator.of(context).pop();
+    }
   }
 }
 
@@ -305,7 +312,7 @@ class _FolderFormField extends FormField<Folder?> {
                       color: folder.color,
                     ),
               text: DefaultTextStyle(
-                style: theme.textTheme.caption!,
+                style: theme.textTheme.labelMedium!,
                 child: Text(folder.title),
               ),
               onTap: () async {
