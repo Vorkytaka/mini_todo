@@ -78,25 +78,21 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     );
 
     // we use builder because of Form widget above this element
-    final Widget submitBtn = Builder(
-      builder: (context) {
-        return InkWell(
-          onTap: _submit,
-          borderRadius: borderRadius,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.send,
-                  color: theme.colorScheme.primary,
-                ),
-              ],
+    final Widget submitBtn = InkWell(
+      onTap: _submit,
+      borderRadius: borderRadius,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.send,
+              color: theme.colorScheme.primary,
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
 
     return Padding(
@@ -133,6 +129,9 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                               },
                               onChanged: (date) {
                                 this.date = date;
+                                if (date == null) {
+                                  time = null;
+                                }
                                 setState(() {});
                               },
                             ),
@@ -192,16 +191,18 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
   }
 }
 
-class _IconButton extends StatelessWidget {
+class Chip extends StatelessWidget {
   final Widget icon;
   final Widget? text;
   final VoidCallback? onTap;
+  final VoidCallback? onCancelTap;
 
-  const _IconButton({
+  const Chip({
     Key? key,
     required this.icon,
     this.text,
     this.onTap,
+    this.onCancelTap,
   }) : super(key: key);
 
   @override
@@ -216,8 +217,19 @@ class _IconButton extends StatelessWidget {
           children: [
             icon,
             if (text != null) ...[
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
               text!,
+            ],
+            if (onCancelTap != null) ...[
+              const SizedBox(width: 8),
+              InkResponse(
+                onTap: onCancelTap,
+                radius: 18,
+                child: const Icon(
+                  Icons.clear,
+                  size: 18,
+                ),
+              ),
             ],
           ],
         ),
@@ -237,19 +249,24 @@ class _DateFormField extends FormField<DateTime?> {
           initialValue: initialValue,
           onSaved: onSaved,
           builder: (field) {
-            return _IconButton(
+            void setValue(DateTime? date) {
+              field.didChange(date);
+              onChanged?.call(date);
+            }
+
+            return Chip(
               onTap: () async {
                 final date = await showDateSelector(
                   context: field.context,
                   selectedDate: field.value,
                 );
                 if (date != null) {
-                  field.didChange(date);
-                  onChanged?.call(date);
+                  setValue(date);
                 }
               },
               icon: const Icon(Icons.today),
               text: field.value != null ? DateTextWidget(date: field.value!) : null,
+              onCancelTap: field.value != null ? () => setValue(null) : null,
             );
           },
         );
@@ -266,15 +283,19 @@ class _TimeFormField extends FormField<TimeOfDay?> {
           initialValue: initialValue,
           onSaved: onSaved,
           builder: (field) {
-            return _IconButton(
+            void setValue(TimeOfDay? time) {
+              field.didChange(time);
+              onChanged?.call(time);
+            }
+
+            return Chip(
               onTap: () async {
                 final time = await showTimePicker(
                   context: field.context,
                   initialTime: field.value ?? const TimeOfDay(hour: 12, minute: 00),
                 );
                 if (time != null) {
-                  field.didChange(time);
-                  onChanged?.call(time);
+                  setValue(time);
                 }
               },
               icon: Icon(
@@ -282,6 +303,7 @@ class _TimeFormField extends FormField<TimeOfDay?> {
                 color: field.value == null ? Theme.of(field.context).hintColor : null,
               ),
               text: field.value != null ? Text(field.value!.format(field.context)) : null,
+              onCancelTap: field.value != null ? () => setValue(null) : null,
             );
           },
         );
@@ -301,7 +323,7 @@ class _FolderFormField extends FormField<Folder?> {
             final s = S.of(field.context);
             final folder = field.value ?? Folder(id: null, title: s.common__inbox);
 
-            return _IconButton(
+            return Chip(
               icon: folder.id == null
                   ? Icon(
                       Icons.inbox_outlined,
