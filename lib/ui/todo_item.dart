@@ -27,7 +27,7 @@ class TodoItemWidget extends StatelessWidget {
       duration: kThemeChangeDuration,
       child: Text(
         todo.title,
-        maxLines: 1,
+        maxLines: todo.date == null ? 2 : 1,
         overflow: TextOverflow.ellipsis,
       ),
     );
