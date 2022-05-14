@@ -114,6 +114,25 @@ class TodoDetailedScreen extends StatelessWidget {
             indent: 56,
           );
 
+          const noteField = TextField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.edit_outlined),
+              prefixIconConstraints: BoxConstraints(
+                minWidth: 24 + 16 + 16,
+                minHeight: 48,
+              ),
+              hintText: 'Заметка',
+              hintMaxLines: 1,
+            ),
+            minLines: 1,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            textAlignVertical: TextAlignVertical.center,
+            textCapitalization: TextCapitalization.sentences,
+          );
+
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -138,6 +157,15 @@ class TodoDetailedScreen extends StatelessWidget {
                           child: timePicker,
                         ),
                       ],
+                    ),
+                    divider,
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minHeight: 56,
+                      ),
+                      child: const Center(
+                        child: noteField,
+                      ),
                     ),
                     divider,
                     deleteItem,
