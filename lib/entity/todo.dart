@@ -37,6 +37,7 @@ class Todo {
   final DateTime createdDate;
   final DateTime updatedDate;
   final int? folderId;
+  final String? note;
 
   const Todo({
     required this.id,
@@ -47,6 +48,7 @@ class Todo {
     required this.createdDate,
     required this.updatedDate,
     required this.folderId,
+    this.note,
   });
 
   static TodoCarcase carcase({
@@ -60,7 +62,7 @@ class Todo {
         date: date,
         time: time,
         folderId: folderId,
-        );
+      );
 
   @override
   String toString() => 'Todo($title, $completed)';
@@ -72,10 +74,11 @@ class Todo {
       title != other.title &&
       completed != other.completed &&
       date != other.date &&
-      time != other.time;
+      time != other.time &&
+      note == other.note;
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => hashValues(id, title, completed, date, time, note);
 
   Todo copyWith({
     String? title,
@@ -83,6 +86,7 @@ class Todo {
     DateTime? date,
     TimeOfDay? time,
     int? folderId,
+    String? note,
   }) =>
       Todo(
         id: id,
@@ -93,6 +97,7 @@ class Todo {
         createdDate: createdDate,
         updatedDate: updatedDate,
         folderId: folderId ?? this.folderId,
+        note: note ?? this.note,
       );
 
   DateTime? get datetime {

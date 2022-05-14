@@ -17,6 +17,8 @@ class TodoTable extends Table {
   DateTimeColumn get updatedDate => dateTime().withDefault(currentDateAndTime)();
 
   IntColumn get folderId => integer().nullable()();
+
+  TextColumn get note => text().nullable()();
 }
 
 class DateConverter implements TypeConverter<DateTime, DateTime> {

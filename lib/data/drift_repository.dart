@@ -60,6 +60,12 @@ class DriftRepository implements Repository {
       );
 
   @override
+  Future<int> setNote(int id, String note) =>
+      (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
+        TodoTableCompanion(note: Value(note)),
+      );
+
+  @override
   Future<int> delete(int id) => (database.delete(database.todoTable)..where((tbl) => tbl.id.equals(id))).go();
 
   @override
@@ -143,6 +149,7 @@ extension on TodoTableData {
         createdDate: createdDate,
         updatedDate: updatedDate,
         folderId: folderId,
+        note: note,
       );
 }
 

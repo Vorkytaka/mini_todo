@@ -114,8 +114,9 @@ class TodoDetailedScreen extends StatelessWidget {
             indent: 56,
           );
 
-          const noteField = TextField(
-            decoration: InputDecoration(
+          final noteField = TextFormField(
+            initialValue: todo.note,
+            decoration: const InputDecoration(
               border: InputBorder.none,
               prefixIcon: Icon(Icons.edit_outlined),
               prefixIconConstraints: BoxConstraints(
@@ -131,6 +132,9 @@ class TodoDetailedScreen extends StatelessWidget {
             textInputAction: TextInputAction.newline,
             textAlignVertical: TextAlignVertical.center,
             textCapitalization: TextCapitalization.sentences,
+            onChanged: (note) {
+              context.read<Repository>().setNote(todo.id, note);
+            },
           );
 
           return Column(
@@ -163,7 +167,7 @@ class TodoDetailedScreen extends StatelessWidget {
                       constraints: const BoxConstraints(
                         minHeight: 56,
                       ),
-                      child: const Center(
+                      child: Center(
                         child: noteField,
                       ),
                     ),

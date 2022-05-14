@@ -16,6 +16,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   final DateTime createdDate;
   final DateTime updatedDate;
   final int? folderId;
+  final String? note;
   TodoTableData(
       {required this.id,
       required this.title,
@@ -24,7 +25,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       this.time,
       required this.createdDate,
       required this.updatedDate,
-      this.folderId});
+      this.folderId,
+      this.note});
   factory TodoTableData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TodoTableData(
@@ -44,6 +46,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}updated_date'])!,
       folderId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}folder_id']),
+      note: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}note']),
     );
   }
   @override
@@ -65,6 +69,9 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
     if (!nullToAbsent || folderId != null) {
       map['folder_id'] = Variable<int?>(folderId);
     }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String?>(note);
+    }
     return map;
   }
 
@@ -80,6 +87,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       folderId: folderId == null && nullToAbsent
           ? const Value.absent()
           : Value(folderId),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
     );
   }
 
@@ -95,6 +103,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       createdDate: serializer.fromJson<DateTime>(json['createdDate']),
       updatedDate: serializer.fromJson<DateTime>(json['updatedDate']),
       folderId: serializer.fromJson<int?>(json['folderId']),
+      note: serializer.fromJson<String?>(json['note']),
     );
   }
   @override
@@ -109,6 +118,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       'createdDate': serializer.toJson<DateTime>(createdDate),
       'updatedDate': serializer.toJson<DateTime>(updatedDate),
       'folderId': serializer.toJson<int?>(folderId),
+      'note': serializer.toJson<String?>(note),
     };
   }
 
@@ -120,7 +130,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           TimeOfDay? time,
           DateTime? createdDate,
           DateTime? updatedDate,
-          int? folderId}) =>
+          int? folderId,
+          String? note}) =>
       TodoTableData(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -130,6 +141,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
         createdDate: createdDate ?? this.createdDate,
         updatedDate: updatedDate ?? this.updatedDate,
         folderId: folderId ?? this.folderId,
+        note: note ?? this.note,
       );
   @override
   String toString() {
@@ -141,14 +153,15 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           ..write('time: $time, ')
           ..write('createdDate: $createdDate, ')
           ..write('updatedDate: $updatedDate, ')
-          ..write('folderId: $folderId')
+          ..write('folderId: $folderId, ')
+          ..write('note: $note')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, title, completed, date, time, createdDate, updatedDate, folderId);
+  int get hashCode => Object.hash(id, title, completed, date, time, createdDate,
+      updatedDate, folderId, note);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -160,7 +173,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           other.time == this.time &&
           other.createdDate == this.createdDate &&
           other.updatedDate == this.updatedDate &&
-          other.folderId == this.folderId);
+          other.folderId == this.folderId &&
+          other.note == this.note);
 }
 
 class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
@@ -172,6 +186,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
   final Value<DateTime> createdDate;
   final Value<DateTime> updatedDate;
   final Value<int?> folderId;
+  final Value<String?> note;
   const TodoTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -181,6 +196,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.createdDate = const Value.absent(),
     this.updatedDate = const Value.absent(),
     this.folderId = const Value.absent(),
+    this.note = const Value.absent(),
   });
   TodoTableCompanion.insert({
     this.id = const Value.absent(),
@@ -191,6 +207,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.createdDate = const Value.absent(),
     this.updatedDate = const Value.absent(),
     this.folderId = const Value.absent(),
+    this.note = const Value.absent(),
   }) : title = Value(title);
   static Insertable<TodoTableData> custom({
     Expression<int>? id,
@@ -201,6 +218,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     Expression<DateTime>? createdDate,
     Expression<DateTime>? updatedDate,
     Expression<int?>? folderId,
+    Expression<String?>? note,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -211,6 +229,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       if (createdDate != null) 'created_date': createdDate,
       if (updatedDate != null) 'updated_date': updatedDate,
       if (folderId != null) 'folder_id': folderId,
+      if (note != null) 'note': note,
     });
   }
 
@@ -222,7 +241,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       Value<TimeOfDay?>? time,
       Value<DateTime>? createdDate,
       Value<DateTime>? updatedDate,
-      Value<int?>? folderId}) {
+      Value<int?>? folderId,
+      Value<String?>? note}) {
     return TodoTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -232,6 +252,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       createdDate: createdDate ?? this.createdDate,
       updatedDate: updatedDate ?? this.updatedDate,
       folderId: folderId ?? this.folderId,
+      note: note ?? this.note,
     );
   }
 
@@ -264,6 +285,9 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     if (folderId.present) {
       map['folder_id'] = Variable<int?>(folderId.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String?>(note.value);
+    }
     return map;
   }
 
@@ -277,7 +301,8 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
           ..write('time: $time, ')
           ..write('createdDate: $createdDate, ')
           ..write('updatedDate: $updatedDate, ')
-          ..write('folderId: $folderId')
+          ..write('folderId: $folderId, ')
+          ..write('note: $note')
           ..write(')'))
         .toString();
   }
@@ -345,9 +370,23 @@ class $TodoTableTable extends TodoTable
   late final GeneratedColumn<int?> folderId = GeneratedColumn<int?>(
       'folder_id', aliasedName, true,
       type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, completed, date, time, createdDate, updatedDate, folderId];
+  late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
+      'note', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        completed,
+        date,
+        time,
+        createdDate,
+        updatedDate,
+        folderId,
+        note
+      ];
   @override
   String get aliasedName => _alias ?? 'todo_table';
   @override
@@ -387,6 +426,10 @@ class $TodoTableTable extends TodoTable
     if (data.containsKey('folder_id')) {
       context.handle(_folderIdMeta,
           folderId.isAcceptableOrUnknown(data['folder_id']!, _folderIdMeta));
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
     }
     return context;
   }

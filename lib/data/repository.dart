@@ -22,6 +22,8 @@ abstract class Repository {
 
   Future<int> setTime(int id, TimeOfDay time);
 
+  Future<int> setNote(int id, String note);
+
   Future<int> delete(int id);
 
   Future<int> createFolder(FolderCarcass folder);
