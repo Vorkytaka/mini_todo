@@ -61,6 +61,22 @@ class TodoDetailedScreen extends StatelessWidget {
             },
           );
 
+          Widget? dateDismiss;
+          if (todo.date != null) {
+            dateDismiss = SizedBox(
+              width: 24,
+              height: 24,
+              child: InkResponse(
+                onTap: () => context.read<Repository>().removeDate(todo.id),
+                radius: 24,
+                child: Icon(
+                  Icons.clear,
+                  color: theme.hintColor,
+                  size: 16,
+                ),
+              ),
+            );
+          }
           final datePickerColor =
               todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
           final datePicker = ListItem(
@@ -79,8 +95,25 @@ class TodoDetailedScreen extends StatelessWidget {
                 context.read<Repository>().setDate(todo.id, date);
               }
             },
+            trailing: dateDismiss,
           );
 
+          Widget? timeDismiss;
+          if (todo.time != null) {
+            timeDismiss = SizedBox(
+              width: 24,
+              height: 24,
+              child: InkResponse(
+                onTap: () => context.read<Repository>().removeTime(todo.id),
+                radius: 24,
+                child: Icon(
+                  Icons.clear,
+                  color: theme.hintColor,
+                  size: 16,
+                ),
+              ),
+            );
+          }
           final timePickerColor =
               todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
           final timePicker = ListItem(
@@ -99,6 +132,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 context.read<Repository>().setTime(todo.id, time);
               }
             },
+            trailing: timeDismiss,
           );
 
           final deleteItem = ListItem(

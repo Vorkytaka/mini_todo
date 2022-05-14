@@ -54,9 +54,19 @@ class DriftRepository implements Repository {
       );
 
   @override
+  Future<int> removeDate(int id) => (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
+        const TodoTableCompanion(date: Value(null), time: Value(null)),
+      );
+
+  @override
   Future<int> setTime(int id, TimeOfDay time) =>
       (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
         TodoTableCompanion(time: Value(time)),
+      );
+
+  @override
+  Future<int> removeTime(int id) => (database.update(database.todoTable)..where((tbl) => tbl.id.equals(id))).write(
+        const TodoTableCompanion(time: Value(null)),
       );
 
   @override
