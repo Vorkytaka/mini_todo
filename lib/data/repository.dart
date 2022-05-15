@@ -43,4 +43,8 @@ abstract class Repository {
   Future<int> changeTodoFolder(int todoId, int? folderId);
 
   Future<int> updateFolder(Folder folder);
+
+  Stream<List<Todo>> streamTodayTodo();
+
+  Stream<List<Todo>> streamOverdueByToday();
 }

@@ -147,6 +147,20 @@ class DriftRepository implements Repository {
       color: Value(folder.color),
     ));
   }
+
+  @override
+  Stream<List<Todo>> streamTodayTodo() {
+    final query = database.select(database.todoTable);
+    query.where((tbl) => tbl.date.equalsExp(currentDate) & tbl.completed.not());
+    return query.map((p0) => p0.toTodo).watch();
+  }
+
+  @override
+  Stream<List<Todo>> streamOverdueByToday() {
+    final query = database.select(database.todoTable);
+    query.where((tbl) => tbl.date.isSmallerThan(currentDate) & tbl.completed.not());
+    return query.map((p0) => p0.toTodo).watch();
+  }
 }
 
 extension on TodoTableData {

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/constants.dart';
+import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/folder/folder_screen.dart';
 import 'package:mini_todo/ui/folder/new_folder_dialog.dart';
+import 'package:mini_todo/ui/folder/today_screen.dart';
 import 'package:mini_todo/ui/new_todo.dart';
 
 import '../list_item.dart';
@@ -60,6 +62,27 @@ class FolderListWidget extends StatelessWidget {
                   title: S.of(context).common__inbox,
                 ),
                 icon: const Icon(Icons.inbox_outlined),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: ListItem(
+                icon: Stack(
+                  alignment: const Alignment(0, 0.55),
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      color: Colors.green,
+                    ),
+                    Text(
+                      '${CurrentTime.of(context).day}',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.green),
+                    )
+                  ],
+                ),
+                title: const Text('Сегодня'),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const TodayScreen()),
+                ),
               ),
             ),
             SliverList(
