@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/generated/l10n.dart';
@@ -47,7 +48,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 child: DefaultTextStyle(
                   style: theme.textTheme.titleMedium!,
                   child: ListItem(
-                    icon: folder.id == null ? const Icon(Icons.inbox_outlined) : const Icon(Icons.folder_outlined),
+                    icon: folder.id == null ? const Icon(kDefaultInboxIcon) : const Icon(kDefaultFolderIcon),
                     title: Text(folder.title),
                     onTap: () async {
                       final folder = await showSelectFolderDialog(context: context);
@@ -150,14 +151,14 @@ class TodoDetailedScreen extends StatelessWidget {
 
           final noteField = TextFormField(
             initialValue: todo.note,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
-              prefixIcon: Icon(Icons.edit_outlined),
-              prefixIconConstraints: BoxConstraints(
+              prefixIcon: const Icon(Icons.edit_outlined),
+              prefixIconConstraints: const BoxConstraints(
                 minWidth: 24 + 16 + 16,
                 minHeight: 48,
               ),
-              hintText: 'Заметка',
+              hintText: S.of(context).todo_detailed_screen__note_hint,
               hintMaxLines: 1,
             ),
             minLines: 1,

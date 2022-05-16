@@ -180,6 +180,26 @@ class S {
     );
   }
 
+  /// `Today`
+  String get folder__today {
+    return Intl.message(
+      'Today',
+      name: 'folder__today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overdue`
+  String get today_screen__overdue {
+    return Intl.message(
+      'Overdue',
+      name: 'today_screen__overdue',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Task`
   String get new_todo_dialog__title_hint {
     return Intl.message(
@@ -265,6 +285,16 @@ class S {
     return Intl.message(
       'Delete',
       name: 'todo_detailed_screen__delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Note`
+  String get todo_detailed_screen__note_hint {
+    return Intl.message(
+      'Note',
+      name: 'todo_detailed_screen__note_hint',
       desc: '',
       args: [],
     );

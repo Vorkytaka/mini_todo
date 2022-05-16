@@ -1,9 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/entity/todo.dart';
 import 'package:mini_todo/ui/todo_item.dart';
 import 'package:mini_todo/utils/collections.dart';
 
 import 'todo_detailed/todo_detailed_screen.dart';
+
+class TodoListHeader extends StatelessWidget {
+  final VoidCallback? onTap;
+  final Widget child;
+
+  const TodoListHeader({
+    Key? key,
+    this.onTap,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: borderRadius,
+      color: Colors.grey.shade100,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: borderRadius,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: DefaultTextStyle(
+            style: Theme.of(context).textTheme.bodySmall!,
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class TodoList extends StatelessWidget {
   final List<Todo> todos;

@@ -11,6 +11,7 @@ import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
 import '../../utils/collections.dart';
+import '../gradient_body.dart';
 import '../new_todo.dart';
 
 enum _MenuItem {
@@ -112,22 +113,9 @@ class _Screen extends StatelessWidget {
               onPressed: () => showNewTodoDialog(context: context, folder: folder),
               child: const Icon(Icons.add),
             ),
-            body: Stack(
-              children: [
-                Ink(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        (folder.color ?? Theme.of(context).primaryColor).lighten(80),
-                        Colors.grey.shade200,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                ),
-                _Body(state: state),
-              ],
+            body: GradientBody(
+              color: (folder.color ?? Theme.of(context).primaryColor).lighten(80),
+              child: _Body(state: state),
             ),
           );
         },
@@ -213,23 +201,12 @@ class _TodosListState extends State<_TodosList> {
         ),
         SliverToBoxAdapter(
           child: Center(
-            child: Material(
-              borderRadius: borderRadius,
-              color: Colors.grey.shade100,
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _showCompleted = !_showCompleted;
-                  });
-                },
-                borderRadius: borderRadius,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  child: Text(
-                    _showCompleted ? S.of(context).common__hide_completed : S.of(context).common__show_completed,
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ),
+            child: TodoListHeader(
+              onTap: () => setState(() {
+                _showCompleted = !_showCompleted;
+              }),
+              child: Text(
+                _showCompleted ? S.of(context).common__hide_completed : S.of(context).common__show_completed,
               ),
             ),
           ),

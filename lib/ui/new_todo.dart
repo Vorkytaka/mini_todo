@@ -13,6 +13,7 @@ import '../entity/todo.dart';
 Future<void> showNewTodoDialog({
   required BuildContext context,
   Folder? folder,
+  DateTime? date,
 }) async {
   return showModalBottomSheet(
     context: context,
@@ -20,17 +21,22 @@ Future<void> showNewTodoDialog({
     isScrollControlled: true,
     isDismissible: true,
     builder: (context) {
-      return _NewTodoDialog(folder: folder);
+      return _NewTodoDialog(
+        folder: folder,
+        date: date,
+      );
     },
   );
 }
 
 class _NewTodoDialog extends StatefulWidget {
   final Folder? folder;
+  final DateTime? date;
 
   const _NewTodoDialog({
     Key? key,
     this.folder,
+    this.date,
   }) : super(key: key);
 
   @override
@@ -45,6 +51,12 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
   DateTime? date;
   TimeOfDay? time;
   Folder? folder;
+
+  @override
+  void initState() {
+    super.initState();
+    date = widget.date;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +136,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                             time: time,
                             child: _DateFormField(
                               key: _dateKey,
+                              initialValue: widget.date,
                               onSaved: (date) {
                                 this.date = date;
                               },
@@ -326,11 +339,11 @@ class _FolderFormField extends FormField<Folder?> {
             return Chip(
               icon: folder.id == null
                   ? Icon(
-                      Icons.inbox_outlined,
+                kDefaultInboxIcon,
                       color: theme.primaryColor,
                     )
                   : Icon(
-                      Icons.folder_outlined,
+                kDefaultFolderIcon,
                       color: folder.color,
                     ),
               text: DefaultTextStyle(
