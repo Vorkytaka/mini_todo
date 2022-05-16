@@ -61,7 +61,7 @@ class FolderListWidget extends StatelessWidget {
                   id: null,
                   title: S.of(context).common__inbox,
                 ),
-                icon: const Icon(Icons.inbox_outlined),
+                icon: const Icon(kDefaultInboxIcon),
               ),
             ),
             SliverToBoxAdapter(
@@ -75,11 +75,15 @@ class FolderListWidget extends StatelessWidget {
                     ),
                     Text(
                       '${CurrentTime.of(context).day}',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.green),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -1,
+                          ),
                     )
                   ],
                 ),
-                title: const Text('Сегодня'),
+                title: Text(S.of(context).folder__today),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const TodayScreen()),
                 ),
@@ -116,7 +120,7 @@ class FolderItemWidget extends StatelessWidget {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => FolderScreen(folder: folder)),
       ),
-      icon: icon ?? const Icon(Icons.folder_outlined),
+      icon: icon ?? const Icon(kDefaultFolderIcon),
       iconColor: folder.color ?? Theme.of(context).primaryColor,
       title: Text(
         folder.title,

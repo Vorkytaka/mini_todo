@@ -12,28 +12,24 @@
   "common__completed": "Completed",
   "common__show_completed": "Show completed",
   "common__hide_completed": "Hide completed",
-
+  "folder__today": "Today",
+  "today_screen__overdue": "Overdue",
   "new_todo_dialog__title_hint": "Task",
   "new_todo_dialog__title_required": "Enter task title",
-
   "datetime_dialog__time": "Time",
-
   "delete_todo_dialog__title": "Delete this todo?",
   "delete_todo_dialog__content": "Are you sure you want to delete ",
   "delete_todo_dialog__caution": "This action cannot be undone.",
-
   "todo_detailed_screen__no_date": "No date",
   "todo_detailed_screen__no_time": "No time",
   "todo_detailed_screen__delete": "Delete",
-
+  "todo_detailed_screen__note_hint": "Note",
   "editable_folder_dialog__hint": "Folder title",
   "editable_folder_dialog__title_error": "Enter folder title",
-
   "folder_screen__update_folder": "Update folder",
   "folder_screen__delete_folder": "Delete folder",
   "folder_screen__empty_title": "Folder is empty",
   "folder_screen__empty_caution": "Don't be lazy,\nadd your first todo!",
-
   "delete_folder_dialog__title": "Delete folder?",
   "delete_folder_dialog__content": "Are you sure you want to delete folder ",
   "delete_folder_dialog__delete_todos_toggle": "Also delete all todos from this folder",

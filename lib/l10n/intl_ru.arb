@@ -11,28 +11,24 @@
   "common__completed": "Выполненные",
   "common__show_completed": "Показать выполненные",
   "common__hide_completed": "Скрыть выполненные",
-
+  "folder__today": "Сегодня",
+  "today_screen__overdue": "Просроченные",
   "new_todo_dialog__title_hint": "Задача",
   "new_todo_dialog__title_required": "Введите название задачи",
-
   "datetime_dialog__time": "Время",
-
   "delete_todo_dialog__title": "Удалить задачу?",
   "delete_todo_dialog__content": "Вы точно хотите удалить ",
   "delete_todo_dialog__caution": "Это действие нельзя отменить.",
-
   "todo_detailed_screen__no_date": "Без даты",
   "todo_detailed_screen__no_time": "Без времени",
   "todo_detailed_screen__delete": "Удалить",
-
+  "todo_detailed_screen__note_hint": "Заметка",
   "editable_folder_dialog__hint": "Название папки",
   "editable_folder_dialog__title_error": "Введите название папки",
-
   "folder_screen__update_folder": "Изменить папку",
   "folder_screen__delete_folder": "Удалить папку",
   "folder_screen__empty_title": "Здесь пусто",
   "folder_screen__empty_caution": "Не ленись, добавь первую задачу!",
-
   "delete_folder_dialog__title": "Удалить папку?",
   "delete_folder_dialog__content": "Вы точно хотите удалить папку ",
   "delete_folder_dialog__delete_todos_toggle": "Удалить все задачи из папки",
