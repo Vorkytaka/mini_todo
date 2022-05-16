@@ -27,12 +27,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__completed":
             MessageLookupByLibrary.simpleMessage("Выполненные"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Принять"),
-        "common__hide_completed":
-            MessageLookupByLibrary.simpleMessage("Скрыть выполненные"),
+        "common__hide_completed": MessageLookupByLibrary.simpleMessage("Скрыть выполненные"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Входящие"),
         "common__no": MessageLookupByLibrary.simpleMessage("Нет"),
-        "common__show_completed":
-            MessageLookupByLibrary.simpleMessage("Показать выполненные"),
+        "common__show_completed": MessageLookupByLibrary.simpleMessage("Показать выполненные"),
         "common__today": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "common__tomorrow": MessageLookupByLibrary.simpleMessage("Завтра"),
         "common__yes": MessageLookupByLibrary.simpleMessage("Да"),

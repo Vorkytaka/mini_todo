@@ -27,12 +27,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "common__completed": MessageLookupByLibrary.simpleMessage("Completed"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
-        "common__hide_completed":
-            MessageLookupByLibrary.simpleMessage("Hide completed"),
+        "common__hide_completed": MessageLookupByLibrary.simpleMessage("Hide completed"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Inbox"),
         "common__no": MessageLookupByLibrary.simpleMessage("No"),
-        "common__show_completed":
-            MessageLookupByLibrary.simpleMessage("Show completed"),
+        "common__show_completed": MessageLookupByLibrary.simpleMessage("Show completed"),
         "common__today": MessageLookupByLibrary.simpleMessage("Today"),
         "common__tomorrow": MessageLookupByLibrary.simpleMessage("Tomorrow"),
         "common__yes": MessageLookupByLibrary.simpleMessage("Yes"),
