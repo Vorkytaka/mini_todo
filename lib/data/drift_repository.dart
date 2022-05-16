@@ -151,7 +151,7 @@ class DriftRepository implements Repository {
   @override
   Stream<List<Todo>> streamTodayTodo() {
     final query = database.select(database.todoTable);
-    query.where((tbl) => tbl.date.equalsExp(currentDate) & tbl.completed.not());
+    query.where((tbl) => tbl.date.sameDate(currentDate) & tbl.completed.not());
     return query.map((p0) => p0.toTodo).watch();
   }
 
@@ -183,4 +183,9 @@ extension on FolderTableData {
         title: title,
         color: color,
       );
+}
+
+extension on Expression<DateTime?> {
+  Expression<bool?> sameDate(Expression<DateTime> compare) =>
+      year.equalsExp(compare.year) & month.equalsExp(compare.month) & day.equalsExp(compare.day);
 }
