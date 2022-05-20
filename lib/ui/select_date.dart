@@ -97,7 +97,7 @@ class _DateSelectorState extends State<_DateSelector> {
                   const SizedBox(width: 16),
                   TextButton(
                     child: Text(s.common__confirm),
-                    onPressed: () => Navigator.of(context).pop(_selected),
+                    onPressed: () => Navigator.of(context).pop(DateUtils.dateOnly(_selected)),
                   ),
                 ],
               ),

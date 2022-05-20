@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:flutter/material.dart' show TimeOfDay, DateUtils;
 import 'package:mini_todo/entity/folder.dart';
 
 import '../entity/todo.dart';
@@ -150,15 +150,17 @@ class DriftRepository implements Repository {
 
   @override
   Stream<List<Todo>> streamTodayTodo() {
+    final today = DateUtils.dateOnly(DateTime.now());
     final query = database.select(database.todoTable);
-    query.where((tbl) => tbl.date.sameDate(currentDate) & tbl.completed.not());
+    query.where((tbl) => tbl.date.equalsValue(today) & tbl.completed.not());
     return query.map((p0) => p0.toTodo).watch();
   }
 
   @override
   Stream<List<Todo>> streamOverdueByToday() {
+    final today = DateUtils.dateOnly(DateTime.now());
     final query = database.select(database.todoTable);
-    query.where((tbl) => tbl.date.isSmallerThan(currentDate) & tbl.completed.not());
+    query.where((tbl) => tbl.date.isSmallerThanDartValue(today) & tbl.completed.not());
     return query.map((p0) => p0.toTodo).watch();
   }
 }
@@ -185,7 +187,9 @@ extension on FolderTableData {
       );
 }
 
-extension on Expression<DateTime?> {
-  Expression<bool?> sameDate(Expression<DateTime> compare) =>
-      year.equalsExp(compare.year) & month.equalsExp(compare.month) & day.equalsExp(compare.day);
+extension on GeneratedColumnWithTypeConverter<DateTime, int?> {
+  Expression<bool?> isSmallerThanDartValue(DateTime dartValue) {
+    final ms = converter.mapToSql(dartValue) as int;
+    return isSmallerThanValue(ms);
+  }
 }

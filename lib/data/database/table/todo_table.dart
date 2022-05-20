@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart' show TimeOfDay, DateUtils;
+import 'package:flutter/material.dart' show TimeOfDay;
 
 class TodoTable extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -8,7 +8,7 @@ class TodoTable extends Table {
 
   BoolColumn get completed => boolean().withDefault(const Constant(false))();
 
-  DateTimeColumn get date => dateTime().map(const DateConverter()).nullable()();
+  IntColumn get date => integer().map(const DateConverter()).nullable()();
 
   IntColumn get time => integer().map(const TimeConverter()).nullable()();
 
@@ -21,19 +21,21 @@ class TodoTable extends Table {
   TextColumn get note => text().nullable()();
 }
 
-class DateConverter implements TypeConverter<DateTime, DateTime> {
+class DateConverter implements TypeConverter<DateTime, int> {
   const DateConverter();
 
   @override
-  DateTime? mapToDart(DateTime? fromDb) {
+  DateTime? mapToDart(int? fromDb) {
     if (fromDb == null) return null;
-    return DateUtils.dateOnly(fromDb);
+    final utc = DateTime.fromMillisecondsSinceEpoch(fromDb * 1000, isUtc: true);
+    return DateTime(utc.year, utc.month, utc.day);
   }
 
   @override
-  DateTime? mapToSql(DateTime? value) {
+  int? mapToSql(DateTime? value) {
     if (value == null) return null;
-    return DateUtils.dateOnly(value);
+    final utc = DateTime.utc(value.year, value.month, value.day);
+    return utc.millisecondsSinceEpoch ~/ 1000;
   }
 }
 

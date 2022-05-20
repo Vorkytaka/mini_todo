@@ -117,7 +117,7 @@ class TodoDetailedScreen extends StatelessWidget {
           }
           final timePickerColor =
               todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
-          final timePicker = ListItem(
+          Widget timePicker = ListItem(
             icon: const Icon(Icons.access_time_outlined),
             title: todo.time != null
                 ? Text(todo.time!.format(context))
@@ -134,6 +134,15 @@ class TodoDetailedScreen extends StatelessWidget {
               }
             },
             trailing: timeDismiss,
+          );
+          timePicker = AnimatedCrossFade(
+            firstChild: timePicker,
+            secondChild: const SizedBox(),
+            crossFadeState: todo.date == null ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 250),
+            sizeCurve: Curves.easeInOut,
+            firstCurve: Curves.easeIn,
+            secondCurve: Curves.easeIn,
           );
 
           final deleteItem = ListItem(
@@ -191,10 +200,7 @@ class TodoDetailedScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         datePicker,
-                        AbsorbPointer(
-                          absorbing: todo.date == null,
-                          child: timePicker,
-                        ),
+                        timePicker,
                       ],
                     ),
                     divider,

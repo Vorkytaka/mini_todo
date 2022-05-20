@@ -30,24 +30,17 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   factory TodoTableData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TodoTableData(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      title: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
-      completed: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}completed'])!,
-      date: $TodoTableTable.$converter0.mapToDart(const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}date'])),
-      time: $TodoTableTable.$converter1.mapToDart(const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}time'])),
-      createdDate: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_date'])!,
-      updatedDate: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}updated_date'])!,
-      folderId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}folder_id']),
-      note: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}note']),
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      title: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
+      completed: const BoolType().mapFromDatabaseResponse(data['${effectivePrefix}completed'])!,
+      date: $TodoTableTable.$converter0
+          .mapToDart(const IntType().mapFromDatabaseResponse(data['${effectivePrefix}date'])),
+      time: $TodoTableTable.$converter1
+          .mapToDart(const IntType().mapFromDatabaseResponse(data['${effectivePrefix}time'])),
+      createdDate: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}created_date'])!,
+      updatedDate: const DateTimeType().mapFromDatabaseResponse(data['${effectivePrefix}updated_date'])!,
+      folderId: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}folder_id']),
+      note: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}note']),
     );
   }
   @override
@@ -58,7 +51,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
     map['completed'] = Variable<bool>(completed);
     if (!nullToAbsent || date != null) {
       final converter = $TodoTableTable.$converter0;
-      map['date'] = Variable<DateTime?>(converter.mapToSql(date));
+      map['date'] = Variable<int?>(converter.mapToSql(date));
     }
     if (!nullToAbsent || time != null) {
       final converter = $TodoTableTable.$converter1;
@@ -270,7 +263,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     }
     if (date.present) {
       final converter = $TodoTableTable.$converter0;
-      map['date'] = Variable<DateTime?>(converter.mapToSql(date.value));
+      map['date'] = Variable<int?>(converter.mapToSql(date.value));
     }
     if (time.present) {
       final converter = $TodoTableTable.$converter1;
@@ -339,9 +332,8 @@ class $TodoTableTable extends TodoTable
       defaultValue: const Constant(false));
   final VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumnWithTypeConverter<DateTime, DateTime?> date =
-      GeneratedColumn<DateTime?>('date', aliasedName, true,
-              type: const IntType(), requiredDuringInsert: false)
+  late final GeneratedColumnWithTypeConverter<DateTime, int?> date =
+      GeneratedColumn<int?>('date', aliasedName, true, type: const IntType(), requiredDuringInsert: false)
           .withConverter<DateTime>($TodoTableTable.$converter0);
   final VerificationMeta _timeMeta = const VerificationMeta('time');
   @override
@@ -436,10 +428,10 @@ class $TodoTableTable extends TodoTable
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
+
   @override
   TodoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TodoTableData.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    return TodoTableData.fromData(data, prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
@@ -447,7 +439,7 @@ class $TodoTableTable extends TodoTable
     return $TodoTableTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<DateTime, DateTime> $converter0 = const DateConverter();
+  static TypeConverter<DateTime, int> $converter0 = const DateConverter();
   static TypeConverter<TimeOfDay, int> $converter1 = const TimeConverter();
 }
 

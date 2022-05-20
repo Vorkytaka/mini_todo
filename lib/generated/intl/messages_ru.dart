@@ -24,8 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common__all": MessageLookupByLibrary.simpleMessage("Все"),
         "common__cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
-        "common__completed":
-            MessageLookupByLibrary.simpleMessage("Выполненные"),
+        "common__completed": MessageLookupByLibrary.simpleMessage("Выполненные"),
         "common__confirm": MessageLookupByLibrary.simpleMessage("Принять"),
         "common__hide_completed": MessageLookupByLibrary.simpleMessage("Скрыть выполненные"),
         "common__inbox": MessageLookupByLibrary.simpleMessage("Входящие"),
