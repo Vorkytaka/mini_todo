@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mini_todo/entity/folder.dart';
+import 'package:mini_todo/entity/subtodo.dart';
 
 import '../entity/todo.dart';
 
@@ -47,4 +48,14 @@ abstract class Repository {
   Stream<List<Todo>> streamTodayTodo();
 
   Stream<List<Todo>> streamOverdueByToday();
+
+  Stream<List<Subtodo>> streamSubtodoByTodo(int todoId);
+
+  Future<int> createSubtodoForTodo(int todoId);
+
+  Future<int> changeSubtodoTitle(int id, String title);
+
+  Future<int> changeSubtodoCompleted(int id, bool completed);
+
+  Future<int> deleteSubtodo(int id);
 }

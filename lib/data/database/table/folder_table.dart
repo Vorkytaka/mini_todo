@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:drift/drift.dart';
 import 'package:mini_todo/constants.dart';
 
+import '../../../entity/folder.dart';
+import '../database.dart';
+
 class FolderTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
@@ -25,4 +28,12 @@ class ColorConverter implements TypeConverter<Color, int> {
     if (value == null) return null;
     return value.value;
   }
+}
+
+extension FolderTableUtils on FolderTableData {
+  Folder get toFolder => Folder(
+        id: id,
+        title: title,
+        color: color,
+      );
 }

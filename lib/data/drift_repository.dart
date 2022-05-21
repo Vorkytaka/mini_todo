@@ -1,9 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show TimeOfDay, DateUtils;
+import 'package:mini_todo/data/database/table/subtodo_table.dart';
+import 'package:mini_todo/data/database/table/todo_table.dart';
 import 'package:mini_todo/entity/folder.dart';
+import 'package:mini_todo/entity/subtodo.dart';
 
 import '../entity/todo.dart';
 import 'database/database.dart';
+import 'database/table/folder_table.dart';
 import 'repository.dart';
 
 class DriftRepository implements Repository {
@@ -163,28 +167,44 @@ class DriftRepository implements Repository {
     query.where((tbl) => tbl.date.isSmallerThanDartValue(today) & tbl.completed.not());
     return query.map((p0) => p0.toTodo).watch();
   }
-}
 
-extension on TodoTableData {
-  Todo get toTodo => Todo(
-        id: id,
-        title: title,
-        completed: completed,
-        date: date,
-        time: time,
-        createdDate: createdDate,
-        updatedDate: updatedDate,
-        folderId: folderId,
-        note: note,
-      );
-}
+  @override
+  Stream<List<Subtodo>> streamSubtodoByTodo(int todoId) {
+    final query = database.select(database.subtodoTable);
+    query.where((tbl) => tbl.todoId.equals(todoId));
+    return query.map((p0) => p0.toSubtodo).watch();
+  }
 
-extension on FolderTableData {
-  Folder get toFolder => Folder(
-        id: id,
-        title: title,
-        color: color,
-      );
+  @override
+  Future<int> createSubtodoForTodo(int todoId) {
+    return database.into(database.subtodoTable).insert(
+          SubtodoTableCompanion.insert(
+            title: '',
+            todoId: todoId,
+          ),
+        );
+  }
+
+  @override
+  Future<int> changeSubtodoTitle(int id, String title) {
+    final query = database.update(database.subtodoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.write(SubtodoTableCompanion(title: Value(title)));
+  }
+
+  @override
+  Future<int> changeSubtodoCompleted(int id, bool completed) {
+    final query = database.update(database.subtodoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.write(SubtodoTableCompanion(completed: Value(completed)));
+  }
+
+  @override
+  Future<int> deleteSubtodo(int id) async {
+    final query = database.delete(database.subtodoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.go();
+  }
 }
 
 extension on GeneratedColumnWithTypeConverter<DateTime, int?> {

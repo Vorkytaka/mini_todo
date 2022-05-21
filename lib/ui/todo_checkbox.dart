@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../constants.dart';
 import '../data/repository.dart';
 import '../entity/todo.dart';
 
@@ -19,7 +18,6 @@ class TodoCheckbox extends StatelessWidget {
       value: todo.completed,
       onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      shape: const RoundedRectangleBorder(borderRadius: borderRadius),
     );
   }
 }

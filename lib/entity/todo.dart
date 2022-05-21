@@ -80,26 +80,6 @@ class Todo {
   @override
   int get hashCode => hashValues(id, title, completed, date, time, note);
 
-  Todo copyWith({
-    String? title,
-    bool? completed,
-    DateTime? date,
-    TimeOfDay? time,
-    int? folderId,
-    String? note,
-  }) =>
-      Todo(
-        id: id,
-        title: title ?? this.title,
-        completed: completed ?? this.completed,
-        date: date ?? this.date,
-        time: time ?? this.time,
-        createdDate: createdDate,
-        updatedDate: updatedDate,
-        folderId: folderId ?? this.folderId,
-        note: note ?? this.note,
-      );
-
   DateTime? get datetime {
     if (date == null) {
       return null;

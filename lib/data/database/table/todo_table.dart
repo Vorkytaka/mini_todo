@@ -1,6 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show TimeOfDay;
 
+import '../../../entity/todo.dart';
+import '../database.dart';
+
 class TodoTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
@@ -53,4 +56,18 @@ class TimeConverter implements TypeConverter<TimeOfDay, int> {
     if (value == null) return null;
     return value.hour * 60 + value.minute;
   }
+}
+
+extension TodoTableUtils on TodoTableData {
+  Todo get toTodo => Todo(
+        id: id,
+        title: title,
+        completed: completed,
+        date: date,
+        time: time,
+        createdDate: createdDate,
+        updatedDate: updatedDate,
+        folderId: folderId,
+        note: note,
+      );
 }

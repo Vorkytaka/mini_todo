@@ -32,6 +32,9 @@ class App extends StatelessWidget {
             elevation: 3,
             highlightElevation: 0,
           ),
+          checkboxTheme: const CheckboxThemeData(
+            shape: ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+          ),
         ),
         builder: (context, child) {
           assert(child != null);

@@ -428,7 +428,6 @@ class $TodoTableTable extends TodoTable
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-
   @override
   TodoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
     return TodoTableData.fromData(data, prefix: tablePrefix != null ? '$tablePrefix.' : null);
@@ -657,6 +656,242 @@ class $FolderTableTable extends FolderTable
   static TypeConverter<Color, int> $converter0 = const ColorConverter();
 }
 
+class SubtodoTableData extends DataClass implements Insertable<SubtodoTableData> {
+  final int id;
+  final String title;
+  final bool completed;
+  final int todoId;
+
+  SubtodoTableData({required this.id, required this.title, required this.completed, required this.todoId});
+
+  factory SubtodoTableData.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return SubtodoTableData(
+      id: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      title: const StringType().mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
+      completed: const BoolType().mapFromDatabaseResponse(data['${effectivePrefix}completed'])!,
+      todoId: const IntType().mapFromDatabaseResponse(data['${effectivePrefix}todo_id'])!,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['completed'] = Variable<bool>(completed);
+    map['todo_id'] = Variable<int>(todoId);
+    return map;
+  }
+
+  SubtodoTableCompanion toCompanion(bool nullToAbsent) {
+    return SubtodoTableCompanion(
+      id: Value(id),
+      title: Value(title),
+      completed: Value(completed),
+      todoId: Value(todoId),
+    );
+  }
+
+  factory SubtodoTableData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SubtodoTableData(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      completed: serializer.fromJson<bool>(json['completed']),
+      todoId: serializer.fromJson<int>(json['todoId']),
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'completed': serializer.toJson<bool>(completed),
+      'todoId': serializer.toJson<int>(todoId),
+    };
+  }
+
+  SubtodoTableData copyWith({int? id, String? title, bool? completed, int? todoId}) => SubtodoTableData(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        completed: completed ?? this.completed,
+        todoId: todoId ?? this.todoId,
+      );
+
+  @override
+  String toString() {
+    return (StringBuffer('SubtodoTableData(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('completed: $completed, ')
+          ..write('todoId: $todoId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, completed, todoId);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SubtodoTableData &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.completed == this.completed &&
+          other.todoId == this.todoId);
+}
+
+class SubtodoTableCompanion extends UpdateCompanion<SubtodoTableData> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<bool> completed;
+  final Value<int> todoId;
+
+  const SubtodoTableCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.completed = const Value.absent(),
+    this.todoId = const Value.absent(),
+  });
+
+  SubtodoTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    this.completed = const Value.absent(),
+    required int todoId,
+  })  : title = Value(title),
+        todoId = Value(todoId);
+
+  static Insertable<SubtodoTableData> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<bool>? completed,
+    Expression<int>? todoId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (completed != null) 'completed': completed,
+      if (todoId != null) 'todo_id': todoId,
+    });
+  }
+
+  SubtodoTableCompanion copyWith({Value<int>? id, Value<String>? title, Value<bool>? completed, Value<int>? todoId}) {
+    return SubtodoTableCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      completed: completed ?? this.completed,
+      todoId: todoId ?? this.todoId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (completed.present) {
+      map['completed'] = Variable<bool>(completed.value);
+    }
+    if (todoId.present) {
+      map['todo_id'] = Variable<int>(todoId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SubtodoTableCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('completed: $completed, ')
+          ..write('todoId: $todoId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SubtodoTableTable extends SubtodoTable with TableInfo<$SubtodoTableTable, SubtodoTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+
+  $SubtodoTableTable(this.attachedDatabase, [this._alias]);
+
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>('id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false, defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String?> title = GeneratedColumn<String?>('title', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(), type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _completedMeta = const VerificationMeta('completed');
+  @override
+  late final GeneratedColumn<bool?> completed = GeneratedColumn<bool?>('completed', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (completed IN (0, 1))',
+      defaultValue: const Constant(false));
+  final VerificationMeta _todoIdMeta = const VerificationMeta('todoId');
+  @override
+  late final GeneratedColumn<int?> todoId =
+      GeneratedColumn<int?>('todo_id', aliasedName, false, type: const IntType(), requiredDuringInsert: true);
+
+  @override
+  List<GeneratedColumn> get $columns => [id, title, completed, todoId];
+
+  @override
+  String get aliasedName => _alias ?? 'subtodo_table';
+
+  @override
+  String get actualTableName => 'subtodo_table';
+
+  @override
+  VerificationContext validateIntegrity(Insertable<SubtodoTableData> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(_titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('completed')) {
+      context.handle(_completedMeta, completed.isAcceptableOrUnknown(data['completed']!, _completedMeta));
+    }
+    if (data.containsKey('todo_id')) {
+      context.handle(_todoIdMeta, todoId.isAcceptableOrUnknown(data['todo_id']!, _todoIdMeta));
+    } else if (isInserting) {
+      context.missing(_todoIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+
+  @override
+  SubtodoTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return SubtodoTableData.fromData(data, prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $SubtodoTableTable createAlias(String alias) {
+    return $SubtodoTableTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TodoTableTable todoTable = $TodoTableTable(this);
@@ -664,17 +899,19 @@ abstract class _$Database extends GeneratedDatabase {
       'CREATE TRIGGER todo_updated_timestamp\r\n    AFTER UPDATE OF title, completed, date, time\r\n    ON todo_table\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE todo_table\r\n        SET updated_date = strftime(\'%s\', CURRENT_TIMESTAMP)\r\n        WHERE id = old.id;\r\n    END;',
       'todo_updated_timestamp');
   late final $FolderTableTable folderTable = $FolderTableTable(this);
+  late final $SubtodoTableTable subtodoTable = $SubtodoTableTable(this);
+
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [todoTable, todoUpdatedTimestamp, folderTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [todoTable, todoUpdatedTimestamp, folderTable, subtodoTable];
+
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
           WritePropagation(
-            on: TableUpdateQuery.onTableName('todo_table',
-                limitUpdateKind: UpdateKind.update),
+            on: TableUpdateQuery.onTableName('todo_table', limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('todo_table', kind: UpdateKind.update),
             ],

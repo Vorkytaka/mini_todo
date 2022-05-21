@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 const int kFolderTitleMaxLength = 255;
 
+const int kSubtodoTitleMaxLength = 100;
+
 const BorderRadius borderRadius = BorderRadius.all(Radius.circular(4));
 
 const BorderRadius borderRadiusMedium = BorderRadius.all(Radius.circular(8));
