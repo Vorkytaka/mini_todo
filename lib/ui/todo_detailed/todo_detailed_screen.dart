@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:great_list_view/great_list_view.dart';
 import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
@@ -82,7 +85,7 @@ class TodoDetailedScreen extends StatelessWidget {
               );
             }
             final datePickerColor =
-                todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+            todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
             final datePicker = ListItem(
               icon: const Icon(Icons.today),
               title: todo.date != null
@@ -119,7 +122,7 @@ class TodoDetailedScreen extends StatelessWidget {
               );
             }
             final timePickerColor =
-                todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+            todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
             Widget timePicker = ListItem(
               icon: const Icon(Icons.access_time_outlined),
               title: todo.time != null
@@ -343,7 +346,7 @@ Future<void> showDeleteTodoDialog({
       ),
     );
 
-class _SubtodoList extends StatelessWidget {
+class _SubtodoList extends StatefulWidget {
   final Todo todo;
 
   const _SubtodoList({
@@ -352,80 +355,134 @@ class _SubtodoList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_SubtodoList> createState() => _SubtodoListState();
+}
+
+class _SubtodoListState extends State<_SubtodoList> {
+  late final AnimatedListController controller;
+  List<Subtodo>? _subtodos;
+  StreamSubscription? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimatedListController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _subscription ??= context.read<Repository>().streamSubtodoByTodo(widget.todo.id).listen((event) {
+      _subtodos = event;
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return StreamBuilder<List<Subtodo>>(
-      stream: context.read<Repository>().streamSubtodoByTodo(todo.id),
-      initialData: const [],
-      builder: (context, snapshot) {
-        final subtodos = snapshot.data!;
-        return ListView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          children: [
-            for (int i = 0; i < subtodos.length; i++)
-              ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 56),
-                child: Center(
-                  child: TextFormField(
-                    key: ValueKey(subtodos[i].id),
-                    initialValue: subtodos[i].title,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      prefixIcon: Checkbox(
-                        tristate: false,
-                        value: subtodos[i].completed,
-                        onChanged: (completed) =>
-                            context.read<Repository>().changeSubtodoCompleted(subtodos[i].id, completed!),
-                      ),
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 24 + 16 + 16,
-                        minHeight: 48,
-                      ),
-                      hintText: S.of(context).todo_detailed_screen__subtodo_hint,
-                      hintMaxLines: 1,
-                      suffixIcon: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: InkResponse(
-                          onTap: () => context.read<Repository>().deleteSubtodo(subtodos[i].id),
-                          radius: 24,
-                          child: Icon(
-                            Icons.clear,
-                            color: theme.errorColor,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                      suffixIconConstraints: const BoxConstraints(
-                        minWidth: 24 + 16 + 16,
-                        minHeight: 48,
-                      ),
-                      counterText: '',
-                    ),
-                    minLines: 1,
-                    maxLines: null,
-                    maxLength: kSubtodoTitleMaxLength,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    textAlignVertical: TextAlignVertical.center,
-                    textCapitalization: TextCapitalization.sentences,
-                    onChanged: (title) => context.read<Repository>().changeSubtodoTitle(subtodos[i].id, title),
-                  ),
+    return ListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      children: [
+        if (_subtodos != null)
+          AutomaticAnimatedListView<Subtodo>(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            list: _subtodos!,
+            listController: controller,
+            itemBuilder: (context, item, data) => _SubtodoItemWidget(subtodo: item),
+            comparator: AnimatedListDiffListComparator(
+              sameItem: (a, b) => a.id == b.id,
+              sameContent: (a, b) => a == b,
+            ),
+            morphDuration: Duration.zero,
+            animator: const DefaultAnimatedListAnimator(
+              dismissIncomingDuration: Duration(milliseconds: 100),
+              resizeDuration: Duration(milliseconds: 250),
+            ),
+          ),
+        ListItem(
+          titleColor: theme.hintColor,
+          iconColor: theme.hintColor,
+          icon: const Icon(Icons.add),
+          title: Text(S.of(context).todo_detailed_screen__add_subtodo),
+          onTap: () => context.read<Repository>().createSubtodoForTodo(widget.todo.id),
+        ),
+      ],
+    );
+  }
+}
+
+class _SubtodoItemWidget extends StatelessWidget {
+  final Subtodo subtodo;
+
+  const _SubtodoItemWidget({
+    Key? key,
+    required this.subtodo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 56,
+      child: Center(
+        child: TextFormField(
+          key: ValueKey(subtodo.id),
+          initialValue: subtodo.title,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            prefixIcon: Checkbox(
+              tristate: false,
+              value: subtodo.completed,
+              onChanged: (completed) => context.read<Repository>().changeSubtodoCompleted(subtodo.id, completed!),
+            ),
+            prefixIconConstraints: const BoxConstraints(
+              minWidth: 24 + 16 + 16,
+              minHeight: 48,
+            ),
+            hintText: S.of(context).todo_detailed_screen__subtodo_hint,
+            hintMaxLines: 1,
+            suffixIcon: SizedBox(
+              width: 24,
+              height: 24,
+              child: InkResponse(
+                onTap: () => context.read<Repository>().deleteSubtodo(subtodo.id),
+                radius: 24,
+                child: Icon(
+                  Icons.clear,
+                  color: theme.errorColor,
+                  size: 16,
                 ),
               ),
-            ListItem(
-              titleColor: theme.hintColor,
-              iconColor: theme.hintColor,
-              icon: const Icon(Icons.add),
-              title: Text(S.of(context).todo_detailed_screen__add_subtodo),
-              onTap: () => context.read<Repository>().createSubtodoForTodo(todo.id),
             ),
-          ],
-        );
-      },
+            suffixIconConstraints: const BoxConstraints(
+              minWidth: 24 + 16 + 16,
+              minHeight: 48,
+            ),
+            counterText: '',
+          ),
+          minLines: 1,
+          maxLines: 1,
+          maxLength: kSubtodoTitleMaxLength,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          textAlignVertical: TextAlignVertical.center,
+          textCapitalization: TextCapitalization.sentences,
+          onChanged: (title) => context.read<Repository>().changeSubtodoTitle(subtodo.id, title),
+        ),
+      ),
     );
   }
 }
