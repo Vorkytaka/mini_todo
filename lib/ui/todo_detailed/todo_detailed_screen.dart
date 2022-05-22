@@ -384,7 +384,7 @@ class _SubtodoList extends StatelessWidget {
                         minWidth: 24 + 16 + 16,
                         minHeight: 48,
                       ),
-                      hintText: 'Подзадача',
+                      hintText: S.of(context).todo_detailed_screen__subtodo_hint,
                       hintMaxLines: 1,
                       suffixIcon: SizedBox(
                         width: 24,
@@ -420,7 +420,7 @@ class _SubtodoList extends StatelessWidget {
               titleColor: theme.hintColor,
               iconColor: theme.hintColor,
               icon: const Icon(Icons.add),
-              title: Text('Добавить подзадачу'),
+              title: Text(S.of(context).todo_detailed_screen__add_subtodo),
               onTap: () => context.read<Repository>().createSubtodoForTodo(todo.id),
             ),
           ],

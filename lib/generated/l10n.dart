@@ -300,6 +300,26 @@ class S {
     );
   }
 
+  /// `Subtask`
+  String get todo_detailed_screen__subtodo_hint {
+    return Intl.message(
+      'Subtask',
+      name: 'todo_detailed_screen__subtodo_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add subtask`
+  String get todo_detailed_screen__add_subtodo {
+    return Intl.message(
+      'Add subtask',
+      name: 'todo_detailed_screen__add_subtodo',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Folder title`
   String get editable_folder_dialog__hint {
     return Intl.message(

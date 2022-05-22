@@ -24,6 +24,8 @@
   "todo_detailed_screen__no_time": "No time",
   "todo_detailed_screen__delete": "Delete",
   "todo_detailed_screen__note_hint": "Note",
+  "todo_detailed_screen__subtodo_hint": "Subtask",
+  "todo_detailed_screen__add_subtodo": "Add subtask",
   "editable_folder_dialog__hint": "Folder title",
   "editable_folder_dialog__title_error": "Enter folder title",
   "folder_screen__update_folder": "Update folder",
@@ -33,9 +35,7 @@
   "delete_folder_dialog__title": "Delete folder?",
   "delete_folder_dialog__content": "Are you sure you want to delete folder ",
   "delete_folder_dialog__delete_todos_toggle": "Also delete all todos from this folder",
-
   "folder_list_screen__create_folder_tooltip": "Create folder",
   "folder_list_screen__create_todo_tooltip": "Create todo",
-
   "select_folder_dialog__title": "Select the folder"
 }

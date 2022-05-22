@@ -91,8 +91,19 @@ class DriftRepository implements Repository {
       );
 
   @override
-  Stream<List<Folder>> streamAllFolder() =>
-      (database.select(database.folderTable)).map((folder) => folder.toFolder).watch();
+  Stream<List<Folder>> streamAllFolder() {
+    // todo: use counting
+    final query = database.select(database.folderTable).join([
+      leftOuterJoin(
+        database.todoTable,
+        database.todoTable.id.equalsExp(database.folderTable.id),
+        useColumns: false,
+      ),
+    ]);
+    query.addColumns([database.todoTable.id.count()]);
+    query.groupBy([database.folderTable.id]);
+    return query.map((p0) => p0.readTable(database.folderTable).toFolder).watch();
+  }
 
   @override
   Stream<List<Todo>> streamTodoFromFolder(int? folderId) => (database.select(database.todoTable)

@@ -22,24 +22,10 @@ class FolderListScreen extends StatelessWidget {
         title: Text(S.of(context).app_name),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton.small(
-            onPressed: () => showNewFolderDialog(context: context),
-            heroTag: null,
-            child: const Icon(Icons.create_new_folder_outlined),
-            tooltip: S.of(context).folder_list_screen__create_folder_tooltip,
-            shape: const RoundedRectangleBorder(borderRadius: borderRadiusMedium),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton(
-            onPressed: () => showNewTodoDialog(context: context),
-            child: const Icon(Icons.add),
-            tooltip: S.of(context).folder_list_screen__create_todo_tooltip,
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showNewTodoDialog(context: context),
+        child: const Icon(Icons.add),
+        tooltip: S.of(context).folder_list_screen__create_todo_tooltip,
       ),
       body: const FolderListWidget(),
     );
@@ -95,6 +81,15 @@ class FolderListWidget extends StatelessWidget {
                   folder: folders[i],
                 ),
                 childCount: folders.length,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: ListItem(
+                icon: const Icon(Icons.add),
+                title: Text(S.of(context).folder_list_screen__create_folder_tooltip),
+                iconColor: Theme.of(context).primaryColor,
+                titleColor: Theme.of(context).primaryColor,
+                onTap: () => showNewFolderDialog(context: context),
               ),
             ),
           ],

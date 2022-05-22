@@ -55,9 +55,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_todo_dialog__title_required": MessageLookupByLibrary.simpleMessage("Введите название задачи"),
         "select_folder_dialog__title": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "today_screen__overdue": MessageLookupByLibrary.simpleMessage("Просроченные"),
+        "todo_detailed_screen__add_subtodo": MessageLookupByLibrary.simpleMessage("Добавить подзадачу"),
         "todo_detailed_screen__delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "todo_detailed_screen__no_date": MessageLookupByLibrary.simpleMessage("Без даты"),
         "todo_detailed_screen__no_time": MessageLookupByLibrary.simpleMessage("Без времени"),
-        "todo_detailed_screen__note_hint": MessageLookupByLibrary.simpleMessage("Заметка")
+        "todo_detailed_screen__note_hint": MessageLookupByLibrary.simpleMessage("Заметка"),
+        "todo_detailed_screen__subtodo_hint": MessageLookupByLibrary.simpleMessage("Подзадача")
       };
 }

@@ -31,7 +31,8 @@ class FolderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<FoldersCubit, List<Folder>>(
       listener: (context, state) {
-        final folder = state.firstOrNull((folder) => folder.id == this.folder.id);
+        final folder =
+            this.folder.id == null ? this.folder : state.firstOrNull((folder) => folder.id == this.folder.id);
         if (folder == null) {
           Navigator.of(context).pop();
         }

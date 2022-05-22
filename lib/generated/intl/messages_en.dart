@@ -57,9 +57,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_todo_dialog__title_required": MessageLookupByLibrary.simpleMessage("Enter task title"),
         "select_folder_dialog__title": MessageLookupByLibrary.simpleMessage("Select the folder"),
         "today_screen__overdue": MessageLookupByLibrary.simpleMessage("Overdue"),
+        "todo_detailed_screen__add_subtodo": MessageLookupByLibrary.simpleMessage("Add subtask"),
         "todo_detailed_screen__delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "todo_detailed_screen__no_date": MessageLookupByLibrary.simpleMessage("No date"),
         "todo_detailed_screen__no_time": MessageLookupByLibrary.simpleMessage("No time"),
-        "todo_detailed_screen__note_hint": MessageLookupByLibrary.simpleMessage("Note")
+        "todo_detailed_screen__note_hint": MessageLookupByLibrary.simpleMessage("Note"),
+        "todo_detailed_screen__subtodo_hint": MessageLookupByLibrary.simpleMessage("Subtask")
       };
 }
