@@ -85,7 +85,7 @@ class TodoDetailedScreen extends StatelessWidget {
               );
             }
             final datePickerColor =
-            todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+                todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
             final datePicker = ListItem(
               icon: const Icon(Icons.today),
               title: todo.date != null
@@ -122,7 +122,7 @@ class TodoDetailedScreen extends StatelessWidget {
               );
             }
             final timePickerColor =
-            todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+                todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
             Widget timePicker = ListItem(
               icon: const Icon(Icons.access_time_outlined),
               title: todo.time != null
@@ -400,7 +400,10 @@ class _SubtodoListState extends State<_SubtodoList> {
             padding: EdgeInsets.zero,
             list: _subtodos!,
             listController: controller,
-            itemBuilder: (context, item, data) => _SubtodoItemWidget(subtodo: item),
+            itemBuilder: (context, item, data) {
+              if (data.measuring) return const SizedBox(height: 56);
+              return _SubtodoItemWidget(subtodo: item);
+            },
             comparator: AnimatedListDiffListComparator(
               sameItem: (a, b) => a.id == b.id,
               sameContent: (a, b) => a == b,
@@ -416,7 +419,9 @@ class _SubtodoListState extends State<_SubtodoList> {
           iconColor: theme.hintColor,
           icon: const Icon(Icons.add),
           title: Text(S.of(context).todo_detailed_screen__add_subtodo),
-          onTap: () => context.read<Repository>().createSubtodoForTodo(widget.todo.id),
+          onTap: () {
+            context.read<Repository>().createSubtodoForTodo(widget.todo.id);
+          },
         ),
       ],
     );
@@ -425,10 +430,12 @@ class _SubtodoListState extends State<_SubtodoList> {
 
 class _SubtodoItemWidget extends StatelessWidget {
   final Subtodo subtodo;
+  final FocusNode? focusNode;
 
   const _SubtodoItemWidget({
     Key? key,
     required this.subtodo,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -473,6 +480,9 @@ class _SubtodoItemWidget extends StatelessWidget {
             ),
             counterText: '',
           ),
+          style: TextStyle(
+            decoration: subtodo.completed ? TextDecoration.lineThrough : null,
+          ),
           minLines: 1,
           maxLines: 1,
           maxLength: kSubtodoTitleMaxLength,
@@ -481,6 +491,7 @@ class _SubtodoItemWidget extends StatelessWidget {
           textAlignVertical: TextAlignVertical.center,
           textCapitalization: TextCapitalization.sentences,
           onChanged: (title) => context.read<Repository>().changeSubtodoTitle(subtodo.id, title),
+          focusNode: focusNode,
         ),
       ),
     );
