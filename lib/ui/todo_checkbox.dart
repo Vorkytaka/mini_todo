@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/repository.dart';
 import '../entity/todo.dart';
 
-class TodoCheckbox extends StatelessWidget {
+class TodoCheckbox extends StatefulWidget {
   final Todo todo;
 
   const TodoCheckbox({
@@ -13,10 +13,29 @@ class TodoCheckbox extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TodoCheckbox> createState() => _TodoCheckboxState();
+}
+
+class _TodoCheckboxState extends State<TodoCheckbox> {
+  late bool _completed;
+
+  @override
+  void initState() {
+    super.initState();
+    _completed = widget.todo.completed;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Checkbox(
-      value: todo.completed,
-      onChanged: (completed) => context.read<Repository>().setCompleted(todo.id, completed!),
+      value: _completed,
+      tristate: false,
+      onChanged: (completed) {
+        setState(() {
+          _completed = completed!;
+        });
+        context.read<Repository>().setCompleted(widget.todo.id, _completed);
+      },
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }

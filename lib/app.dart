@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/dependencies.dart';
 import 'package:mini_todo/ui/folder/folder_list_screen.dart';
 
@@ -28,7 +27,7 @@ class App extends StatelessWidget {
             elevation: 1,
           ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            shape: RoundedRectangleBorder(borderRadius: borderRadiusLarge),
+            shape: ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(56 / 2))),
             elevation: 3,
             highlightElevation: 0,
           ),

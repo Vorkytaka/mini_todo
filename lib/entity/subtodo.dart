@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Subtodo {
   final int id;
   final String title;
@@ -8,4 +10,11 @@ class Subtodo {
     required this.title,
     required this.completed,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      other is Subtodo && id == other.id && title == other.title && completed == other.completed;
+
+  @override
+  int get hashCode => hashValues(id, title, completed);
 }

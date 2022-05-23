@@ -64,7 +64,7 @@ class FolderListWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: Colors.green,
                             fontWeight: FontWeight.w800,
-                            letterSpacing: -1,
+                            letterSpacing: -0.25,
                           ),
                     )
                   ],
