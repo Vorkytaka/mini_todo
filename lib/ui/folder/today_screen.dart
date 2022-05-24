@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/todo_repository.dart';
 import 'package:mini_todo/entity/todo.dart';
 import 'package:mini_todo/ui/formatter.dart';
-import 'package:mini_todo/ui/gradient_body.dart';
+import 'package:mini_todo/ui/common/gradient_body.dart';
 import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
@@ -53,7 +53,7 @@ class TodayScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           sliver: StreamBuilder<List<Todo>>(
             initialData: const [],
-            stream: context.read<Repository>().streamTodayTodo(),
+            stream: context.read<TodoRepository>().streamTodayTodo(),
             builder: (context, snapshot) => TodoList(todos: snapshot.data!),
           ),
         ),
@@ -68,7 +68,7 @@ class TodayScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           sliver: StreamBuilder<List<Todo>>(
             initialData: const [],
-            stream: context.read<Repository>().streamOverdueByToday(),
+            stream: context.read<TodoRepository>().streamTodayOverdue(),
             builder: (context, snapshot) => TodoList(todos: snapshot.data!),
           ),
         ),

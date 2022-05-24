@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/data/folder_repository.dart';
 import 'package:mini_todo/generated/l10n.dart';
-import 'package:mini_todo/ui/color_picker.dart';
+import 'package:mini_todo/ui/common/color_picker.dart';
 
 import '../../constants.dart';
-import '../../data/repository.dart';
 import '../../entity/folder.dart';
 
 Future<void> showNewFolderDialog({required BuildContext context}) => showModalBottomSheet(
@@ -14,7 +14,7 @@ Future<void> showNewFolderDialog({required BuildContext context}) => showModalBo
       isDismissible: true,
       builder: (context) => _EditableFolderDialog(
         onConfirm: (folder) async {
-          await context.read<Repository>().createFolder(folder);
+          await context.read<FolderRepository>().create(folder);
           Navigator.of(context).pop();
         },
       ),
@@ -37,7 +37,7 @@ Future<void> showEditFolderDialog({
             title: carcass.title,
             color: carcass.color,
           );
-          await context.read<Repository>().updateFolder(newFolder);
+          await context.read<FolderRepository>().update(newFolder);
           Navigator.of(context).pop();
         },
       ),

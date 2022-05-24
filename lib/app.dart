@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mini_todo/dependencies.dart';
 import 'package:mini_todo/ui/folder/folder_list_screen.dart';
@@ -6,11 +7,17 @@ import 'package:mini_todo/ui/folder/folder_list_screen.dart';
 import 'generated/l10n.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final FlutterLocalNotificationsPlugin notificationPlugin;
+
+  const App({
+    Key? key,
+    required this.notificationPlugin,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OuterDependencies(
+      notificationPlugin: notificationPlugin,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         supportedLocales: S.delegate.supportedLocales,

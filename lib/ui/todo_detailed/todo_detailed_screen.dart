@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:great_list_view/great_list_view.dart';
 import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
+import 'package:mini_todo/data/subtodo_repository.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/subtodo.dart';
 import 'package:mini_todo/generated/l10n.dart';
@@ -12,10 +13,10 @@ import 'package:mini_todo/ui/list_item.dart';
 import 'package:mini_todo/ui/select_date.dart';
 import 'package:mini_todo/ui/select_folder.dart';
 
-import '../../data/repository.dart';
+import '../../data/todo_repository.dart';
 import '../../entity/folder.dart';
 import '../../entity/todo.dart';
-import '../keyboard.dart';
+import '../common/keyboard.dart';
 import '../todo_checkbox.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
@@ -32,7 +33,7 @@ class TodoDetailedScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         body: StreamBuilder<Todo?>(
-          stream: context.read<Repository>().streamTodo(todo.id),
+          stream: context.read<TodoRepository>().streamConcreteTodo(todo.id),
           initialData: todo,
           builder: (context, snapshot) {
             final theme = Theme.of(context);
@@ -59,7 +60,7 @@ class TodoDetailedScreen extends StatelessWidget {
                       onTap: () async {
                         final folder = await showSelectFolderDialog(context: context);
                         if (folder != null) {
-                          context.read<Repository>().changeTodoFolder(todo.id, folder.id);
+                          context.read<TodoRepository>().updateFolder(todo.id, folder.id);
                         }
                       },
                     ),
@@ -74,7 +75,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 width: 24,
                 height: 24,
                 child: InkResponse(
-                  onTap: () => context.read<Repository>().removeDate(todo.id),
+                  onTap: () => context.read<TodoRepository>().removeDate(todo.id),
                   radius: 24,
                   child: Icon(
                     Icons.clear,
@@ -99,7 +100,7 @@ class TodoDetailedScreen extends StatelessWidget {
                   selectedDate: todo.date,
                 );
                 if (date != null) {
-                  context.read<Repository>().setDate(todo.id, date);
+                  context.read<TodoRepository>().setDate(todo.id, date);
                 }
               },
               trailing: dateDismiss,
@@ -111,7 +112,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 width: 24,
                 height: 24,
                 child: InkResponse(
-                  onTap: () => context.read<Repository>().removeTime(todo.id),
+                  onTap: () => context.read<TodoRepository>().removeTime(todo.id),
                   radius: 24,
                   child: Icon(
                     Icons.clear,
@@ -136,7 +137,7 @@ class TodoDetailedScreen extends StatelessWidget {
                   initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
                 );
                 if (time != null) {
-                  context.read<Repository>().setTime(todo.id, time);
+                  context.read<TodoRepository>().setTime(todo.id, time);
                 }
               },
               trailing: timeDismiss,
@@ -183,7 +184,7 @@ class TodoDetailedScreen extends StatelessWidget {
               textAlignVertical: TextAlignVertical.center,
               textCapitalization: TextCapitalization.sentences,
               onChanged: (note) {
-                context.read<Repository>().setNote(todo.id, note);
+                context.read<TodoRepository>().updateNote(todo.id, note);
               },
             );
 
@@ -254,7 +255,7 @@ class _AppBarState extends State<_AppBar> {
     super.initState();
     _titleController = TextEditingController(text: widget.todo.title);
     _titleController.addListener(() {
-      context.read<Repository>().setTitle(widget.todo.id, _titleController.text);
+      context.read<TodoRepository>().setTitle(widget.todo.id, _titleController.text);
     });
   }
 
@@ -337,7 +338,7 @@ Future<void> showDeleteTodoDialog({
           TextButton(
             style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
             onPressed: () async {
-              await context.read<Repository>().delete(todo.id);
+              await context.read<TodoRepository>().delete(todo.id);
               Navigator.of(context).pop();
             },
             child: Text(S.of(context).common__yes),
@@ -372,7 +373,7 @@ class _SubtodoListState extends State<_SubtodoList> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _subscription ??= context.read<Repository>().streamSubtodoByTodo(widget.todo.id).listen((event) {
+    _subscription ??= context.read<SubtodoRepository>().streamByTodo(widget.todo.id).listen((event) {
       _subtodos = event;
       setState(() {});
     });
@@ -420,7 +421,7 @@ class _SubtodoListState extends State<_SubtodoList> {
           icon: const Icon(Icons.add),
           title: Text(S.of(context).todo_detailed_screen__add_subtodo),
           onTap: () {
-            context.read<Repository>().createSubtodoForTodo(widget.todo.id);
+            context.read<SubtodoRepository>().createForTodo(widget.todo.id);
           },
         ),
       ],
@@ -453,7 +454,7 @@ class _SubtodoItemWidget extends StatelessWidget {
             prefixIcon: Checkbox(
               tristate: false,
               value: subtodo.completed,
-              onChanged: (completed) => context.read<Repository>().changeSubtodoCompleted(subtodo.id, completed!),
+              onChanged: (completed) => context.read<SubtodoRepository>().changeCompleted(subtodo.id, completed!),
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 24 + 16 + 16,
@@ -465,7 +466,7 @@ class _SubtodoItemWidget extends StatelessWidget {
               width: 24,
               height: 24,
               child: InkResponse(
-                onTap: () => context.read<Repository>().deleteSubtodo(subtodo.id),
+                onTap: () => context.read<SubtodoRepository>().delete(subtodo.id),
                 radius: 24,
                 child: Icon(
                   Icons.clear,
@@ -490,7 +491,7 @@ class _SubtodoItemWidget extends StatelessWidget {
           textInputAction: TextInputAction.done,
           textAlignVertical: TextAlignVertical.center,
           textCapitalization: TextCapitalization.sentences,
-          onChanged: (title) => context.read<Repository>().changeSubtodoTitle(subtodo.id, title),
+          onChanged: (title) => context.read<SubtodoRepository>().changeTitle(subtodo.id, title),
           focusNode: focusNode,
         ),
       ),

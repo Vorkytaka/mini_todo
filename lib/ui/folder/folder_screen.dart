@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/constants.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/folder_repository.dart';
 import 'package:mini_todo/domain/folder/folder_cubit.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
@@ -12,7 +12,7 @@ import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
 import '../../utils/collections.dart';
-import '../gradient_body.dart';
+import '../common/gradient_body.dart';
 import '../new_todo.dart';
 
 enum _MenuItem {
@@ -288,7 +288,7 @@ class _DeleteFolderDialogState extends State<DeleteFolderDialog> {
         TextButton(
           style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
           onPressed: () async {
-            await context.read<Repository>().deleteFolder(widget.folder.id!, _deleteTodos);
+            await context.read<FolderRepository>().delete(widget.folder.id!, _deleteTodos);
             Navigator.of(context).pop();
           },
           child: Text(S.of(context).common__yes),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/todo_repository.dart';
 
 import '../../entity/folder.dart';
 import '../../entity/todo.dart';
@@ -13,9 +13,9 @@ class FolderCubit extends Cubit<FolderState> {
 
   FolderCubit({
     required Folder folder,
-    required Repository repository,
+    required TodoRepository repository,
   }) : super(FolderState.init(folderId: folder.id)) {
-    _todosSubscription = repository.streamTodoFromFolder(state.folderId).listen((todos) {
+    _todosSubscription = repository.streamTodosFromFolder(state.folderId).listen((todos) {
       emit(state.copyWith(todos: todos));
     });
     _completedSubscription = repository.streamCompletedTodoFromFolder(state.folderId).listen((completed) {

@@ -1,28 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mini_todo/data/database/database.dart';
-import 'package:mini_todo/data/drift_repository.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/todo_repository_impl.dart';
+import 'package:mini_todo/data/folder_repository.dart';
+import 'package:mini_todo/data/notification/notification_service.dart';
+import 'package:mini_todo/data/todo_repository.dart';
+import 'package:mini_todo/data/subtodo_repository.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 
 import 'current_time_widget.dart';
 
 class OuterDependencies extends StatelessWidget {
+  final FlutterLocalNotificationsPlugin notificationPlugin;
   final Widget child;
 
   const OuterDependencies({
     Key? key,
     required this.child,
+    required this.notificationPlugin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<Repository>(
-      create: (context) => DriftRepository(database: Database()),
-      child: BlocProvider<FoldersCubit>(
-        create: (context) => FoldersCubit(repository: context.read()),
-        lazy: false,
-        child: child,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<NotificationService>(
+          create: (context) => NotificationService(plugin: notificationPlugin),
+          lazy: false,
+        ),
+        RepositoryProvider<Database>(
+          create: (context) => Database(),
+          lazy: false,
+        ),
+      ],
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider<FolderRepository>(
+            create: (context) => FolderRepositoryImpl(database: context.read()),
+          ),
+          RepositoryProvider<TodoRepository>(
+            create: (context) => TodoRepositoryImpl(database: context.read()),
+          ),
+          RepositoryProvider<SubtodoRepository>(
+            create: (context) => SubtodoRepositoryImpl(database: context.read()),
+          ),
+        ],
+        child: BlocProvider<FoldersCubit>(
+          create: (context) => FoldersCubit(folderRepository: context.read()),
+          lazy: false,
+          child: child,
+        ),
       ),
     );
   }

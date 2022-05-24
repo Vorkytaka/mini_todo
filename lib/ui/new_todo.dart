@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/todo_repository.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/select_date.dart';
@@ -198,7 +198,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
         folderId: folder?.id,
       );
 
-      context.read<Repository>().create(todo);
+      context.read<TodoRepository>().create(todo);
       Navigator.of(context).pop();
     }
   }

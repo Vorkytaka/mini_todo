@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mini_todo/data/repository.dart';
+import 'package:mini_todo/data/folder_repository.dart';
 import 'package:mini_todo/entity/folder.dart';
 
 import '../../utils/collections.dart';
@@ -10,9 +10,9 @@ class FoldersCubit extends Cubit<List<Folder>> {
   StreamSubscription? _subscription;
 
   FoldersCubit({
-    required Repository repository,
+    required FolderRepository folderRepository,
   }) : super(const []) {
-    _subscription = repository.streamAllFolder().listen((folders) {
+    _subscription = folderRepository.streamAll().listen((folders) {
       emit(folders);
     });
   }
