@@ -45,8 +45,7 @@ class FolderState {
 
   const FolderState.init({
     required this.folderId,
-  })
-      : todos = const [],
+  })  : todos = const [],
         completed = const [];
 
   FolderState copyWith({

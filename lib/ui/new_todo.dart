@@ -338,7 +338,7 @@ class _FolderFormField extends FormField<Folder?> {
             return Chip(
               icon: folder.id == null
                   ? Icon(
-                kDefaultInboxIcon,
+                      kDefaultInboxIcon,
                       color: theme.primaryColor,
                     )
                   : Icon(

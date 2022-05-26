@@ -62,7 +62,7 @@ class TimeConverter implements TypeConverter<TimeOfDay, int> {
 
 extension TodoTableUtils on TodoTableData {
   Todo get toTodo => Todo(
-    id: id,
+        id: id,
         title: title,
         completed: completed,
         date: date,

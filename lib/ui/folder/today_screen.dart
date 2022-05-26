@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/todo_repository.dart';
 import 'package:mini_todo/entity/todo.dart';
-import 'package:mini_todo/ui/formatter.dart';
 import 'package:mini_todo/ui/common/gradient_body.dart';
+import 'package:mini_todo/ui/formatter.dart';
 import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 

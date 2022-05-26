@@ -25,4 +25,3 @@ extension DateTimeUtils on DateTime {
 
   DateTime operator -(Duration duration) => subtract(duration);
 }
-
