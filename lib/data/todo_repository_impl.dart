@@ -111,6 +111,7 @@ class TodoRepositoryImpl implements TodoRepository {
     });
     query.where((tbl) => tbl.completed);
     query.limit(10);
+    query.orderBy([(t) => OrderingTerm(expression: t.completedDate, mode: OrderingMode.desc)]);
     return query.map((todo) => todo.toTodo).watch();
   }
 

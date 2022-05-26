@@ -12,6 +12,10 @@ class FolderTable extends Table {
   TextColumn get title => text().withLength(min: 1, max: kFolderTitleMaxLength)();
 
   IntColumn get color => integer().map(const ColorConverter()).nullable()();
+
+  DateTimeColumn get createdDate => dateTime().withDefault(currentDateAndTime)();
+
+  DateTimeColumn get updatedDate => dateTime().withDefault(currentDateAndTime)();
 }
 
 class ColorConverter implements TypeConverter<Color, int> {

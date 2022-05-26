@@ -19,6 +19,8 @@ class TodoTable extends Table {
 
   DateTimeColumn get updatedDate => dateTime().withDefault(currentDateAndTime)();
 
+  DateTimeColumn get completedDate => dateTime().nullable()();
+
   IntColumn get folderId => integer().nullable()();
 
   TextColumn get note => text().nullable()();
@@ -60,7 +62,7 @@ class TimeConverter implements TypeConverter<TimeOfDay, int> {
 
 extension TodoTableUtils on TodoTableData {
   Todo get toTodo => Todo(
-        id: id,
+    id: id,
         title: title,
         completed: completed,
         date: date,
@@ -69,5 +71,6 @@ extension TodoTableUtils on TodoTableData {
         updatedDate: updatedDate,
         folderId: folderId,
         note: note,
+        completedDate: completedDate,
       );
 }

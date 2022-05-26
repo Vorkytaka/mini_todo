@@ -1,7 +1,9 @@
 import 'table/todo_table.dart';
+import 'table/folder_table.dart';
+import 'table/subtodo_table.dart';
 
 CREATE TRIGGER todo_updated_timestamp
-    AFTER UPDATE OF title, completed, date, time
+    AFTER UPDATE OF title, completed, date, time, folder_id, note
     ON todo_table
     FOR EACH ROW
     BEGIN
@@ -10,13 +12,34 @@ CREATE TRIGGER todo_updated_timestamp
         WHERE id = old.id;
     END;
 
--- CREATE TRIGGER todo_completed_date
---    AFTER UPDATE OF completed
---    ON todo_table
---    FOR EACH ROW
---    WHEN new.completed == 1
---    BEGIN
---        UPDATE todo_table
---        SET completed_date = strftime('%s', CURRENT_TIMESTAMP)
---        WHERE id = old.id;
---    END;
+CREATE TRIGGER todo_completed
+    AFTER UPDATE OF completed
+    ON todo_table
+    FOR EACH ROW
+    WHEN new.completed == 1
+    BEGIN
+        UPDATE todo_table
+        SET completed_date = strftime('%s', CURRENT_TIMESTAMP)
+        WHERE id = old.id;
+    END;
+
+CREATE TRIGGER todo_uncompleted
+    AFTER UPDATE OF completed
+    ON todo_table
+    FOR EACH ROW
+    WHEN new.completed == 0
+    BEGIN
+        UPDATE todo_table
+        SET completed_date = NULL
+        WHERE id = old.id;
+    END;
+
+CREATE TRIGGER folder_updated_timestamp
+    AFTER UPDATE OF title, color
+    ON folder_table
+    FOR EACH ROW
+    BEGIN
+        UPDATE folder_table
+        SET updated_date = strftime('%s', CURRENT_TIMESTAMP)
+        WHERE id = old.id;
+    END;

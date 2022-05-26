@@ -38,6 +38,7 @@ class Todo {
   final DateTime updatedDate;
   final int? folderId;
   final String? note;
+  final DateTime? completedDate;
 
   const Todo({
     required this.id,
@@ -49,6 +50,7 @@ class Todo {
     required this.updatedDate,
     required this.folderId,
     this.note,
+    this.completedDate,
   });
 
   static TodoCarcase carcase({
@@ -75,10 +77,11 @@ class Todo {
       completed != other.completed &&
       date != other.date &&
       time != other.time &&
-      note == other.note;
+      note == other.note &&
+      completedDate != other.completedDate;
 
   @override
-  int get hashCode => hashValues(id, title, completed, date, time, note);
+  int get hashCode => hashValues(id, title, completed, date, time, note, completedDate);
 
   DateTime? get datetime {
     if (date == null) {
