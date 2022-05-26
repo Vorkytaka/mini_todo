@@ -7,6 +7,7 @@ import 'package:mini_todo/constants.dart';
 import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/subtodo_repository.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
+import 'package:mini_todo/domain/use_case.dart';
 import 'package:mini_todo/entity/subtodo.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/list_item.dart';
@@ -75,7 +76,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 width: 24,
                 height: 24,
                 child: InkResponse(
-                  onTap: () => context.read<TodoRepository>().removeDate(todo.id),
+                  onTap: () async => await deleteTodoDate(context, todo.id),
                   radius: 24,
                   child: Icon(
                     Icons.clear,
@@ -100,7 +101,7 @@ class TodoDetailedScreen extends StatelessWidget {
                   selectedDate: todo.date,
                 );
                 if (date != null) {
-                  context.read<TodoRepository>().setDate(todo.id, date);
+                  await updateTodoDate(context, todo.id, date);
                 }
               },
               trailing: dateDismiss,
@@ -112,7 +113,7 @@ class TodoDetailedScreen extends StatelessWidget {
                 width: 24,
                 height: 24,
                 child: InkResponse(
-                  onTap: () => context.read<TodoRepository>().removeTime(todo.id),
+                  onTap: () async => await deleteTodoTime(context, todo.id),
                   radius: 24,
                   child: Icon(
                     Icons.clear,
@@ -137,7 +138,7 @@ class TodoDetailedScreen extends StatelessWidget {
                   initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
                 );
                 if (time != null) {
-                  context.read<TodoRepository>().setTime(todo.id, time);
+                  await updateTodoTime(context, todo.id, time);
                 }
               },
               trailing: timeDismiss,
@@ -338,7 +339,7 @@ Future<void> showDeleteTodoDialog({
           TextButton(
             style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
             onPressed: () async {
-              await context.read<TodoRepository>().delete(todo.id);
+              await deleteTodo(context, todo.id);
               Navigator.of(context).pop();
             },
             child: Text(S.of(context).common__yes),

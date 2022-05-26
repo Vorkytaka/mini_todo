@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../entity/todo.dart';
 
 abstract class TodoRepository {
-  Future<int> create(TodoCarcase todo);
+  Future<Todo> create(TodoCarcase todo);
 
   Future<int> setCompleted(int id, bool completed);
 
@@ -34,4 +34,6 @@ abstract class TodoRepository {
   Stream<List<Todo>> streamTodayTodo();
 
   Stream<List<Todo>> streamTodayOverdue();
+
+  Future<Todo?> readById(int id);
 }

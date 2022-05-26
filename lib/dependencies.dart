@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mini_todo/data/database/database.dart';
-import 'package:mini_todo/data/todo_repository_impl.dart';
 import 'package:mini_todo/data/folder_repository.dart';
-import 'package:mini_todo/data/notification/notification_service.dart';
-import 'package:mini_todo/data/todo_repository.dart';
+import 'package:mini_todo/data/notification/notification_repository.dart';
 import 'package:mini_todo/data/subtodo_repository.dart';
+import 'package:mini_todo/data/todo_repository.dart';
+import 'package:mini_todo/data/todo_repository_impl.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 
 import 'current_time_widget.dart';
@@ -25,10 +25,6 @@ class OuterDependencies extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<NotificationService>(
-          create: (context) => NotificationService(plugin: notificationPlugin),
-          lazy: false,
-        ),
         RepositoryProvider<Database>(
           create: (context) => Database(),
           lazy: false,
@@ -44,6 +40,9 @@ class OuterDependencies extends StatelessWidget {
           ),
           RepositoryProvider<SubtodoRepository>(
             create: (context) => SubtodoRepositoryImpl(database: context.read()),
+          ),
+          RepositoryProvider<NotificationRepository>(
+            create: (context) => NotificationRepositoryImpl(plugin: notificationPlugin),
           ),
         ],
         child: BlocProvider<FoldersCubit>(

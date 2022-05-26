@@ -14,16 +14,18 @@ class TodoRepositoryImpl implements TodoRepository {
   });
 
   @override
-  Future<int> create(TodoCarcase todo) {
+  Future<Todo> create(TodoCarcase todo) {
     final query = database.into(database.todoTable);
-    return query.insert(
-      TodoTableCompanion.insert(
-        title: todo.title,
-        date: Value(todo.date),
-        time: Value(todo.time),
-        folderId: Value(todo.folderId),
-      ),
-    );
+    return query
+        .insertReturning(
+          TodoTableCompanion.insert(
+            title: todo.title,
+            date: Value(todo.date),
+            time: Value(todo.time),
+            folderId: Value(todo.folderId),
+          ),
+        )
+        .then((value) => value.toTodo);
   }
 
   @override
@@ -133,6 +135,13 @@ class TodoRepositoryImpl implements TodoRepository {
     final query = database.select(database.todoTable);
     query.where((tbl) => tbl.date.isSmallerThanDartValue(today) & tbl.completed.not());
     return query.map((p0) => p0.toTodo).watch();
+  }
+
+  @override
+  Future<Todo?> readById(int id) {
+    final query = database.select(database.todoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.getSingleOrNull().then((value) => value?.toTodo);
   }
 }
 

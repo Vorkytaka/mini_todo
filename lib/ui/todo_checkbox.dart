@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_todo/domain/use_case.dart';
 
-import '../data/todo_repository.dart';
 import '../entity/todo.dart';
 
 class TodoCheckbox extends StatefulWidget {
@@ -30,11 +29,9 @@ class _TodoCheckboxState extends State<TodoCheckbox> {
     return Checkbox(
       value: _completed,
       tristate: false,
-      onChanged: (completed) {
-        setState(() {
-          _completed = completed!;
-        });
-        context.read<TodoRepository>().setCompleted(widget.todo.id, _completed);
+      onChanged: (completed) async {
+        setState(() => _completed = completed!);
+        await completeTodo(context, widget.todo.id, _completed);
       },
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
