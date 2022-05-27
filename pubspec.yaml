@@ -20,6 +20,8 @@ dependencies:
   great_list_view: ^0.1.4
   flutter_local_notifications: ^9.5.3+1
   flutter_native_timezone: ^2.0.0
+  firebase_core: ^1.17.1
+  firebase_crashlytics: ^2.8.1
 
 dev_dependencies:
   flutter_test:

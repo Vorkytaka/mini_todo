@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "147837449073",
+    "project_id": "minitodo-e3730",
+    "storage_bucket": "minitodo-e3730.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147837449073:android:04a3385b7ac7fdec9e3cd0",
+        "android_client_info": {
+          "package_name": "tk.vrk.minitodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147837449073-0dhsc6e2pijg17t168ajaismrgrncm5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQGg5eXKxpO-KRc5CuChm69somSe6PjeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147837449073-0dhsc6e2pijg17t168ajaismrgrncm5s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
