@@ -7,7 +7,7 @@ import '../database.dart';
 class TodoTable extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get title => text().withLength(min: 1, max: 255)();
+  TextColumn get title => text().withLength(max: 255)();
 
   BoolColumn get completed => boolean().withDefault(const Constant(false))();
 

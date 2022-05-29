@@ -345,7 +345,7 @@ class $TodoTableTable extends TodoTable with TableInfo<$TodoTableTable, TodoTabl
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>('title', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 255),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _completedMeta = const VerificationMeta('completed');
