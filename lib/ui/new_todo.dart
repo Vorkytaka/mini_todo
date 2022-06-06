@@ -6,6 +6,7 @@ import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/select_date.dart';
 import 'package:mini_todo/ui/select_folder.dart';
+import 'package:mini_todo/ui/todo_detailed/todo_detailed_screen.dart';
 
 import '../entity/todo.dart';
 
@@ -91,6 +92,9 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     // we use builder because of Form widget above this element
     final Widget submitBtn = InkWell(
       onTap: _submit,
+      onLongPress: () {
+        print('long');
+      },
       borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -197,7 +201,48 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
         folderId: folder?.id,
       );
 
-      await createTodo(context, todo);
+      final todoId = await createTodo(context, todo);
+
+      if (widget.folder == null || widget.folder?.id != folder?.id) {
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        final s = S.of(context);
+        final navigator = Navigator.of(context, rootNavigator: true);
+        Future.delayed(const Duration(milliseconds: 250), () {
+          scaffoldMessenger.hideCurrentSnackBar();
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: RichText(
+                maxLines: 2,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: todo.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: s.new_todo_dialog__snackbar_text),
+                    TextSpan(
+                      text: folder?.title ?? s.common__inbox,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              action: SnackBarAction(
+                label: 'ОТКРЫТЬ',
+                onPressed: () {
+                  navigator.push(
+                    MaterialPageRoute(
+                      builder: (context) => TodoDetailedScreen(todoId: todoId),
+                    ),
+                  );
+                },
+              ),
+              behavior: SnackBarBehavior.fixed,
+            ),
+          );
+        });
+      }
+
       Navigator.of(context).pop();
     }
   }
@@ -342,7 +387,7 @@ class _FolderFormField extends FormField<Folder?> {
                       color: theme.primaryColor,
                     )
                   : Icon(
-                kDefaultFolderIcon,
+                      kDefaultFolderIcon,
                       color: folder.color,
                     ),
               text: DefaultTextStyle(

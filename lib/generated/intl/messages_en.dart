@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Folder is empty"),
         "folder_screen__update_folder":
             MessageLookupByLibrary.simpleMessage("Update folder"),
+        "new_todo_dialog__snackbar_text":
+            MessageLookupByLibrary.simpleMessage(" was added to "),
         "new_todo_dialog__title_hint":
             MessageLookupByLibrary.simpleMessage("Task"),
         "new_todo_dialog__title_required":

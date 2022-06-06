@@ -41,6 +41,10 @@ class App extends StatelessWidget {
           checkboxTheme: const CheckboxThemeData(
             shape: ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
           ),
+          snackBarTheme: SnackBarThemeData(
+            backgroundColor: Colors.grey.shade900,
+            actionTextColor: Colors.orange,
+          ),
         ),
         builder: (context, child) {
           assert(child != null);

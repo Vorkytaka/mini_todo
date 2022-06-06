@@ -39,7 +39,7 @@ class TodoRepositoryImpl implements TodoRepository {
   Stream<Todo?> streamConcreteTodo(int id) {
     final query = database.select(database.todoTable);
     query.where((tbl) => tbl.id.equals(id));
-    return query.map((todo) => todo.toTodo).watchSingle();
+    return query.map((todo) => todo.toTodo).watchSingleOrNull();
   }
 
   @override

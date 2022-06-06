@@ -54,7 +54,10 @@ class TodayScreen extends StatelessWidget {
           sliver: StreamBuilder<List<Todo>>(
             initialData: const [],
             stream: context.read<TodoRepository>().streamTodayTodo(),
-            builder: (context, snapshot) => TodoList(todos: snapshot.data!),
+            builder: (context, snapshot) {
+              if(snapshot.data!.isEmpty) return const SliverToBoxAdapter();
+              return TodoList(todos: snapshot.data!);
+            },
           ),
         ),
         SliverToBoxAdapter(
@@ -69,7 +72,10 @@ class TodayScreen extends StatelessWidget {
           sliver: StreamBuilder<List<Todo>>(
             initialData: const [],
             stream: context.read<TodoRepository>().streamTodayOverdue(),
-            builder: (context, snapshot) => TodoList(todos: snapshot.data!),
+            builder: (context, snapshot) {
+              if(snapshot.data!.isEmpty) return const SliverToBoxAdapter();
+              return TodoList(todos: snapshot.data!);
+            },
           ),
         ),
       ],

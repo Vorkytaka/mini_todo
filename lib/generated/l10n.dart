@@ -220,6 +220,16 @@ class S {
     );
   }
 
+  /// ` was added to `
+  String get new_todo_dialog__snackbar_text {
+    return Intl.message(
+      ' was added to ',
+      name: 'new_todo_dialog__snackbar_text',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Time`
   String get datetime_dialog__time {
     return Intl.message(

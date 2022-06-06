@@ -15,6 +15,7 @@
   "today_screen__overdue": "Просроченные",
   "new_todo_dialog__title_hint": "Задача",
   "new_todo_dialog__title_required": "Введите название задачи",
+  "new_todo_dialog__snackbar_text": " добавлено в папку ",
   "datetime_dialog__time": "Время",
   "delete_todo_dialog__title": "Удалить задачу?",
   "delete_todo_dialog__content": "Вы точно хотите удалить ",

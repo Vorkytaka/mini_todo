@@ -67,6 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Здесь пусто"),
         "folder_screen__update_folder":
             MessageLookupByLibrary.simpleMessage("Изменить папку"),
+        "new_todo_dialog__snackbar_text":
+            MessageLookupByLibrary.simpleMessage(" добавлено в папку "),
         "new_todo_dialog__title_hint":
             MessageLookupByLibrary.simpleMessage("Задача"),
         "new_todo_dialog__title_required":

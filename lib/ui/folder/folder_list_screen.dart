@@ -11,6 +11,7 @@ import 'package:mini_todo/ui/folder/today_screen.dart';
 import 'package:mini_todo/ui/new_todo.dart';
 
 import '../list_item.dart';
+import 'all_todo_screen.dart';
 
 class FolderListScreen extends StatelessWidget {
   const FolderListScreen({Key? key}) : super(key: key);
@@ -41,6 +42,9 @@ class FolderListWidget extends StatelessWidget {
       builder: (context, folders) {
         return CustomScrollView(
           slivers: [
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 8),
+            ),
             SliverToBoxAdapter(
               child: FolderItemWidget(
                 folder: Folder(
@@ -49,6 +53,9 @@ class FolderListWidget extends StatelessWidget {
                 ),
                 icon: const Icon(kDefaultInboxIcon),
               ),
+            ),
+            const SliverToBoxAdapter(
+              child: Divider(),
             ),
             SliverToBoxAdapter(
               child: ListItem(
@@ -74,6 +81,21 @@ class FolderListWidget extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const TodayScreen()),
                 ),
               ),
+            ),
+            SliverToBoxAdapter(
+              child: ListItem(
+                icon: const Icon(
+                  Icons.folder_copy,
+                  color: Colors.grey,
+                ),
+                title: Text('Все задачи'),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AllTodoScreen()),
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: Divider(),
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(

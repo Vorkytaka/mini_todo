@@ -1,31 +1,33 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:great_list_view/great_list_view.dart';
 import 'package:mini_todo/constants.dart';
-import 'package:mini_todo/current_time_widget.dart';
 import 'package:mini_todo/data/subtodo_repository.dart';
-import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/domain/use_case.dart';
 import 'package:mini_todo/entity/subtodo.dart';
 import 'package:mini_todo/generated/l10n.dart';
 import 'package:mini_todo/ui/list_item.dart';
-import 'package:mini_todo/ui/select_date.dart';
-import 'package:mini_todo/ui/select_folder.dart';
+import 'package:mini_todo/ui/todo_detailed/todo_detailted_cubit.dart';
 
+import '../../current_time_widget.dart';
 import '../../data/todo_repository.dart';
+import '../../domain/folders/folders_cubit.dart';
 import '../../entity/folder.dart';
 import '../../entity/todo.dart';
 import '../common/keyboard.dart';
+import '../select_date.dart';
+import '../select_folder.dart';
 import '../todo_checkbox.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
-  final Todo todo;
+  final int todoId;
 
   const TodoDetailedScreen({
     Key? key,
-    required this.todo,
+    required this.todoId,
   }) : super(key: key);
 
   @override
@@ -33,238 +35,225 @@ class TodoDetailedScreen extends StatelessWidget {
     return KeyboardUnfocus(
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
-        body: StreamBuilder<Todo?>(
-          stream: context.read<TodoRepository>().streamConcreteTodo(todo.id),
-          initialData: todo,
-          builder: (context, snapshot) {
-            final theme = Theme.of(context);
-            final now = CurrentTime.of(context);
-            final todo = snapshot.data;
+        body: BlocProvider<TodoDetailedCubit>(
+          create: (context) => TodoDetailedCubit(
+            todoId: todoId,
+            todoRepository: context.read(),
+          ),
+          child: BlocConsumer<TodoDetailedCubit, TodoDetailedState>(
+            listener: (context, state) {
+              if (state.initialized && state.todo == null) {
+                Navigator.of(context).pop();
+              }
+            },
+            buildWhen: (prev, curr) => curr.hasTodo,
+            builder: (context, state) {
+              final theme = Theme.of(context);
+              final now = CurrentTime.of(context);
+              final todo = state.todo;
 
-            if (todo == null) {
-              WidgetsBinding.instance?.addPostFrameCallback((_) => Navigator.of(context).pop());
-              return const SizedBox.shrink();
-            }
+              if (todo == null) {
+                return const SizedBox.shrink();
+              }
 
-            final folderPicker = BlocBuilder<FoldersCubit, List<Folder>>(
-              builder: (context, folders) {
-                final folder = folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
-                return IconTheme.merge(
-                  data: IconThemeData(
-                    color: folder.color ?? theme.primaryColor,
-                  ),
-                  child: DefaultTextStyle(
-                    style: theme.textTheme.titleMedium!,
-                    child: ListItem(
-                      icon: folder.id == null ? const Icon(kDefaultInboxIcon) : const Icon(kDefaultFolderIcon),
-                      title: Text(folder.title),
-                      onTap: () async {
-                        final folder = await showSelectFolderDialog(context: context);
-                        if (folder != null) {
-                          context.read<TodoRepository>().updateFolder(todo.id, folder.id);
-                        }
-                      },
+              final folderPicker = BlocBuilder<FoldersCubit, List<Folder>>(
+                builder: (context, folders) {
+                  final folder = folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
+                  return IconTheme.merge(
+                    data: IconThemeData(
+                      color: folder.color ?? theme.primaryColor,
+                    ),
+                    child: DefaultTextStyle(
+                      style: theme.textTheme.titleMedium!,
+                      child: ListItem(
+                        icon: folder.id == null ? const Icon(kDefaultInboxIcon) : const Icon(kDefaultFolderIcon),
+                        title: Text(folder.title),
+                        onTap: () async {
+                          final folder = await showSelectFolderDialog(context: context);
+                          if (folder != null) {
+                            context.read<TodoRepository>().updateFolder(todo.id, folder.id);
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+
+              Widget? dateDismiss;
+              if (todo.date != null) {
+                dateDismiss = SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: InkResponse(
+                    onTap: () async => await deleteTodoDate(context, todo.id),
+                    radius: 24,
+                    child: Icon(
+                      Icons.clear,
+                      color: theme.hintColor,
+                      size: 16,
                     ),
                   ),
                 );
-              },
-            );
-
-            Widget? dateDismiss;
-            if (todo.date != null) {
-              dateDismiss = SizedBox(
-                width: 24,
-                height: 24,
-                child: InkResponse(
-                  onTap: () async => await deleteTodoDate(context, todo.id),
-                  radius: 24,
-                  child: Icon(
-                    Icons.clear,
-                    color: theme.hintColor,
-                    size: 16,
-                  ),
-                ),
+              }
+              final datePickerColor =
+                  todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+              final datePicker = ListItem(
+                icon: const Icon(Icons.today),
+                title: todo.date != null
+                    ? DateTextWidget(date: todo.date!)
+                    : Text(S.of(context).todo_detailed_screen__no_date),
+                titleColor: datePickerColor,
+                iconColor: datePickerColor,
+                onTap: () async {
+                  final date = await showDateSelector(
+                    context: context,
+                    selectedDate: todo.date,
+                  );
+                  if (date != null) {
+                    await updateTodoDate(context, todo.id, date);
+                  }
+                },
+                trailing: dateDismiss,
               );
-            }
-            final datePickerColor =
-                todo.date == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
-            final datePicker = ListItem(
-              icon: const Icon(Icons.today),
-              title: todo.date != null
-                  ? DateTextWidget(date: todo.date!)
-                  : Text(S.of(context).todo_detailed_screen__no_date),
-              titleColor: datePickerColor,
-              iconColor: datePickerColor,
-              onTap: () async {
-                final date = await showDateSelector(
-                  context: context,
-                  selectedDate: todo.date,
-                );
-                if (date != null) {
-                  await updateTodoDate(context, todo.id, date);
-                }
-              },
-              trailing: dateDismiss,
-            );
 
-            Widget? timeDismiss;
-            if (todo.time != null) {
-              timeDismiss = SizedBox(
-                width: 24,
-                height: 24,
-                child: InkResponse(
-                  onTap: () async => await deleteTodoTime(context, todo.id),
-                  radius: 24,
-                  child: Icon(
-                    Icons.clear,
-                    color: theme.hintColor,
-                    size: 16,
+              Widget? timeDismiss;
+              if (todo.time != null) {
+                timeDismiss = SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: InkResponse(
+                    onTap: () async => await deleteTodoTime(context, todo.id),
+                    radius: 24,
+                    child: Icon(
+                      Icons.clear,
+                      color: theme.hintColor,
+                      size: 16,
+                    ),
                   ),
-                ),
+                );
+              }
+              final timePickerColor =
+                  todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
+              Widget timePicker = ListItem(
+                icon: const Icon(Icons.access_time_outlined),
+                title: todo.time != null
+                    ? Text(todo.time!.format(context))
+                    : Text(S.of(context).todo_detailed_screen__no_time),
+                titleColor: timePickerColor,
+                iconColor: timePickerColor,
+                onTap: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
+                  );
+                  if (time != null) {
+                    await updateTodoTime(context, todo.id, time);
+                  }
+                },
+                trailing: timeDismiss,
               );
-            }
-            final timePickerColor =
-                todo.time == null ? theme.hintColor : colorRelativeToDate(theme, now, todo.date, todo.time);
-            Widget timePicker = ListItem(
-              icon: const Icon(Icons.access_time_outlined),
-              title: todo.time != null
-                  ? Text(todo.time!.format(context))
-                  : Text(S.of(context).todo_detailed_screen__no_time),
-              titleColor: timePickerColor,
-              iconColor: timePickerColor,
-              onTap: () async {
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime: todo.time ?? const TimeOfDay(hour: 12, minute: 00),
-                );
-                if (time != null) {
-                  await updateTodoTime(context, todo.id, time);
-                }
-              },
-              trailing: timeDismiss,
-            );
-            timePicker = AnimatedCrossFade(
-              firstChild: timePicker,
-              secondChild: const SizedBox(),
-              crossFadeState: todo.date == null ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 250),
-              sizeCurve: Curves.easeInOut,
-              firstCurve: Curves.easeIn,
-              secondCurve: Curves.easeIn,
-            );
+              timePicker = AnimatedCrossFade(
+                firstChild: timePicker,
+                secondChild: const SizedBox(),
+                crossFadeState: todo.date == null ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 250),
+                sizeCurve: Curves.easeInOut,
+                firstCurve: Curves.easeIn,
+                secondCurve: Curves.easeIn,
+              );
 
-            final deleteItem = ListItem(
-              icon: const Icon(Icons.delete),
-              title: Text(S.of(context).todo_detailed_screen__delete),
-              titleColor: theme.errorColor,
-              iconColor: theme.errorColor,
-              onTap: () async => showDeleteTodoDialog(context: context, todo: todo),
-            );
+              final deleteItem = ListItem(
+                icon: const Icon(Icons.delete),
+                title: Text(S.of(context).todo_detailed_screen__delete),
+                titleColor: theme.errorColor,
+                iconColor: theme.errorColor,
+                onTap: () async => showDeleteTodoDialog(context: context, todo: todo),
+              );
 
-            const divider = Divider(
-              height: 1,
-              indent: 56,
-            );
+              const divider = Divider(
+                height: 1,
+                indent: 56,
+              );
 
-            final noteField = TextFormField(
-              initialValue: todo.note,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                prefixIcon: const Icon(Icons.edit_outlined),
-                prefixIconConstraints: const BoxConstraints(
-                  minWidth: 24 + 16 + 16,
-                  minHeight: 48,
-                ),
-                hintText: S.of(context).todo_detailed_screen__note_hint,
-                hintMaxLines: 1,
-              ),
-              minLines: 1,
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textInputAction: TextInputAction.newline,
-              textAlignVertical: TextAlignVertical.center,
-              textCapitalization: TextCapitalization.sentences,
-              onChanged: (note) {
-                context.read<TodoRepository>().updateNote(todo.id, note);
-              },
-            );
-
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _AppBar(todo: todo),
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    children: [
-                      folderPicker,
-                      divider,
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          datePicker,
-                          timePicker,
-                        ],
-                      ),
-                      divider,
-                      _SubtodoList(todo: todo),
-                      divider,
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minHeight: 56,
-                        ),
-                        child: Center(
-                          child: noteField,
-                        ),
-                      ),
-                      divider,
-                      deleteItem,
-                    ],
+              final noteField = TextFormField(
+                initialValue: todo.note,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: const Icon(Icons.edit_outlined),
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 24 + 16 + 16,
+                    minHeight: 48,
                   ),
+                  hintText: S.of(context).todo_detailed_screen__note_hint,
+                  hintMaxLines: 1,
                 ),
-              ],
-            );
-          },
+                minLines: 1,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                textAlignVertical: TextAlignVertical.center,
+                textCapitalization: TextCapitalization.sentences,
+                onChanged: (note) {
+                  context.read<TodoRepository>().updateNote(todo.id, note);
+                },
+              );
+
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _AppBar(todo: todo),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: [
+                        folderPicker,
+                        divider,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            datePicker,
+                            timePicker,
+                          ],
+                        ),
+                        divider,
+                        _SubtodoList(todo: todo),
+                        divider,
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minHeight: 56,
+                          ),
+                          child: Center(
+                            child: noteField,
+                          ),
+                        ),
+                        divider,
+                        deleteItem,
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
 }
 
-class _AppBar extends StatefulWidget {
+class _AppBar extends StatelessWidget {
   final Todo todo;
 
   const _AppBar({
     Key? key,
     required this.todo,
   }) : super(key: key);
-
-  @override
-  State<_AppBar> createState() => _AppBarState();
-}
-
-class _AppBarState extends State<_AppBar> {
-  late final TextEditingController _titleController;
-
-  @override
-  void initState() {
-    super.initState();
-    _titleController = TextEditingController(text: widget.todo.title);
-    _titleController.addListener(() {
-      context.read<TodoRepository>().setTitle(widget.todo.id, _titleController.text);
-    });
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -283,16 +272,19 @@ class _AppBarState extends State<_AppBar> {
               const BackButton(),
               const SizedBox(width: 8),
               Expanded(
-                child: TextField(
-                  controller: _titleController,
+                child: TextFormField(
+                  initialValue: todo.title,
                   decoration: const InputDecoration(border: InputBorder.none),
                   style: Theme.of(context).textTheme.headline6,
                   maxLines: null,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
+                  onChanged: (title) {
+                    context.read<TodoRepository>().setTitle(todo.id, title);
+                  },
                 ),
               ),
-              TodoCheckbox(todo: widget.todo),
+              TodoCheckbox(todo: todo),
             ],
           ),
         ),

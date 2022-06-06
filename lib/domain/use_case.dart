@@ -7,13 +7,15 @@ import 'package:mini_todo/entity/todo.dart';
 
 typedef UseCase<O, P> = O Function(BuildContext context, P params);
 
-Future<void> createTodo(BuildContext context, TodoCarcase carcase) async {
+Future<int> createTodo(BuildContext context, TodoCarcase carcase) async {
   final todoRepository = context.read<TodoRepository>();
   final todo = await todoRepository.create(carcase);
 
   if (todo.date != null && todo.time != null) {
     await _addNotification(context, todo);
   }
+
+  return todo.id;
 }
 
 Future<void> updateTodoDate(BuildContext context, int id, DateTime date) async {
