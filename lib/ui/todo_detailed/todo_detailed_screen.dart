@@ -17,6 +17,7 @@ import '../../data/todo_repository.dart';
 import '../../domain/folders/folders_cubit.dart';
 import '../../entity/folder.dart';
 import '../../entity/todo.dart';
+import '../../utils/tuple.dart';
 import '../common/keyboard.dart';
 import '../select_date.dart';
 import '../select_folder.dart';
@@ -56,9 +57,9 @@ class TodoDetailedScreen extends StatelessWidget {
                 return const SizedBox.shrink();
               }
 
-              final folderPicker = BlocBuilder<FoldersCubit, List<Folder>>(
+              final folderPicker = BlocBuilder<FoldersCubit, List<Pair<Folder, int>>>(
                 builder: (context, folders) {
-                  final folder = folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
+                  final folder = folders. byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
                   return IconTheme.merge(
                     data: IconThemeData(
                       color: folder.color ?? theme.primaryColor,

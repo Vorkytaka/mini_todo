@@ -2,6 +2,12 @@ import 'package:flutter/cupertino.dart';
 
 typedef Pair<T1, T2> = Tuple2<T1, T2>;
 
+extension PairUtils<T1, T2> on Pair<T1, T2> {
+  T1 get first => value1;
+
+  T2 get second => value2;
+}
+
 class Tuple2<T1, T2> {
   final T1 value1;
   final T2 value2;

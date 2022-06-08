@@ -12,6 +12,7 @@ import 'package:mini_todo/ui/todo_list.dart';
 import 'package:mini_todo/utils/color.dart';
 
 import '../../utils/collections.dart';
+import '../../utils/tuple.dart';
 import '../common/gradient_body.dart';
 import '../new_todo.dart';
 
@@ -30,18 +31,18 @@ class FolderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FoldersCubit, List<Folder>>(
+    return BlocConsumer<FoldersCubit, List<Pair<Folder, int>>>(
       listener: (context, state) {
         final folder =
-            this.folder.id == null ? this.folder : state.firstOrNull((folder) => folder.id == this.folder.id);
+            this.folder.id == null ? this.folder : state.firstOrNull((folder) => folder.first.id == this.folder.id);
         if (folder == null) {
           Navigator.of(context).pop();
         }
       },
-      buildWhen: (prev, curr) => curr.firstOrNull((folder) => folder.id == this.folder.id) != null,
+      buildWhen: (prev, curr) => curr.firstOrNull((folder) => folder.first.id == this.folder.id) != null,
       builder: (context, folders) {
-        final folder =
-            this.folder.id == null ? this.folder : folders.firstWhere((folder) => folder.id == this.folder.id);
+        final Folder folder =
+            this.folder.id == null ? this.folder : folders.firstWhere((folder) => folder.first.id == this.folder.id).first;
         final color = folder.color ?? Theme.of(context).colorScheme.primary;
         return ColoredThemeWrapper(
           color: color,

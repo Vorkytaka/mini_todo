@@ -70,6 +70,16 @@ class S {
     );
   }
 
+  /// `All todos`
+  String get common__all_todos {
+    return Intl.message(
+      'All todos',
+      name: 'common__all_todos',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm`
   String get common__confirm {
     return Intl.message(
@@ -225,6 +235,16 @@ class S {
     return Intl.message(
       ' was added to ',
       name: 'new_todo_dialog__snackbar_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OPEN`
+  String get new_todo_dialog__snackbar_action {
+    return Intl.message(
+      'OPEN',
+      name: 'new_todo_dialog__snackbar_action',
       desc: '',
       args: [],
     );

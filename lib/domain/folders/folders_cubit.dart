@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_todo/data/folder_repository.dart';
 import 'package:mini_todo/entity/folder.dart';
+import 'package:mini_todo/utils/tuple.dart';
 
 import '../../utils/collections.dart';
 
-class FoldersCubit extends Cubit<List<Folder>> {
+class FoldersCubit extends Cubit<List<Pair<Folder, int>>> {
   StreamSubscription? _subscription;
 
   FoldersCubit({
@@ -24,6 +25,6 @@ class FoldersCubit extends Cubit<List<Folder>> {
   }
 }
 
-extension ListFoldersUtils on List<Folder> {
-  Folder? byId(int? id) => id == null ? null : firstOrNull((folder) => folder.id == id);
+extension FoldersUtils on List<Pair<Folder, int>> {
+  Folder? byId(int? id) => id == null ? null : firstOrNull((folder) => folder.first.id == id)?.first;
 }

@@ -5,6 +5,7 @@ import '../constants.dart';
 import '../domain/folders/folders_cubit.dart';
 import '../entity/folder.dart';
 import '../generated/l10n.dart';
+import '../utils/tuple.dart';
 
 Future<Folder?> showSelectFolderDialog({
   required BuildContext context,
@@ -13,7 +14,7 @@ Future<Folder?> showSelectFolderDialog({
     context: context,
     builder: (context) {
       final theme = Theme.of(context);
-      return BlocBuilder<FoldersCubit, List<Folder>>(
+      return BlocBuilder<FoldersCubit, List<Pair<Folder, int>>>(
         builder: (context, folders) => SimpleDialog(
           title: Text(S.of(context).select_folder_dialog__title),
           children: [
@@ -31,9 +32,9 @@ Future<Folder?> showSelectFolderDialog({
             for (final folder in folders)
               ListTile(
                 leading: const Icon(kDefaultFolderIcon),
-                title: Text(folder.title),
-                iconColor: folder.color ?? theme.primaryColor,
-                onTap: () => Navigator.of(context).pop(folder),
+                title: Text(folder.first.title),
+                iconColor: folder.first.color ?? theme.primaryColor,
+                onTap: () => Navigator.of(context).pop<Folder?>(folder.first),
               ),
           ],
         ),

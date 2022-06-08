@@ -7,6 +7,7 @@ import 'package:mini_todo/utils/color.dart';
 import '../../data/todo_repository.dart';
 import '../../entity/todo.dart';
 import '../../generated/l10n.dart';
+import '../../utils/tuple.dart';
 import '../common/gradient_body.dart';
 import '../new_todo.dart';
 import '../todo_list.dart';
@@ -23,10 +24,10 @@ class AllTodoScreen extends StatelessWidget {
 
     final appBar = AppBar(
       centerTitle: false,
-      title: Text('Все задачи'),
+      title: Text(s.common__all_todos),
     );
 
-    Widget body = BlocBuilder<FoldersCubit, List<Folder>>(
+    Widget body = BlocBuilder<FoldersCubit, List<Pair<Folder, int>>>(
       builder: (context, folders) {
         return CustomScrollView(
           slivers: [
@@ -34,21 +35,21 @@ class AllTodoScreen extends StatelessWidget {
               child: SizedBox(height: 8),
             ),
             ..._folder(context, Folder(id: null, title: s.common__inbox)),
-            for (final folder in folders) ..._folder(context, folder),
+            for (final folder in folders) ..._folder(context, folder.first),
           ],
         );
       },
     );
 
     body = GradientBody(
-      color: Colors.grey.lighten(70),
+      color: Colors.indigo.lighten(70),
       child: body,
     );
 
     return Theme(
       data: theme.copyWith(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
-        toggleableActiveColor: Colors.grey,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        toggleableActiveColor: Colors.indigo,
       ),
       child: Scaffold(
         appBar: appBar,

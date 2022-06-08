@@ -1,17 +1,24 @@
 import 'package:drift/drift.dart';
 import 'package:mini_todo/data/database/database.dart';
 import 'package:mini_todo/data/database/table/folder_table.dart';
+import 'package:mini_todo/utils/tuple.dart';
 
 import '../entity/folder.dart';
 
 abstract class FolderRepository {
   Future<void> create(FolderCarcass folder);
 
-  Stream<List<Folder>> streamAll();
+  Stream<List<Pair<Folder, int>>> streamAll();
 
   Future<void> update(Folder folder);
 
   Future<void> delete(int folderId, bool deleteTodos);
+
+  Stream<int> streamInboxTodoCount();
+
+  Stream<int> streamTodayTodoCount();
+
+  Stream<int> streamAllTodoCount();
 }
 
 class FolderRepositoryImpl implements FolderRepository {
@@ -31,18 +38,23 @@ class FolderRepositoryImpl implements FolderRepository {
   }
 
   @override
-  Stream<List<Folder>> streamAll() {
+  Stream<List<Pair<Folder, int>>> streamAll() {
     // todo: use counting
     final query = database.select(database.folderTable).join([
       leftOuterJoin(
         database.todoTable,
-        database.todoTable.id.equalsExp(database.folderTable.id),
+        database.todoTable.folderId.equalsExp(database.folderTable.id) & database.todoTable.completed.equals(false),
         useColumns: false,
       ),
     ]);
     query.addColumns([database.todoTable.id.count()]);
     query.groupBy([database.folderTable.id]);
-    return query.map((p0) => p0.readTable(database.folderTable).toFolder).watch();
+    return query.map((p0) {
+      return Pair(
+        p0.readTable(database.folderTable).toFolder,
+        p0.read(database.todoTable.id.count()),
+      );
+    }).watch();
   }
 
   @override
@@ -73,5 +85,31 @@ class FolderRepositoryImpl implements FolderRepository {
       query.where((tbl) => tbl.id.equals(folderId));
       await query.go();
     });
+  }
+
+  @override
+  Stream<int> streamInboxTodoCount() {
+    final query = database.selectOnly(database.todoTable);
+    query.where(database.todoTable.folderId.isNull());
+    query.where(database.todoTable.completed.equals(false));
+    query.addColumns([database.todoTable.id.count()]);
+    return query.map((p0) => p0.read(database.todoTable.id.count())).watchSingle();
+  }
+
+  @override
+  Stream<int> streamAllTodoCount() {
+    final query = database.selectOnly(database.todoTable);
+    query.where(database.todoTable.completed.equals(false));
+    query.addColumns([database.todoTable.id.count()]);
+    return query.map((p0) => p0.read(database.todoTable.id.count())).watchSingle();
+  }
+
+  @override
+  Stream<int> streamTodayTodoCount() {
+    final query = database.selectOnly(database.todoTable);
+    query.where(database.todoTable.date.equalsValue(DateTime.now()));
+    query.where(database.todoTable.completed.equals(false));
+    query.addColumns([database.todoTable.id.count()]);
+    return query.map((p0) => p0.read(database.todoTable.id.count())).watchSingle();
   }
 }

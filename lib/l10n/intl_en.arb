@@ -1,6 +1,7 @@
 {
   "app_name": "miniTodo",
   "common__inbox": "Inbox",
+  "common__all_todos": "All todos",
   "common__confirm": "Confirm",
   "common__cancel": "Cancel",
   "common__all": "All",
@@ -17,6 +18,7 @@
   "new_todo_dialog__title_hint": "Task",
   "new_todo_dialog__title_required": "Enter task title",
   "new_todo_dialog__snackbar_text": " was added to ",
+  "new_todo_dialog__snackbar_action": "OPEN",
   "datetime_dialog__time": "Time",
   "delete_todo_dialog__title": "Delete this todo?",
   "delete_todo_dialog__content": "Are you sure you want to delete ",

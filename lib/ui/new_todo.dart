@@ -92,9 +92,6 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
     // we use builder because of Form widget above this element
     final Widget submitBtn = InkWell(
       onTap: _submit,
-      onLongPress: () {
-        print('long');
-      },
       borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -228,7 +225,7 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                 ),
               ),
               action: SnackBarAction(
-                label: 'ОТКРЫТЬ',
+                label: s.new_todo_dialog__snackbar_action,
                 onPressed: () {
                   navigator.push(
                     MaterialPageRoute(

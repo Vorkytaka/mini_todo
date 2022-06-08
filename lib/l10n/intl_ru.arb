@@ -1,5 +1,6 @@
 {
   "common__inbox": "Входящие",
+  "common__all_todos": "Все задачи",
   "common__confirm": "Принять",
   "common__cancel": "Отмена",
   "common__all": "Все",
@@ -16,6 +17,7 @@
   "new_todo_dialog__title_hint": "Задача",
   "new_todo_dialog__title_required": "Введите название задачи",
   "new_todo_dialog__snackbar_text": " добавлено в папку ",
+  "new_todo_dialog__snackbar_action": "ОТКРЫТЬ",
   "datetime_dialog__time": "Время",
   "delete_todo_dialog__title": "Удалить задачу?",
   "delete_todo_dialog__content": "Вы точно хотите удалить ",

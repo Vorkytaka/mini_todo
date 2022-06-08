@@ -23,6 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common__all": MessageLookupByLibrary.simpleMessage("Все"),
+        "common__all_todos": MessageLookupByLibrary.simpleMessage("Все задачи"),
         "common__cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "common__completed":
             MessageLookupByLibrary.simpleMessage("Выполненные"),
@@ -67,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Здесь пусто"),
         "folder_screen__update_folder":
             MessageLookupByLibrary.simpleMessage("Изменить папку"),
+        "new_todo_dialog__snackbar_action":
+            MessageLookupByLibrary.simpleMessage("ОТКРЫТЬ"),
         "new_todo_dialog__snackbar_text":
             MessageLookupByLibrary.simpleMessage(" добавлено в папку "),
         "new_todo_dialog__title_hint":
