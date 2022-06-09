@@ -34,10 +34,23 @@ class TodoItemWidget extends StatelessWidget {
 
     Widget? datetimeWidget;
     if (todo.date != null) {
-      datetimeWidget = DatetimeOnNowWidget(
+      datetimeWidget = DateTextWidget(
         date: todo.date!,
         time: todo.time,
       );
+
+      if (!todo.completed) {
+        datetimeWidget = NowStyle(
+          date: todo.date!,
+          time: todo.time,
+          child: datetimeWidget,
+        );
+      } else {
+        datetimeWidget = DefaultTextStyle(
+          style: theme.textTheme.labelMedium!.apply(color: theme.hintColor),
+          child: datetimeWidget,
+        );
+      }
     }
 
     final Widget checkbox = TodoCheckbox(todo: todo);

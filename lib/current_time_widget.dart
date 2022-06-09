@@ -96,11 +96,6 @@ class DatetimeOnNowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String str = dateFormatter.format(date);
-    if (time != null) {
-      str = '$str, ${time!.format(context)}';
-    }
-
     return NowStyle(
       date: date,
       time: time,
