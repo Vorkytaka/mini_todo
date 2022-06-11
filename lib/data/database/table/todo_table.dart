@@ -67,13 +67,13 @@ class DurationConverter implements TypeConverter<Duration, int> {
 
   @override
   Duration? mapToDart(int? fromDb) {
-    if(fromDb == null) return null;
+    if (fromDb == null) return null;
     return Duration(minutes: fromDb);
   }
 
   @override
   int? mapToSql(Duration? value) {
-    if(value == null) return null;
+    if (value == null) return null;
     return value.inMinutes;
   }
 }
@@ -90,5 +90,6 @@ extension TodoTableUtils on TodoTableData {
         folderId: folderId,
         note: note,
         completedDate: completedDate,
+        notificationDelay: notificationDelay,
       );
 }

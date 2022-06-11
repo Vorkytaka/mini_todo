@@ -220,6 +220,10 @@ class TodoDetailedScreen extends StatelessWidget {
                           children: [
                             datePicker,
                             timePicker,
+                            ListItem(
+                              icon: const Icon(Icons.alarm),
+                              title: Text('${todo.notificationDelay}'),
+                            ),
                           ],
                         ),
                         divider,

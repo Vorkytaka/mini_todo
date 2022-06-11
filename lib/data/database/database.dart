@@ -53,6 +53,9 @@ class Database extends _$Database {
               // In version 2 we add `notificationDelay`
               if (target == 2) {
                 await migrator.addColumn(todoTable, todoTable.notificationDelay);
+                final query = update(todoTable);
+                query.where((tbl) => tbl.time.isNotNull());
+                await query.write(const TodoTableCompanion(notificationDelay: Value(Duration.zero)));
               }
             }
           });
