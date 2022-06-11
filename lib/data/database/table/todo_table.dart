@@ -24,6 +24,8 @@ class TodoTable extends Table {
   IntColumn get folderId => integer().nullable()();
 
   TextColumn get note => text().nullable()();
+
+  IntColumn get notificationDelay => integer().map(const DurationConverter()).nullable()();
 }
 
 class DateConverter implements TypeConverter<DateTime, int> {
@@ -60,6 +62,22 @@ class TimeConverter implements TypeConverter<TimeOfDay, int> {
   }
 }
 
+class DurationConverter implements TypeConverter<Duration, int> {
+  const DurationConverter();
+
+  @override
+  Duration? mapToDart(int? fromDb) {
+    if (fromDb == null) return null;
+    return Duration(minutes: fromDb);
+  }
+
+  @override
+  int? mapToSql(Duration? value) {
+    if (value == null) return null;
+    return value.inMinutes;
+  }
+}
+
 extension TodoTableUtils on TodoTableData {
   Todo get toTodo => Todo(
         id: id,
@@ -72,5 +90,6 @@ extension TodoTableUtils on TodoTableData {
         folderId: folderId,
         note: note,
         completedDate: completedDate,
+        notificationDelay: notificationDelay,
       );
 }
