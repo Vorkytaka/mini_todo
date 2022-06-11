@@ -24,8 +24,7 @@ part 'database.g.dart';
 class Database extends _$Database {
   Database() : super(_openConnection());
 
-  @override
-  int get schemaVersion => 1;
+  Database.connect(QueryExecutor connection) : super(connection);
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
@@ -34,4 +33,42 @@ class Database extends _$Database {
       return NativeDatabase(file, logStatements: kDebugMode);
     });
   }
+
+  @override
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (migrator, from, to) async {
+          // Disable foreign_keys before migrations
+          await customStatement('PRAGMA foreign_keys = OFF');
+
+          // All migrations in one transaction
+          await transaction(() async {
+            // Goes from current to the new version
+            for (int current = from; current < to; current++) {
+              // Get the version to which we will migrate now
+              final int target = current + 1;
+
+              // In version 2 we add `notificationDelay`
+              if (target == 2) {
+                await migrator.addColumn(todoTable, todoTable.notificationDelay);
+              }
+            }
+          });
+
+          // Assert that the schema is valid after migrations
+          if (kDebugMode) {
+            final wrongForeignKeys = await customSelect('PRAGMA foreign_key_check').get();
+            assert(
+              wrongForeignKeys.isEmpty,
+              '${wrongForeignKeys.map((e) => e.data)}',
+            );
+          }
+        },
+        beforeOpen: (details) async {
+          // Enable foreign_keys before open, but after migrations
+          await customStatement('PRAGMA foreign_keys = ON');
+        },
+      );
 }
