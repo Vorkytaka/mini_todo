@@ -36,4 +36,8 @@ abstract class TodoRepository {
   Stream<List<Todo>> streamTodayOverdue();
 
   Future<Todo?> readById(int id);
+
+  Future<int> setNotificationOffset(int id, Duration offset);
+
+  Future<int> removeNotificationOffset(int id);
 }

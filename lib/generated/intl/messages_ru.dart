@@ -20,6 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(count) =>
+      "${Intl.plural(count, zero: 'Без дней', one: 'Напомнить за ${count} день', two: 'Напомнить за ${count} дня', few: 'Напомнить за ${count} дня', other: 'Напомнить за ${count} дней')}";
+
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'Без часов', one: 'Напомнить за ${count} час', two: 'Напомнить за ${count} часа', few: 'Напомнить за ${count} часа', other: 'Напомнить за ${count} часов')}";
+
+  static String m2(count) =>
+      "${Intl.plural(count, zero: 'Без минут', one: 'Напомнить за ${count} минуту', two: 'Напомнить за ${count} минуты', few: 'Напомнить за ${count} минуты', other: 'Напомнить за ${count} минут')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "common__all": MessageLookupByLibrary.simpleMessage("Все"),
@@ -78,6 +87,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Введите название задачи"),
         "select_folder_dialog__title":
             MessageLookupByLibrary.simpleMessage("Выберите папку"),
+        "select_notification_offset__1_day":
+            MessageLookupByLibrary.simpleMessage("За 1 день"),
+        "select_notification_offset__1_hour":
+            MessageLookupByLibrary.simpleMessage("За 1 час"),
+        "select_notification_offset__30_mins":
+            MessageLookupByLibrary.simpleMessage("За 30 минут"),
+        "select_notification_offset__in_time":
+            MessageLookupByLibrary.simpleMessage("Во время"),
+        "select_notification_offset__no_notification":
+            MessageLookupByLibrary.simpleMessage("Без уведомления"),
+        "select_notification_offset__title":
+            MessageLookupByLibrary.simpleMessage("Уведомление"),
         "today_screen__overdue":
             MessageLookupByLibrary.simpleMessage("Просроченные"),
         "todo_detailed_screen__add_subtodo":
@@ -90,6 +111,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Без времени"),
         "todo_detailed_screen__note_hint":
             MessageLookupByLibrary.simpleMessage("Заметка"),
+        "todo_detailed_screen__notification_days": m0,
+        "todo_detailed_screen__notification_hours": m1,
+        "todo_detailed_screen__notification_in_time":
+            MessageLookupByLibrary.simpleMessage("Напомнить во время"),
+        "todo_detailed_screen__notification_minutes": m2,
+        "todo_detailed_screen__notification_without":
+            MessageLookupByLibrary.simpleMessage("Без напоминания"),
         "todo_detailed_screen__subtodo_hint":
             MessageLookupByLibrary.simpleMessage("Подзадача")
       };

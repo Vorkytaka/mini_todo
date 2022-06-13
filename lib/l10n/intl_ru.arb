@@ -28,6 +28,11 @@
   "todo_detailed_screen__note_hint": "Заметка",
   "todo_detailed_screen__subtodo_hint": "Подзадача",
   "todo_detailed_screen__add_subtodo": "Добавить подзадачу",
+  "todo_detailed_screen__notification_without": "Без напоминания",
+  "todo_detailed_screen__notification_in_time": "Напомнить во время",
+  "todo_detailed_screen__notification_days": "{count,plural, =0{Без дней} =1{Напомнить за {count} день} =2{Напомнить за {count} дня} few{Напомнить за {count} дня} other{Напомнить за {count} дней}}",
+  "todo_detailed_screen__notification_hours": "{count,plural, =0{Без часов} =1{Напомнить за {count} час} =2{Напомнить за {count} часа} few{Напомнить за {count} часа} other{Напомнить за {count} часов}}",
+  "todo_detailed_screen__notification_minutes": "{count,plural, =0{Без минут} =1{Напомнить за {count} минуту} =2{Напомнить за {count} минуты} few{Напомнить за {count} минуты} other{Напомнить за {count} минут}}",
   "editable_folder_dialog__hint": "Название папки",
   "editable_folder_dialog__title_error": "Введите название папки",
   "folder_screen__update_folder": "Изменить папку",
@@ -39,5 +44,14 @@
   "delete_folder_dialog__delete_todos_toggle": "Удалить все задачи из папки",
   "folder_list_screen__create_folder_tooltip": "Создать папку",
   "folder_list_screen__create_todo_tooltip": "Создать задачу",
-  "select_folder_dialog__title": "Выберите папку"
+  "select_folder_dialog__title": "Выберите папку",
+  "duration__days_delay": "{count,plural, =0{Без дней} =1{За {count} день} =2{За {count} дня} few{За {count} дня} other{За {count} дней}}",
+  "duration__hours_delay": "{count,plural, =0{Без часов} =1{За {count} час} =2{За {count} часа} few{За {count} часа} other{За {count} часов}}",
+  "duration__minutes_delay": "{count,plural, =0{Без минут} =1{Напомнить за {count} минуту} =2{Напомнить за {count} минуты} few{Напомнить за {count} минуты} other{Напомнить за {count} минут}}",
+  "select_notification_offset__title": "Уведомление",
+  "select_notification_offset__no_notification": "Без уведомления",
+  "select_notification_offset__in_time": "Во время",
+  "select_notification_offset__30_mins": "За 30 минут",
+  "select_notification_offset__1_hour": "За 1 час",
+  "select_notification_offset__1_day": "За 1 день"
 }

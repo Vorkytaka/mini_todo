@@ -23,6 +23,7 @@ class TodoRepositoryImpl implements TodoRepository {
             date: Value(todo.date),
             time: Value(todo.time),
             folderId: Value(todo.folderId),
+            notificationOffset: todo.time != null ? const Value(Duration.zero) : const Value.absent(),
           ),
         )
         .then((value) => value.toTodo);
@@ -60,7 +61,11 @@ class TodoRepositoryImpl implements TodoRepository {
   Future<int> removeDate(int id) {
     final query = database.update(database.todoTable);
     query.where((tbl) => tbl.id.equals(id));
-    return query.write(const TodoTableCompanion(date: Value(null), time: Value(null)));
+    return query.write(const TodoTableCompanion(
+      date: Value(null),
+      time: Value(null),
+      notificationOffset: Value(null),
+    ));
   }
 
   @override
@@ -74,7 +79,10 @@ class TodoRepositoryImpl implements TodoRepository {
   Future<int> removeTime(int id) {
     final query = database.update(database.todoTable);
     query.where((tbl) => tbl.id.equals(id));
-    return query.write(const TodoTableCompanion(time: Value(null)));
+    return query.write(const TodoTableCompanion(
+      time: Value(null),
+      notificationOffset: Value(null),
+    ));
   }
 
   @override
@@ -143,6 +151,20 @@ class TodoRepositoryImpl implements TodoRepository {
     final query = database.select(database.todoTable);
     query.where((tbl) => tbl.id.equals(id));
     return query.getSingleOrNull().then((value) => value?.toTodo);
+  }
+
+  @override
+  Future<int> setNotificationOffset(int id, Duration offset) {
+    final query = database.update(database.todoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.write(TodoTableCompanion(notificationOffset: Value(offset)));
+  }
+
+  @override
+  Future<int> removeNotificationOffset(int id) {
+    final query = database.update(database.todoTable);
+    query.where((tbl) => tbl.id.equals(id));
+    return query.write(const TodoTableCompanion(notificationOffset: Value(null)));
   }
 }
 

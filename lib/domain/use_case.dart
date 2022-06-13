@@ -58,14 +58,27 @@ Future<void> deleteTodo(BuildContext context, int id) async {
   _cancelNotification(context, id);
 }
 
+Future<void> updateTodoNotificationOffset(BuildContext context, int id, Duration offset) async {
+  final todoRepository = context.read<TodoRepository>();
+  await todoRepository.setNotificationOffset(id, offset);
+  await _addNotificationById(context, id);
+}
+
+Future<void> deleteTodoNotificationOffset(BuildContext context, int id) async {
+  final todoRepository = context.read<TodoRepository>();
+  await todoRepository.removeNotificationOffset(id);
+  await _cancelNotification(context, id);
+}
+
 /// -----------------------
 /// ---- notifications ----
 /// -----------------------
 
 Future<void> _addNotification(BuildContext context, Todo todo) async {
-  if (todo.date == null || todo.time == null) return;
+  if (todo.date == null || todo.time == null || todo.notificationOffset == null) return;
 
-  final datetime = todo.date!.add(Duration(hours: todo.time!.hour, minutes: todo.time!.minute));
+  final datetime =
+      todo.date!.add(Duration(hours: todo.time!.hour, minutes: todo.time!.minute)).subtract(todo.notificationOffset!);
 
   final now = DateTime.now();
   if (datetime.isBefore(now)) return;

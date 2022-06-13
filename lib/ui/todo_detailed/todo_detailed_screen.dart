@@ -21,6 +21,7 @@ import '../../utils/tuple.dart';
 import '../common/keyboard.dart';
 import '../select_date.dart';
 import '../select_folder.dart';
+import '../select_notification_offset.dart';
 import '../todo_checkbox.dart';
 
 class TodoDetailedScreen extends StatelessWidget {
@@ -59,7 +60,7 @@ class TodoDetailedScreen extends StatelessWidget {
 
               final folderPicker = BlocBuilder<FoldersCubit, List<Pair<Folder, int>>>(
                 builder: (context, folders) {
-                  final folder = folders. byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
+                  final folder = folders.byId(todo.folderId) ?? Folder(id: null, title: S.of(context).common__inbox);
                   return IconTheme.merge(
                     data: IconThemeData(
                       color: folder.color ?? theme.primaryColor,
@@ -164,6 +165,43 @@ class TodoDetailedScreen extends StatelessWidget {
                 secondCurve: Curves.easeIn,
               );
 
+              final Color? notificationOffsetColor = todo.notificationOffset == null
+                  ? theme.hintColor
+                  : colorRelativeToDate(theme, now, todo.date, todo.time, todo.notificationOffset);
+              Widget notificationOffsetPicker = ListItem(
+                onTap: () async {
+                  final offset = await showNotificationOffsetSelector(
+                    context: context,
+                    selectedOffset: todo.notificationOffset,
+                  );
+
+                  if (offset != null) {
+                    if (offset.isNegative) {
+                      await deleteTodoNotificationOffset(context, todo.id);
+                    } else {
+                      await updateTodoNotificationOffset(context, todo.id, offset);
+                    }
+                  }
+                },
+                iconColor: notificationOffsetColor,
+                titleColor: notificationOffsetColor,
+                icon: todo.notificationOffset != null
+                    ? const Icon(Icons.notifications_active_outlined)
+                    : const Icon(Icons.notifications_off_outlined),
+                title: Text(todo.notificationOffset != null
+                    ? todo.notificationOffset!.format(context)
+                    : S.of(context).todo_detailed_screen__notification_without),
+              );
+              notificationOffsetPicker = AnimatedCrossFade(
+                firstChild: notificationOffsetPicker,
+                secondChild: const SizedBox(),
+                crossFadeState: todo.time == null ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 250),
+                sizeCurve: Curves.easeInOut,
+                firstCurve: Curves.easeIn,
+                secondCurve: Curves.easeIn,
+              );
+
               final deleteItem = ListItem(
                 icon: const Icon(Icons.delete),
                 title: Text(S.of(context).todo_detailed_screen__delete),
@@ -220,10 +258,7 @@ class TodoDetailedScreen extends StatelessWidget {
                           children: [
                             datePicker,
                             timePicker,
-                            ListItem(
-                              icon: const Icon(Icons.alarm),
-                              title: Text('${todo.notificationDelay}'),
-                            ),
+                            notificationOffsetPicker,
                           ],
                         ),
                         divider,
@@ -494,5 +529,25 @@ class _SubtodoItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension DurationIntl on Duration {
+  String format(BuildContext context) {
+    final s = S.of(context);
+
+    if (inMinutes == 0) {
+      return s.todo_detailed_screen__notification_in_time;
+    }
+
+    if (inDays != 0) {
+      return s.todo_detailed_screen__notification_days(inDays);
+    }
+
+    if (inHours != 0) {
+      return s.todo_detailed_screen__notification_hours(inHours);
+    }
+
+    return s.todo_detailed_screen__notification_minutes(inMinutes);
   }
 }

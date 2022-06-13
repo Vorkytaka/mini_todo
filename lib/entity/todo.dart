@@ -39,7 +39,7 @@ class Todo {
   final int? folderId;
   final String? note;
   final DateTime? completedDate;
-  final Duration? notificationDelay;
+  final Duration? notificationOffset;
 
   const Todo({
     required this.id,
@@ -52,7 +52,7 @@ class Todo {
     required this.folderId,
     this.note,
     this.completedDate,
-    this.notificationDelay,
+    this.notificationOffset,
   });
 
   static TodoCarcase carcase({
@@ -81,8 +81,8 @@ class Todo {
       time != other.time &&
       note == other.note &&
       completedDate != other.completedDate &&
-      notificationDelay != other.notificationDelay;
+      notificationOffset != other.notificationOffset;
 
   @override
-  int get hashCode => hashValues(id, title, completed, date, time, note, completedDate, notificationDelay);
+  int get hashCode => hashValues(id, title, completed, date, time, note, completedDate, notificationOffset);
 }

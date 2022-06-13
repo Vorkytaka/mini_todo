@@ -29,6 +29,11 @@
   "todo_detailed_screen__note_hint": "Note",
   "todo_detailed_screen__subtodo_hint": "Subtask",
   "todo_detailed_screen__add_subtodo": "Add subtask",
+  "todo_detailed_screen__notification_without": "Not to notify",
+  "todo_detailed_screen__notification_in_time": "Notify in time",
+  "todo_detailed_screen__notification_days": "{count,plural, =0{No days} =1{Notify in {count} day} other{Notify in {count} days}}",
+  "todo_detailed_screen__notification_hours": "{count,plural, =0{No hours} =1{Notify in {count} hour} other{Notify in {count} hours}}",
+  "todo_detailed_screen__notification_minutes": "{count,plural, =0{No minutes} =1{Notify in {count} minute} other{Notify in {count} minutes}}",
   "editable_folder_dialog__hint": "Folder title",
   "editable_folder_dialog__title_error": "Enter folder title",
   "folder_screen__update_folder": "Update folder",
@@ -40,5 +45,11 @@
   "delete_folder_dialog__delete_todos_toggle": "Also delete all todos from this folder",
   "folder_list_screen__create_folder_tooltip": "Create folder",
   "folder_list_screen__create_todo_tooltip": "Create todo",
-  "select_folder_dialog__title": "Select the folder"
+  "select_folder_dialog__title": "Select the folder",
+  "select_notification_offset__title": "Notification",
+  "select_notification_offset__no_notification": "Without notification",
+  "select_notification_offset__in_time": "In time",
+  "select_notification_offset__30_mins": "30 min early",
+  "select_notification_offset__1_hour": "1 hour early",
+  "select_notification_offset__1_day": "1 day early"
 }

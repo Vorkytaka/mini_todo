@@ -48,8 +48,8 @@ class TodoTable extends Table with TableInfo {
   late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
       'note', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
-  late final GeneratedColumn<int?> notificationDelay = GeneratedColumn<int?>(
-      'notification_delay', aliasedName, true,
+  late final GeneratedColumn<int?> notificationOffset = GeneratedColumn<int?>(
+      'notification_offset', aliasedName, true,
       type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
@@ -63,7 +63,7 @@ class TodoTable extends Table with TableInfo {
         completedDate,
         folderId,
         note,
-        notificationDelay
+        notificationOffset
       ];
   @override
   String get aliasedName => _alias ?? 'todo_table';

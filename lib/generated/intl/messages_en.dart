@@ -20,6 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(count) =>
+      "${Intl.plural(count, zero: 'No days', one: 'Notify in ${count} day', other: 'Notify in ${count} days')}";
+
+  static String m1(count) =>
+      "${Intl.plural(count, zero: 'No hours', one: 'Notify in ${count} hour', other: 'Notify in ${count} hours')}";
+
+  static String m2(count) =>
+      "${Intl.plural(count, zero: 'No minutes', one: 'Notify in ${count} minute', other: 'Notify in ${count} minutes')}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_name": MessageLookupByLibrary.simpleMessage("miniTodo"),
@@ -79,6 +88,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter task title"),
         "select_folder_dialog__title":
             MessageLookupByLibrary.simpleMessage("Select the folder"),
+        "select_notification_offset__1_day":
+            MessageLookupByLibrary.simpleMessage("1 day early"),
+        "select_notification_offset__1_hour":
+            MessageLookupByLibrary.simpleMessage("1 hour early"),
+        "select_notification_offset__30_mins":
+            MessageLookupByLibrary.simpleMessage("30 min early"),
+        "select_notification_offset__in_time":
+            MessageLookupByLibrary.simpleMessage("In time"),
+        "select_notification_offset__no_notification":
+            MessageLookupByLibrary.simpleMessage("Without notification"),
+        "select_notification_offset__title":
+            MessageLookupByLibrary.simpleMessage("Notification"),
         "today_screen__overdue":
             MessageLookupByLibrary.simpleMessage("Overdue"),
         "todo_detailed_screen__add_subtodo":
@@ -91,6 +112,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No time"),
         "todo_detailed_screen__note_hint":
             MessageLookupByLibrary.simpleMessage("Note"),
+        "todo_detailed_screen__notification_days": m0,
+        "todo_detailed_screen__notification_hours": m1,
+        "todo_detailed_screen__notification_in_time":
+            MessageLookupByLibrary.simpleMessage("Notify in time"),
+        "todo_detailed_screen__notification_minutes": m2,
+        "todo_detailed_screen__notification_without":
+            MessageLookupByLibrary.simpleMessage("Not to notify"),
         "todo_detailed_screen__subtodo_hint":
             MessageLookupByLibrary.simpleMessage("Subtask")
       };

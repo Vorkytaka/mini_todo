@@ -50,12 +50,14 @@ class Database extends _$Database {
               // Get the version to which we will migrate now
               final int target = current + 1;
 
-              // In version 2 we add `notificationDelay`
+              // In version 2 we add `notificationOffset`
               if (target == 2) {
-                await migrator.addColumn(todoTable, todoTable.notificationDelay);
+                await migrator.addColumn(todoTable, todoTable.notificationOffset);
+
+                // set zero offset for all todos with time
                 final query = update(todoTable);
                 query.where((tbl) => tbl.time.isNotNull());
-                await query.write(const TodoTableCompanion(notificationDelay: Value(Duration.zero)));
+                await query.write(const TodoTableCompanion(notificationOffset: Value(Duration.zero)));
               }
             }
           });

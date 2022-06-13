@@ -25,7 +25,7 @@ class TodoTable extends Table {
 
   TextColumn get note => text().nullable()();
 
-  IntColumn get notificationDelay => integer().map(const DurationConverter()).nullable()();
+  IntColumn get notificationOffset => integer().map(const DurationConverter()).nullable()();
 }
 
 class DateConverter implements TypeConverter<DateTime, int> {
@@ -90,6 +90,6 @@ extension TodoTableUtils on TodoTableData {
         folderId: folderId,
         note: note,
         completedDate: completedDate,
-        notificationDelay: notificationDelay,
+        notificationOffset: notificationOffset,
       );
 }

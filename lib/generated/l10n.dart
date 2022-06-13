@@ -350,6 +350,65 @@ class S {
     );
   }
 
+  /// `Not to notify`
+  String get todo_detailed_screen__notification_without {
+    return Intl.message(
+      'Not to notify',
+      name: 'todo_detailed_screen__notification_without',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notify in time`
+  String get todo_detailed_screen__notification_in_time {
+    return Intl.message(
+      'Notify in time',
+      name: 'todo_detailed_screen__notification_in_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count,plural, =0{No days} =1{Notify in {count} day} other{Notify in {count} days}}`
+  String todo_detailed_screen__notification_days(num count) {
+    return Intl.plural(
+      count,
+      zero: 'No days',
+      one: 'Notify in $count day',
+      other: 'Notify in $count days',
+      name: 'todo_detailed_screen__notification_days',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =0{No hours} =1{Notify in {count} hour} other{Notify in {count} hours}}`
+  String todo_detailed_screen__notification_hours(num count) {
+    return Intl.plural(
+      count,
+      zero: 'No hours',
+      one: 'Notify in $count hour',
+      other: 'Notify in $count hours',
+      name: 'todo_detailed_screen__notification_hours',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =0{No minutes} =1{Notify in {count} minute} other{Notify in {count} minutes}}`
+  String todo_detailed_screen__notification_minutes(num count) {
+    return Intl.plural(
+      count,
+      zero: 'No minutes',
+      one: 'Notify in $count minute',
+      other: 'Notify in $count minutes',
+      name: 'todo_detailed_screen__notification_minutes',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Folder title`
   String get editable_folder_dialog__hint {
     return Intl.message(
@@ -465,6 +524,66 @@ class S {
     return Intl.message(
       'Select the folder',
       name: 'select_folder_dialog__title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notification`
+  String get select_notification_offset__title {
+    return Intl.message(
+      'Notification',
+      name: 'select_notification_offset__title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Without notification`
+  String get select_notification_offset__no_notification {
+    return Intl.message(
+      'Without notification',
+      name: 'select_notification_offset__no_notification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In time`
+  String get select_notification_offset__in_time {
+    return Intl.message(
+      'In time',
+      name: 'select_notification_offset__in_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `30 min early`
+  String get select_notification_offset__30_mins {
+    return Intl.message(
+      '30 min early',
+      name: 'select_notification_offset__30_mins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 hour early`
+  String get select_notification_offset__1_hour {
+    return Intl.message(
+      '1 hour early',
+      name: 'select_notification_offset__1_hour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 day early`
+  String get select_notification_offset__1_day {
+    return Intl.message(
+      '1 day early',
+      name: 'select_notification_offset__1_day',
       desc: '',
       args: [],
     );

@@ -144,8 +144,9 @@ Color? colorRelativeToDate(
   ThemeData theme,
   DateTime now,
   DateTime? date,
-  TimeOfDay? time,
-) {
+  TimeOfDay? time, [
+  Duration? offset,
+]) {
   if (date == null) {
     return null;
   }
@@ -159,7 +160,10 @@ Color? colorRelativeToDate(
     }
   }
 
-  final datetime = date & time;
+  DateTime datetime = date & time;
+  if(offset != null) {
+    datetime = datetime.subtract(offset);
+  }
   if (datetime.isBefore(now)) {
     return theme.errorColor;
   } else {

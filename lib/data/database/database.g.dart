@@ -18,7 +18,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   final DateTime? completedDate;
   final int? folderId;
   final String? note;
-  final Duration? notificationDelay;
+  final Duration? notificationOffset;
   TodoTableData(
       {required this.id,
       required this.title,
@@ -30,7 +30,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       this.completedDate,
       this.folderId,
       this.note,
-      this.notificationDelay});
+      this.notificationOffset});
   factory TodoTableData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TodoTableData(
@@ -54,9 +54,9 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}folder_id']),
       note: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}note']),
-      notificationDelay: $TodoTableTable.$converter2.mapToDart(const IntType()
+      notificationOffset: $TodoTableTable.$converter2.mapToDart(const IntType()
           .mapFromDatabaseResponse(
-              data['${effectivePrefix}notification_delay'])),
+              data['${effectivePrefix}notification_offset'])),
     );
   }
   @override
@@ -84,10 +84,10 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String?>(note);
     }
-    if (!nullToAbsent || notificationDelay != null) {
+    if (!nullToAbsent || notificationOffset != null) {
       final converter = $TodoTableTable.$converter2;
-      map['notification_delay'] =
-          Variable<int?>(converter.mapToSql(notificationDelay));
+      map['notification_offset'] =
+          Variable<int?>(converter.mapToSql(notificationOffset));
     }
     return map;
   }
@@ -108,9 +108,9 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           ? const Value.absent()
           : Value(folderId),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
-      notificationDelay: notificationDelay == null && nullToAbsent
+      notificationOffset: notificationOffset == null && nullToAbsent
           ? const Value.absent()
-          : Value(notificationDelay),
+          : Value(notificationOffset),
     );
   }
 
@@ -128,8 +128,8 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       completedDate: serializer.fromJson<DateTime?>(json['completedDate']),
       folderId: serializer.fromJson<int?>(json['folderId']),
       note: serializer.fromJson<String?>(json['note']),
-      notificationDelay:
-          serializer.fromJson<Duration?>(json['notificationDelay']),
+      notificationOffset:
+          serializer.fromJson<Duration?>(json['notificationOffset']),
     );
   }
   @override
@@ -146,7 +146,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
       'completedDate': serializer.toJson<DateTime?>(completedDate),
       'folderId': serializer.toJson<int?>(folderId),
       'note': serializer.toJson<String?>(note),
-      'notificationDelay': serializer.toJson<Duration?>(notificationDelay),
+      'notificationOffset': serializer.toJson<Duration?>(notificationOffset),
     };
   }
 
@@ -161,7 +161,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           DateTime? completedDate,
           int? folderId,
           String? note,
-          Duration? notificationDelay}) =>
+          Duration? notificationOffset}) =>
       TodoTableData(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -173,7 +173,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
         completedDate: completedDate ?? this.completedDate,
         folderId: folderId ?? this.folderId,
         note: note ?? this.note,
-        notificationDelay: notificationDelay ?? this.notificationDelay,
+        notificationOffset: notificationOffset ?? this.notificationOffset,
       );
   @override
   String toString() {
@@ -188,14 +188,14 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           ..write('completedDate: $completedDate, ')
           ..write('folderId: $folderId, ')
           ..write('note: $note, ')
-          ..write('notificationDelay: $notificationDelay')
+          ..write('notificationOffset: $notificationOffset')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, title, completed, date, time, createdDate,
-      updatedDate, completedDate, folderId, note, notificationDelay);
+      updatedDate, completedDate, folderId, note, notificationOffset);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -210,7 +210,7 @@ class TodoTableData extends DataClass implements Insertable<TodoTableData> {
           other.completedDate == this.completedDate &&
           other.folderId == this.folderId &&
           other.note == this.note &&
-          other.notificationDelay == this.notificationDelay);
+          other.notificationOffset == this.notificationOffset);
 }
 
 class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
@@ -224,7 +224,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
   final Value<DateTime?> completedDate;
   final Value<int?> folderId;
   final Value<String?> note;
-  final Value<Duration?> notificationDelay;
+  final Value<Duration?> notificationOffset;
   const TodoTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -236,7 +236,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.completedDate = const Value.absent(),
     this.folderId = const Value.absent(),
     this.note = const Value.absent(),
-    this.notificationDelay = const Value.absent(),
+    this.notificationOffset = const Value.absent(),
   });
   TodoTableCompanion.insert({
     this.id = const Value.absent(),
@@ -249,7 +249,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     this.completedDate = const Value.absent(),
     this.folderId = const Value.absent(),
     this.note = const Value.absent(),
-    this.notificationDelay = const Value.absent(),
+    this.notificationOffset = const Value.absent(),
   }) : title = Value(title);
   static Insertable<TodoTableData> custom({
     Expression<int>? id,
@@ -262,7 +262,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     Expression<DateTime?>? completedDate,
     Expression<int?>? folderId,
     Expression<String?>? note,
-    Expression<Duration?>? notificationDelay,
+    Expression<Duration?>? notificationOffset,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -275,7 +275,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       if (completedDate != null) 'completed_date': completedDate,
       if (folderId != null) 'folder_id': folderId,
       if (note != null) 'note': note,
-      if (notificationDelay != null) 'notification_delay': notificationDelay,
+      if (notificationOffset != null) 'notification_offset': notificationOffset,
     });
   }
 
@@ -290,7 +290,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       Value<DateTime?>? completedDate,
       Value<int?>? folderId,
       Value<String?>? note,
-      Value<Duration?>? notificationDelay}) {
+      Value<Duration?>? notificationOffset}) {
     return TodoTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -302,7 +302,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
       completedDate: completedDate ?? this.completedDate,
       folderId: folderId ?? this.folderId,
       note: note ?? this.note,
-      notificationDelay: notificationDelay ?? this.notificationDelay,
+      notificationOffset: notificationOffset ?? this.notificationOffset,
     );
   }
 
@@ -341,10 +341,10 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
     if (note.present) {
       map['note'] = Variable<String?>(note.value);
     }
-    if (notificationDelay.present) {
+    if (notificationOffset.present) {
       final converter = $TodoTableTable.$converter2;
-      map['notification_delay'] =
-          Variable<int?>(converter.mapToSql(notificationDelay.value));
+      map['notification_offset'] =
+          Variable<int?>(converter.mapToSql(notificationOffset.value));
     }
     return map;
   }
@@ -362,7 +362,7 @@ class TodoTableCompanion extends UpdateCompanion<TodoTableData> {
           ..write('completedDate: $completedDate, ')
           ..write('folderId: $folderId, ')
           ..write('note: $note, ')
-          ..write('notificationDelay: $notificationDelay')
+          ..write('notificationOffset: $notificationOffset')
           ..write(')'))
         .toString();
   }
@@ -440,12 +440,12 @@ class $TodoTableTable extends TodoTable
   late final GeneratedColumn<String?> note = GeneratedColumn<String?>(
       'note', aliasedName, true,
       type: const StringType(), requiredDuringInsert: false);
-  final VerificationMeta _notificationDelayMeta =
-      const VerificationMeta('notificationDelay');
+  final VerificationMeta _notificationOffsetMeta =
+      const VerificationMeta('notificationOffset');
   @override
   late final GeneratedColumnWithTypeConverter<Duration, int?>
-      notificationDelay = GeneratedColumn<int?>(
-              'notification_delay', aliasedName, true,
+      notificationOffset = GeneratedColumn<int?>(
+              'notification_offset', aliasedName, true,
               type: const IntType(), requiredDuringInsert: false)
           .withConverter<Duration>($TodoTableTable.$converter2);
   @override
@@ -460,7 +460,7 @@ class $TodoTableTable extends TodoTable
         completedDate,
         folderId,
         note,
-        notificationDelay
+        notificationOffset
       ];
   @override
   String get aliasedName => _alias ?? 'todo_table';
@@ -512,7 +512,7 @@ class $TodoTableTable extends TodoTable
       context.handle(
           _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
     }
-    context.handle(_notificationDelayMeta, const VerificationResult.success());
+    context.handle(_notificationOffsetMeta, const VerificationResult.success());
     return context;
   }
 
