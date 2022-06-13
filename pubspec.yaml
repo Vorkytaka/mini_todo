@@ -1,7 +1,7 @@
 name: mini_todo
 description: A compact todo app
 publish_to: 'none'
-version: 0.4.0+7
+version: 0.5.0+8
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
