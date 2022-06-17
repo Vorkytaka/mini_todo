@@ -7,7 +7,7 @@ import '../entity/subtodo.dart';
 abstract class SubtodoRepository {
   Stream<List<Subtodo>> streamByTodo(int todoId);
 
-  Future<void> createForTodo(int todoId);
+  Future<void> createForTodo(int todoId, String title);
 
   Future<void> changeTitle(int id, String title);
 
@@ -29,11 +29,11 @@ class SubtodoRepositoryImpl implements SubtodoRepository {
   }
 
   @override
-  Future<void> createForTodo(int todoId) {
+  Future<void> createForTodo(int todoId, String title) {
     final query = database.into(database.subtodoTable);
     return query.insert(
       SubtodoTableCompanion.insert(
-        title: '',
+        title: title,
         todoId: todoId,
       ),
     );

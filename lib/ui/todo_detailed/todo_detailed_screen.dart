@@ -420,8 +420,6 @@ class _SubtodoListState extends State<_SubtodoList> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -448,16 +446,100 @@ class _SubtodoListState extends State<_SubtodoList> {
               resizeDuration: Duration(milliseconds: 250),
             ),
           ),
-        ListItem(
-          titleColor: theme.hintColor,
-          iconColor: theme.hintColor,
-          icon: const Icon(Icons.add),
-          title: Text(S.of(context).todo_detailed_screen__add_subtodo),
-          onTap: () {
-            context.read<SubtodoRepository>().createForTodo(widget.todo.id);
-          },
-        ),
+        _AddSubtodoElement(todo: widget.todo),
       ],
+    );
+  }
+}
+
+class _AddSubtodoElement extends StatefulWidget {
+  final Todo todo;
+
+  const _AddSubtodoElement({
+    Key? key,
+    required this.todo,
+  }) : super(key: key);
+
+  @override
+  State<_AddSubtodoElement> createState() => _AddSubtodoElementState();
+}
+
+class _AddSubtodoElementState extends State<_AddSubtodoElement> {
+  bool _inCreateState = false;
+  final FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        setState(() {
+          _inCreateState = false;
+          // ???
+          if (_controller.text.isNotEmpty) {
+            context.read<SubtodoRepository>().createForTodo(widget.todo.id, _controller.text);
+          }
+          _controller.clear();
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return AnimatedSwitcher(
+      duration: kThemeAnimationDuration,
+      child: _inCreateState
+          ? TextFormField(
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: const Checkbox(
+                    value: false,
+                    onChanged: null,
+                  ),
+                  prefixIconConstraints: const BoxConstraints(
+                    minWidth: 24 + 16 + 16,
+                    minHeight: 56,
+                  ),
+                  hintText: S.of(context).todo_detailed_screen__add_subtodo,
+                  hintMaxLines: 1,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.done),
+                    onPressed: () {
+                      _focusNode.unfocus();
+                    },
+                  )),
+              minLines: 1,
+              maxLines: null,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
+              textAlignVertical: TextAlignVertical.center,
+              textCapitalization: TextCapitalization.sentences,
+              controller: _controller,
+              focusNode: _focusNode,
+            )
+          : ListItem(
+              titleColor: theme.hintColor,
+              iconColor: theme.hintColor,
+              icon: const Icon(Icons.add),
+              title: Text(S.of(context).todo_detailed_screen__add_subtodo),
+              onTap: () {
+                setState(() {
+                  _inCreateState = true;
+                });
+                _focusNode.requestFocus();
+              },
+            ),
     );
   }
 }
