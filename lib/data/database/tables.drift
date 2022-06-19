@@ -43,3 +43,13 @@ CREATE TRIGGER folder_updated_timestamp
         SET updated_date = strftime('%s', CURRENT_TIMESTAMP)
         WHERE id = old.id;
     END;
+
+CREATE TRIGGER complete_todo_by_subtodos
+    AFTER UPDATE OF completed
+    ON subtodo_table
+    WHEN NEW.completed = true AND (SELECT COUNT(distinct completed) FROM subtodo_table WHERE todo_id = NEW.todo_id) = 1
+    BEGIN
+        UPDATE todo_table
+        SET completed = 1
+        WHERE id = new.todo_id;
+    END;

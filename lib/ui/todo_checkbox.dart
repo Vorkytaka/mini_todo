@@ -25,6 +25,16 @@ class _TodoCheckboxState extends State<TodoCheckbox> {
   }
 
   @override
+  void didUpdateWidget(covariant TodoCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(widget.todo.completed != oldWidget.todo.completed) {
+      setState(() {
+        _completed = widget.todo.completed;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Checkbox(
       value: _completed,

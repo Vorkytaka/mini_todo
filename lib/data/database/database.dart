@@ -35,7 +35,7 @@ class Database extends _$Database {
   }
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -50,14 +50,17 @@ class Database extends _$Database {
               // Get the version to which we will migrate now
               final int target = current + 1;
 
-              // In version 2 we add `notificationOffset`
               if (target == 2) {
+                // In version 2 we add `notificationOffset`
                 await migrator.addColumn(todoTable, todoTable.notificationOffset);
 
                 // set zero offset for all todos with time
                 final query = update(todoTable);
                 query.where((tbl) => tbl.time.isNotNull());
                 await query.write(const TodoTableCompanion(notificationOffset: Value(Duration.zero)));
+              } else if(target == 3) {
+                // In version 3 we add `completeTodoBySubtodos`
+                await migrator.createTrigger(completeTodoBySubtodos);
               }
             }
           });
