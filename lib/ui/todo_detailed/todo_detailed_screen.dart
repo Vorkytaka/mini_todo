@@ -514,7 +514,7 @@ class _AddSubtodoElementState extends State<_AddSubtodoElement> {
                   hintText: S.of(context).todo_detailed_screen__add_subtodo,
                   hintMaxLines: 1,
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.done),
+                    icon: const Icon(Icons.done),
                     onPressed: () {
                       _focusNode.unfocus();
                     },
@@ -546,12 +546,10 @@ class _AddSubtodoElementState extends State<_AddSubtodoElement> {
 
 class _SubtodoItemWidget extends StatelessWidget {
   final Subtodo subtodo;
-  final FocusNode? focusNode;
 
   const _SubtodoItemWidget({
     Key? key,
     required this.subtodo,
-    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -607,7 +605,6 @@ class _SubtodoItemWidget extends StatelessWidget {
           textAlignVertical: TextAlignVertical.center,
           textCapitalization: TextCapitalization.sentences,
           onChanged: (title) => context.read<SubtodoRepository>().changeTitle(subtodo.id, title),
-          focusNode: focusNode,
         ),
       ),
     );

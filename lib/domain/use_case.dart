@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+// todo: remove lint when we will use most correctly use cases
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

@@ -1099,6 +1099,9 @@ abstract class _$Database extends GeneratedDatabase {
       'CREATE TRIGGER folder_updated_timestamp\r\n    AFTER UPDATE OF title, color\r\n    ON folder_table\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE folder_table\r\n        SET updated_date = strftime(\'%s\', CURRENT_TIMESTAMP)\r\n        WHERE id = old.id;\r\n    END;',
       'folder_updated_timestamp');
   late final $SubtodoTableTable subtodoTable = $SubtodoTableTable(this);
+  late final Trigger completeTodoBySubtodos = Trigger(
+      'CREATE TRIGGER complete_todo_by_subtodos\r\n    AFTER UPDATE OF completed\r\n    ON subtodo_table\r\n    WHEN NEW.completed = true AND (SELECT COUNT(distinct completed) FROM subtodo_table WHERE todo_id = NEW.todo_id) = 1\r\n    BEGIN\r\n        UPDATE todo_table\r\n        SET completed = 1\r\n        WHERE id = new.todo_id;\r\n    END;',
+      'complete_todo_by_subtodos');
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -1109,7 +1112,8 @@ abstract class _$Database extends GeneratedDatabase {
         todoUncompleted,
         folderTable,
         folderUpdatedTimestamp,
-        subtodoTable
+        subtodoTable,
+        completeTodoBySubtodos
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -1140,6 +1144,13 @@ abstract class _$Database extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('folder_table', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('subtodo_table',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('todo_table', kind: UpdateKind.update),
             ],
           ),
         ],
