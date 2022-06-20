@@ -48,23 +48,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__yes": MessageLookupByLibrary.simpleMessage("Yes"),
         "common__yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Time"),
-        "delete_folder_dialog__content": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to delete folder "),
+        "delete_folder_dialog__content":
+            MessageLookupByLibrary.simpleMessage("Are you sure you want to delete folder "),
         "delete_folder_dialog__delete_todos_toggle":
-            MessageLookupByLibrary.simpleMessage(
-                "Also delete all todos from this folder"),
-        "delete_folder_dialog__title":
-            MessageLookupByLibrary.simpleMessage("Delete folder?"),
-        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage(
-            "This action cannot be undone."),
-        "delete_todo_dialog__content": MessageLookupByLibrary.simpleMessage(
-            "Are you sure you want to delete "),
-        "delete_todo_dialog__title":
-            MessageLookupByLibrary.simpleMessage("Delete this todo?"),
-        "editable_folder_dialog__hint":
-            MessageLookupByLibrary.simpleMessage("Folder title"),
-        "editable_folder_dialog__title_error":
-            MessageLookupByLibrary.simpleMessage("Enter folder title"),
+            MessageLookupByLibrary.simpleMessage("Also delete all todos from this folder"),
+        "delete_folder_dialog__title": MessageLookupByLibrary.simpleMessage("Delete folder?"),
+        "delete_subtodo__body": MessageLookupByLibrary.simpleMessage("Are you sure you want to delete subtodo "),
+        "delete_subtodo__title": MessageLookupByLibrary.simpleMessage("Delete this todo?"),
+        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage("This action cannot be undone."),
+        "delete_todo_dialog__content": MessageLookupByLibrary.simpleMessage("Are you sure you want to delete "),
+        "delete_todo_dialog__title": MessageLookupByLibrary.simpleMessage("Delete this todo?"),
+        "editable_folder_dialog__hint": MessageLookupByLibrary.simpleMessage("Folder title"),
+        "editable_folder_dialog__title_error": MessageLookupByLibrary.simpleMessage("Enter folder title"),
         "folder__today": MessageLookupByLibrary.simpleMessage("Today"),
         "folder_list_screen__create_folder_tooltip":
             MessageLookupByLibrary.simpleMessage("Create folder"),

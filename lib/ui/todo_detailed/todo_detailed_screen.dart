@@ -613,12 +613,12 @@ Future<void> showDeleteSubtodoDialog({
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Удалить подзадачу?'),
+        title: Text(S.of(context).delete_subtodo__title),
         content: RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.bodyMedium,
             children: [
-              const TextSpan(text: 'Точно удалить подзадачу '),
+              TextSpan(text: S.of(context).delete_subtodo__body),
               TextSpan(
                 text: subtodo.title,
                 style: const TextStyle(fontWeight: FontWeight.bold),

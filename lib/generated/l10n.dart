@@ -409,6 +409,26 @@ class S {
     );
   }
 
+  /// `Delete this todo?`
+  String get delete_subtodo__title {
+    return Intl.message(
+      'Delete this todo?',
+      name: 'delete_subtodo__title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete subtodo `
+  String get delete_subtodo__body {
+    return Intl.message(
+      'Are you sure you want to delete subtodo ',
+      name: 'delete_subtodo__body',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Folder title`
   String get editable_folder_dialog__hint {
     return Intl.message(
