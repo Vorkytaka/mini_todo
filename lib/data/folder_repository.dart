@@ -107,9 +107,16 @@ class FolderRepositoryImpl implements FolderRepository {
   @override
   Stream<int> streamTodayTodoCount() {
     final query = database.selectOnly(database.todoTable);
-    query.where(database.todoTable.date.equalsValue(DateTime.now()));
+    query.where(database.todoTable.date.isSmallerOrEqualThanDartValue(DateTime.now()));
     query.where(database.todoTable.completed.equals(false));
     query.addColumns([database.todoTable.id.count()]);
     return query.map((p0) => p0.read(database.todoTable.id.count())).watchSingle();
+  }
+}
+
+extension on GeneratedColumnWithTypeConverter<DateTime, int?> {
+  Expression<bool?> isSmallerOrEqualThanDartValue(DateTime dartValue) {
+    final ms = converter.mapToSql(dartValue) as int;
+    return isSmallerOrEqualValue(ms);
   }
 }
