@@ -34,6 +34,8 @@
   "todo_detailed_screen__notification_days": "{count,plural, =0{No days} =1{Notify in {count} day} other{Notify in {count} days}}",
   "todo_detailed_screen__notification_hours": "{count,plural, =0{No hours} =1{Notify in {count} hour} other{Notify in {count} hours}}",
   "todo_detailed_screen__notification_minutes": "{count,plural, =0{No minutes} =1{Notify in {count} minute} other{Notify in {count} minutes}}",
+  "delete_subtodo__title": "Delete this todo?",
+  "delete_subtodo__body": "Are you sure you want to delete subtodo ",
   "editable_folder_dialog__hint": "Folder title",
   "editable_folder_dialog__title_error": "Enter folder title",
   "folder_screen__update_folder": "Update folder",

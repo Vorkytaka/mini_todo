@@ -33,6 +33,8 @@
   "todo_detailed_screen__notification_days": "{count,plural, =0{Без дней} =1{Напомнить за {count} день} =2{Напомнить за {count} дня} few{Напомнить за {count} дня} other{Напомнить за {count} дней}}",
   "todo_detailed_screen__notification_hours": "{count,plural, =0{Без часов} =1{Напомнить за {count} час} =2{Напомнить за {count} часа} few{Напомнить за {count} часа} other{Напомнить за {count} часов}}",
   "todo_detailed_screen__notification_minutes": "{count,plural, =0{Без минут} =1{Напомнить за {count} минуту} =2{Напомнить за {count} минуты} few{Напомнить за {count} минуты} other{Напомнить за {count} минут}}",
+  "delete_subtodo__title": "Удалить подзадачу?",
+  "delete_subtodo__body": "Вы точно хотите удалить ",
   "editable_folder_dialog__hint": "Название папки",
   "editable_folder_dialog__title_error": "Введите название папки",
   "folder_screen__update_folder": "Изменить папку",

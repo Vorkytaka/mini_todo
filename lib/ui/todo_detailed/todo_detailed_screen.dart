@@ -571,21 +571,16 @@ class _SubtodoItemWidget extends StatelessWidget {
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 24 + 16 + 16,
-              minHeight: 48,
+              minHeight: 56,
             ),
             hintText: S.of(context).todo_detailed_screen__subtodo_hint,
             hintMaxLines: 1,
-            suffixIcon: SizedBox(
-              width: 24,
-              height: 24,
-              child: InkResponse(
-                onTap: () => context.read<SubtodoRepository>().delete(subtodo.id),
-                radius: 24,
-                child: Icon(
-                  Icons.clear,
-                  color: theme.errorColor,
-                  size: 16,
-                ),
+            suffixIcon: IconButton(
+              onPressed: () => showDeleteSubtodoDialog(context: context, subtodo: subtodo),
+              icon: Icon(
+                Icons.clear,
+                color: theme.errorColor,
+                size: 16,
               ),
             ),
             suffixIconConstraints: const BoxConstraints(
@@ -610,6 +605,46 @@ class _SubtodoItemWidget extends StatelessWidget {
     );
   }
 }
+
+Future<void> showDeleteSubtodoDialog({
+  required BuildContext context,
+  required Subtodo subtodo,
+}) =>
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).delete_subtodo__title),
+        content: RichText(
+          text: TextSpan(
+            style: Theme.of(context).textTheme.bodyMedium,
+            children: [
+              TextSpan(text: S.of(context).delete_subtodo__body),
+              TextSpan(
+                text: subtodo.title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const TextSpan(text: '?'),
+              const TextSpan(text: '\n\n'),
+              TextSpan(text: S.of(context).delete_todo_dialog__caution),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(S.of(context).common__no),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            onPressed: () async {
+              await context.read<SubtodoRepository>().delete(subtodo.id);
+              Navigator.of(context).pop();
+            },
+            child: Text(S.of(context).common__yes),
+          ),
+        ],
+      ),
+    );
 
 extension DurationIntl on Duration {
   String format(BuildContext context) {

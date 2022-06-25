@@ -48,22 +48,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "common__yes": MessageLookupByLibrary.simpleMessage("Да"),
         "common__yesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
         "datetime_dialog__time": MessageLookupByLibrary.simpleMessage("Время"),
-        "delete_folder_dialog__content": MessageLookupByLibrary.simpleMessage(
-            "Вы точно хотите удалить папку "),
+        "delete_folder_dialog__content": MessageLookupByLibrary.simpleMessage("Вы точно хотите удалить папку "),
         "delete_folder_dialog__delete_todos_toggle":
             MessageLookupByLibrary.simpleMessage("Удалить все задачи из папки"),
-        "delete_folder_dialog__title":
-            MessageLookupByLibrary.simpleMessage("Удалить папку?"),
-        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage(
-            "Это действие нельзя отменить."),
-        "delete_todo_dialog__content":
-            MessageLookupByLibrary.simpleMessage("Вы точно хотите удалить "),
-        "delete_todo_dialog__title":
-            MessageLookupByLibrary.simpleMessage("Удалить задачу?"),
-        "editable_folder_dialog__hint":
-            MessageLookupByLibrary.simpleMessage("Название папки"),
-        "editable_folder_dialog__title_error":
-            MessageLookupByLibrary.simpleMessage("Введите название папки"),
+        "delete_folder_dialog__title": MessageLookupByLibrary.simpleMessage("Удалить папку?"),
+        "delete_subtodo__body": MessageLookupByLibrary.simpleMessage("Вы точно хотите удалить "),
+        "delete_subtodo__title": MessageLookupByLibrary.simpleMessage("Удалить подзадачу?"),
+        "delete_todo_dialog__caution": MessageLookupByLibrary.simpleMessage("Это действие нельзя отменить."),
+        "delete_todo_dialog__content": MessageLookupByLibrary.simpleMessage("Вы точно хотите удалить "),
+        "delete_todo_dialog__title": MessageLookupByLibrary.simpleMessage("Удалить задачу?"),
+        "editable_folder_dialog__hint": MessageLookupByLibrary.simpleMessage("Название папки"),
+        "editable_folder_dialog__title_error": MessageLookupByLibrary.simpleMessage("Введите название папки"),
         "folder__today": MessageLookupByLibrary.simpleMessage("Сегодня"),
         "folder_list_screen__create_folder_tooltip":
             MessageLookupByLibrary.simpleMessage("Создать папку"),
