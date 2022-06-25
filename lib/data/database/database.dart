@@ -59,8 +59,8 @@ class Database extends _$Database {
                 query.where((tbl) => tbl.time.isNotNull());
                 await query.write(const TodoTableCompanion(notificationOffset: Value(Duration.zero)));
               } else if(target == 3) {
-                // In version 3 we add `completeTodoBySubtodos`
                 await migrator.createTrigger(completeTodoBySubtodos);
+                await migrator.createTrigger(completeSubtodosByTodo);
               }
             }
           });

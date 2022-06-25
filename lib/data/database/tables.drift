@@ -51,5 +51,15 @@ CREATE TRIGGER complete_todo_by_subtodos
     BEGIN
         UPDATE todo_table
         SET completed = 1
-        WHERE id = new.todo_id;
+        WHERE id = NEW.todo_id;
+    END;
+
+CREATE TRIGGER complete_subtodos_by_todo
+    AFTER UPDATE OF completed
+    ON todo_table
+    WHEN NEW.completed = true
+    BEGIN
+        UPDATE subtodo_table
+        SET completed = 1
+        WHERE todo_id = NEW.id;
     END;

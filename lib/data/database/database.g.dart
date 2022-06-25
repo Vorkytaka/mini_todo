@@ -6,7 +6,7 @@ part of 'database.dart';
 // MoorGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+// ignore_for_file: type=lint
 class TodoTableData extends DataClass implements Insertable<TodoTableData> {
   final int id;
   final String title;
@@ -1100,8 +1100,11 @@ abstract class _$Database extends GeneratedDatabase {
       'folder_updated_timestamp');
   late final $SubtodoTableTable subtodoTable = $SubtodoTableTable(this);
   late final Trigger completeTodoBySubtodos = Trigger(
-      'CREATE TRIGGER complete_todo_by_subtodos\r\n    AFTER UPDATE OF completed\r\n    ON subtodo_table\r\n    WHEN NEW.completed = true AND (SELECT COUNT(distinct completed) FROM subtodo_table WHERE todo_id = NEW.todo_id) = 1\r\n    BEGIN\r\n        UPDATE todo_table\r\n        SET completed = 1\r\n        WHERE id = new.todo_id;\r\n    END;',
+      'CREATE TRIGGER complete_todo_by_subtodos\r\n    AFTER UPDATE OF completed\r\n    ON subtodo_table\r\n    WHEN NEW.completed = true AND (SELECT COUNT(distinct completed) FROM subtodo_table WHERE todo_id = NEW.todo_id) = 1\r\n    BEGIN\r\n        UPDATE todo_table\r\n        SET completed = 1\r\n        WHERE id = NEW.todo_id;\r\n    END;',
       'complete_todo_by_subtodos');
+  late final Trigger completeSubtodosByTodo = Trigger(
+      'CREATE TRIGGER complete_subtodos_by_todo\r\n    AFTER UPDATE OF completed\r\n    ON todo_table\r\n    WHEN NEW.completed = true\r\n    BEGIN\r\n        UPDATE subtodo_table\r\n        SET completed = 1\r\n        WHERE todo_id = NEW.id;\r\n    END;',
+      'complete_subtodos_by_todo');
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -1113,7 +1116,8 @@ abstract class _$Database extends GeneratedDatabase {
         folderTable,
         folderUpdatedTimestamp,
         subtodoTable,
-        completeTodoBySubtodos
+        completeTodoBySubtodos,
+        completeSubtodosByTodo
       ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
@@ -1151,6 +1155,13 @@ abstract class _$Database extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('todo_table', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('todo_table',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('subtodo_table', kind: UpdateKind.update),
             ],
           ),
         ],
