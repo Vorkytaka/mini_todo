@@ -9,6 +9,7 @@ import '../../entity/todo.dart';
 import '../../generated/l10n.dart';
 import '../../utils/tuple.dart';
 import '../common/gradient_body.dart';
+import '../common/padding.dart';
 import '../new_todo.dart';
 import '../todo_list.dart';
 
@@ -36,6 +37,7 @@ class AllTodoScreen extends StatelessWidget {
             ),
             ..._folder(context, Folder(id: null, title: s.common__inbox)),
             for (final folder in folders) ..._folder(context, folder.first),
+            const FabSliverPadding(),
           ],
         );
       },

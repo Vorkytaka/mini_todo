@@ -234,7 +234,8 @@ class _NewTodoDialogState extends State<_NewTodoDialog> {
                   );
                 },
               ),
-              behavior: SnackBarBehavior.fixed,
+              behavior: SnackBarBehavior.floating,
+              dismissDirection: DismissDirection.horizontal,
             ),
           );
         });

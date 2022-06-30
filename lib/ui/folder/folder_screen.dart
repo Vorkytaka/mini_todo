@@ -6,6 +6,7 @@ import 'package:mini_todo/domain/folder/folder_cubit.dart';
 import 'package:mini_todo/domain/folders/folders_cubit.dart';
 import 'package:mini_todo/entity/folder.dart';
 import 'package:mini_todo/generated/l10n.dart';
+import 'package:mini_todo/ui/common/padding.dart';
 import 'package:mini_todo/ui/common/theme.dart';
 import 'package:mini_todo/ui/folder/new_folder_dialog.dart';
 import 'package:mini_todo/ui/todo_list.dart';
@@ -214,6 +215,7 @@ class _TodosListState extends State<_TodosList> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 sliver: TodoList(todos: state.completed),
               ),
+            const FabSliverPadding(),
           ],
         );
       },
